@@ -1,0 +1,62 @@
+- content_for :title, 'ホーム'
+
+.hero-section
+  .hero-container
+    .hero-content
+      %h1.hero-title Design Labへようこそ
+      %p.hero-description 高速で美しい、モダンなウェブサイトを簡単に作成・管理できるCMSです
+      .hero-actions
+        = link_to 'はじめる', '#', class: 'btn btn-primary btn-large'
+        = link_to 'もっと詳しく', '#', class: 'btn btn-secondary btn-large'
+
+- if @recent_articles.any?
+  %section.recent-articles-section
+    .container
+      %h2.section-title 最新の記事
+      .articles-grid
+        - @recent_articles.each do |article|
+          .article-card
+            - if article.image_url.present?
+              .article-image
+                %img{src: article.image_url, alt: article.title}
+            .article-content
+              %h3.article-title
+                = link_to article.title, '#'
+              %p.article-excerpt
+                = truncate(strip_tags(article.content_json&.dig('content')), length: 100)
+              .article-meta
+                %time.article-date= article.published_at&.strftime('%Y年%m月%d日')
+
+- if @featured_pages.any?
+  %section.featured-pages-section
+    .container
+      %h2.section-title 主要ページ
+      .pages-grid
+        - @featured_pages.each do |page|
+          .page-card
+            %h3.page-title
+              = link_to page.title, '#'
+            %p.page-excerpt
+              = truncate(strip_tags(page.content_json&.dig('content')), length: 80)
+
+%section.features-section
+  .container
+    %h2.section-title 特徴
+    .features-grid
+      .feature-item
+        .feature-icon
+          %i.icon.icon-speed
+        %h3.feature-title 高速表示
+        %p.feature-description 最新技術による高速なページ読み込み
+      
+      .feature-item
+        .feature-icon
+          %i.icon.icon-responsive
+        %h3.feature-title レスポンシブ
+        %p.feature-description 全デバイスに対応した美しいデザイン
+      
+      .feature-item
+        .feature-icon
+          %i.icon.icon-easy
+        %h3.feature-title 簡単管理
+        %p.feature-description 直感的な管理画面で楽々コンテンツ更新

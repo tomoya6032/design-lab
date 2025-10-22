@@ -1,0 +1,53 @@
+- content_for :page_title, 'ダッシュボード'
+
+.dashboard-overview
+  .stats-grid
+    .stat-card
+      .stat-icon
+        %i.icon.icon-articles
+      .stat-content
+        %h3.stat-number= Article.count
+        %p.stat-label 記事数
+    
+    .stat-card
+      .stat-icon
+        %i.icon.icon-pages
+      .stat-content
+        %h3.stat-number= Page.count
+        %p.stat-label 固定ページ数
+    
+    .stat-card
+      .stat-icon
+        %i.icon.icon-media
+      .stat-content
+        %h3.stat-number= Medium.count
+        %p.stat-label メディア数
+    
+    .stat-card
+      .stat-icon
+        %i.icon.icon-users
+      .stat-content
+        %h3.stat-number= User.count
+        %p.stat-label ユーザー数
+
+.dashboard-content
+  .dashboard-section
+    %h3 最近の記事
+    .recent-articles
+      - @recent_articles&.each do |article|
+        .article-item
+          %h4= link_to article.title, '#'
+          %p.article-meta
+            作成日: #{article.created_at.strftime('%Y年%m月%d日')}
+            ステータス: #{article.status}
+      - if @recent_articles.blank?
+        %p.no-content まだ記事がありません。
+        = link_to '新しい記事を作成', '#', class: 'btn btn-primary'
+  
+  .dashboard-section
+    %h3 サイト設定
+    .site-status
+      - setting = Setting.current
+      %p サイト名: #{setting.site_name}
+      %p 説明: #{setting.site_description || '未設定'}
+      = link_to 'サイト設定を編集', '#', class: 'btn btn-secondary'

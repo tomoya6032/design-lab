@@ -1,0 +1,57 @@
+!!!
+%html{lang: 'ja'}
+  %head
+    %meta{charset: 'utf-8'}
+    %meta{name: 'viewport', content: 'width=device-width, initial-scale=1'}
+    %title= content_for?(:title) ? "#{yield(:title)} | #{@site_setting&.site_name || 'Design Lab'}" : @site_setting&.site_name || 'Design Lab'
+    %meta{name: 'description', content: content_for?(:description) ? yield(:description) : @site_setting&.site_description}
+    = csrf_meta_tags
+    = csp_meta_tag
+    = stylesheet_link_tag 'application', 'data-turbo-track': 'reload'
+    = javascript_include_tag 'application', 'data-turbo-track': 'reload', type: 'module'
+    - if @site_setting&.favicon_url.present?
+      %link{rel: 'icon', type: 'image/png', href: @site_setting.favicon_url}
+    - if @site_setting&.custom_css.present?
+      :css
+        #{@site_setting.custom_css}
+  %body.site-body
+    %header.site-header
+      .header-container
+        .site-branding
+          %h1.site-title
+            = link_to root_path do
+              - if @site_setting&.logo_url.present?
+                %img.site-logo{src: @site_setting.logo_url, alt: @site_setting.site_name}
+              - else
+                = @site_setting&.site_name || 'Design Lab'
+          - if @site_setting&.site_description.present?
+            %p.site-description= @site_setting.site_description
+        
+        %nav.main-navigation
+          %ul.nav-menu
+            %li.nav-item
+              = link_to 'ホーム', root_path, class: 'nav-link'
+            %li.nav-item
+              = link_to 'ブログ', '#', class: 'nav-link'
+            %li.nav-item
+              = link_to 'お問い合わせ', '#', class: 'nav-link'
+    
+    %main.site-main
+      = yield
+    
+    %footer.site-footer
+      .footer-container
+        .footer-content
+          %p.copyright
+            &copy; #{Date.current.year} #{@site_setting&.site_name || 'Design Lab'}. All rights reserved.
+          .social-links
+            - if @site_setting&.social_links.present?
+              - @site_setting.social_links.each do |platform, url|
+                - if url.present?
+                  = link_to url, class: "social-link social-#{platform}", target: '_blank', rel: 'noopener' do
+                    %i.icon{class: "icon-#{platform}"}
+                    = platform.humanize
+    
+    - if @site_setting&.custom_js.present?
+      :javascript
+        #{@site_setting.custom_js}

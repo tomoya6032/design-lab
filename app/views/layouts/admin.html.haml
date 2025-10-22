@@ -1,0 +1,59 @@
+!!!
+%html{lang: 'ja'}
+  %head
+    %meta{charset: 'utf-8'}
+    %meta{name: 'viewport', content: 'width=device-width, initial-scale=1'}
+    %title Design Lab CMS - 管理画面
+    = csrf_meta_tags
+    = csp_meta_tag
+    = stylesheet_link_tag 'application', 'data-turbo-track': 'reload'
+    = javascript_include_tag 'application', 'data-turbo-track': 'reload', type: 'module'
+  %body.admin-body
+    %header.admin-header
+      .admin-header-content
+        %h1.admin-logo
+          = link_to 'Design Lab CMS', admin_dashboard_index_path, class: 'admin-logo-link'
+        .admin-user-menu
+          - if user_signed_in?
+            %span.welcome-text こんにちは、#{current_user.email} さん
+            = link_to 'ログアウト', destroy_user_session_path, method: :delete, class: 'logout-link'
+          - else
+            = link_to 'ログイン', new_user_session_path, class: 'login-link'
+    
+    .admin-layout
+      %nav.admin-sidebar
+        %ul.admin-menu
+          %li.admin-menu-item
+            = link_to admin_dashboard_index_path, class: 'admin-menu-link' do
+              %i.icon.icon-dashboard
+              ダッシュボード
+          %li.admin-menu-item
+            = link_to '#', class: 'admin-menu-link' do
+              %i.icon.icon-articles
+              記事管理
+          %li.admin-menu-item
+            = link_to '#', class: 'admin-menu-link' do
+              %i.icon.icon-pages
+              固定ページ
+          %li.admin-menu-item
+            = link_to '#', class: 'admin-menu-link' do
+              %i.icon.icon-media
+              メディア
+          %li.admin-menu-item
+            = link_to '#', class: 'admin-menu-link' do
+              %i.icon.icon-settings
+              サイト設定
+      
+      %main.admin-content
+        .admin-content-header
+          %h2.page-title= content_for?(:page_title) ? yield(:page_title) : 'ダッシュボード'
+          .admin-actions
+            = yield(:admin_actions) if content_for?(:admin_actions)
+        
+        .admin-content-body
+          - if notice
+            .alert.alert-success= notice
+          - if alert
+            .alert.alert-danger= alert
+          
+          = yield
