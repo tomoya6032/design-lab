@@ -89,6 +89,11 @@ rails server -p 3001
 
 ## 開発者向け情報
 
+### バージョン管理
+このプロジェクトはGitで管理されています。
+- **SourceTree連携**: 詳細は `SOURCETREE_GUIDE.md` を参照
+- **リポジトリパス**: `/Users/mac-user/cms-lab/design-lab`
+
 ### テスト実行
 ```bash
 bundle exec rspec
