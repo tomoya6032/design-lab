@@ -7,13 +7,17 @@ Rails.application.routes.draw do
     resources :articles
     resources :pages
     resources :media
+    resources :users, only: [:index, :show, :edit, :update, :destroy]
     resource :settings, only: [:show, :edit, :update]
+    get 'theme-customization', to: 'theme_customization#edit'
+    patch 'theme-customization', to: 'theme_customization#update'
     root 'dashboard#index'  # /admin のルートパス
   end
   
   # フロントエンド
   namespace :site do
     get 'home/index'
+    resources :articles, only: [:show]
     root 'home#index'  # /site のルートパス
   end
   

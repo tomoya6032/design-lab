@@ -9,6 +9,11 @@
         = link_to 'はじめる', '#', class: 'btn btn-primary btn-large'
         = link_to 'もっと詳しく', '#', class: 'btn btn-secondary btn-large'
 
+%div.debug-info{style: "background: #f5f5f5; padding: 10px; margin: 20px 0; border: 1px solid #ddd;"}
+  %p 記事数: #{@recent_articles.count}
+  %p 記事のステータス: #{Article.all.map(&:status).join(', ')}
+  %p 公開記事数: #{Article.published.count}
+
 - if @recent_articles.any?
   %section.recent-articles-section
     .container
@@ -21,11 +26,21 @@
                 %img{src: article.image_url, alt: article.title}
             .article-content
               %h3.article-title
-                = link_to article.title, '#'
+                = link_to article.title, site_article_path(article.slug)
               %p.article-excerpt
-                = truncate(strip_tags(article.content_json&.dig('content')), length: 100)
+                - if article.content_json.is_a?(String)
+                  = truncate(strip_tags(article.content_json), length: 100)
+                - elsif article.content_json.is_a?(Hash)
+                  = truncate(strip_tags(article.content_json.dig('content')), length: 100)
+                - else
+                  = truncate(article.meta_description.presence || '', length: 100)
               .article-meta
                 %time.article-date= article.published_at&.strftime('%Y年%m月%d日')
+- else
+  %section.no-articles-section
+    .container
+      %h2.section-title 記事はまだありません
+      %p 管理画面から記事を作成し、公開してください。
 
 - if @featured_pages.any?
   %section.featured-pages-section
@@ -37,7 +52,12 @@
             %h3.page-title
               = link_to page.title, '#'
             %p.page-excerpt
-              = truncate(strip_tags(page.content_json&.dig('content')), length: 80)
+              - if page.content_json.is_a?(String)
+                = truncate(strip_tags(page.content_json), length: 80)
+              - elsif page.content_json.is_a?(Hash)
+                = truncate(strip_tags(page.content_json.dig('content')), length: 80)
+              - else
+                = truncate(page.meta_description.presence || '', length: 80)
 
 %section.features-section
   .container

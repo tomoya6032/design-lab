@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_21_213838) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_22_050553) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -67,6 +67,28 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_21_213838) do
     t.jsonb "seo_settings"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "theme", default: "modern"
+    t.string "contact_email"
+    t.boolean "maintenance_mode", default: false
+    t.string "meta_title"
+    t.text "meta_description"
+    t.string "meta_keywords"
+    t.string "google_analytics_id"
+    t.string "twitter_url"
+    t.string "facebook_url"
+    t.string "instagram_url"
+    t.string "youtube_url"
+    t.string "primary_color"
+    t.string "secondary_color"
+    t.string "accent_color"
+    t.string "font_family"
+    t.string "header_font"
+    t.integer "header_height"
+    t.integer "container_width"
+    t.integer "sidebar_width"
+    t.integer "border_radius"
+    t.string "box_shadow"
+    t.string "animation_speed"
   end
 
   create_table "users", force: :cascade do |t|
@@ -77,6 +99,14 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_21_213838) do
     t.datetime "remember_created_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "first_name"
+    t.string "last_name"
+    t.string "role", default: "user"
+    t.integer "sign_in_count", default: 0, null: false
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
+    t.string "current_sign_in_ip"
+    t.string "last_sign_in_ip"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end

@@ -1,4 +1,5 @@
 class Site::HomeController < ApplicationController
+  layout 'site'
   before_action :load_site_setting
   
   def index

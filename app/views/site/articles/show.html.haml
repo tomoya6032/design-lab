@@ -1,0 +1,33 @@
+- content_for :title, @article.title
+
+%article.article-detail
+  .article-header
+    .container
+      %h1.article-title= @article.title
+      .article-meta
+        %time.article-date= @article.published_at&.strftime('%Y年%m月%d日')
+        %span.article-author= @article.user.email
+        - if @article.custom_fields && @article.custom_fields['category'].present?
+          %span.article-category= @article.custom_fields['category']
+        - if @article.custom_fields && @article.custom_fields['tags'].present?
+          .article-tags
+            - @article.custom_fields['tags'].split(',').each do |tag|
+              %span.tag= tag.strip
+
+  .article-content
+    .container
+      - if @article.image_url.present?
+        .article-image
+          %img{src: @article.image_url, alt: @article.title}
+      
+      .article-body
+        - if @article.content_json.is_a?(String)
+          = simple_format(@article.content_json)
+        - elsif @article.content_json.is_a?(Hash)
+          = simple_format(@article.content_json.dig('content'))
+        - else
+          %p= @article.meta_description
+
+  .article-navigation
+    .container
+      = link_to '記事一覧に戻る', root_path, class: 'btn btn-secondary'

@@ -3,20 +3,25 @@
   %head
     %meta{charset: 'utf-8'}
     %meta{name: 'viewport', content: 'width=device-width, initial-scale=1'}
-    %title Design Lab CMS - 管理画面
+    %title 
+      - if content_for?(:page_title)
+        = yield(:page_title)
+        \- Design Lab CMS
+      - else
+        Design Lab CMS - 管理画面
     = csrf_meta_tags
     = csp_meta_tag
     = stylesheet_link_tag 'application', 'data-turbo-track': 'reload'
-    = javascript_include_tag 'application', 'data-turbo-track': 'reload', type: 'module'
+    = javascript_include_tag 'application', 'data-turbo-track': 'reload'
   %body.admin-body
     %header.admin-header
       .admin-header-content
         %h1.admin-logo
-          = link_to 'Design Lab CMS', admin_dashboard_index_path, class: 'admin-logo-link'
+          = link_to 'Design Lab CMS', admin_root_path, class: 'admin-logo-link'
         .admin-user-menu
           - if user_signed_in?
             %span.welcome-text こんにちは、#{current_user.email} さん
-            = link_to 'ログアウト', destroy_user_session_path, method: :delete, class: 'logout-link'
+            = link_to 'ログアウト', destroy_user_session_path, data: { turbo_method: :delete }, class: 'logout-link'
           - else
             = link_to 'ログイン', new_user_session_path, class: 'login-link'
     
@@ -24,23 +29,27 @@
       %nav.admin-sidebar
         %ul.admin-menu
           %li.admin-menu-item
-            = link_to admin_dashboard_index_path, class: 'admin-menu-link' do
+            = link_to admin_root_path, class: 'admin-menu-link' do
               %i.icon.icon-dashboard
               ダッシュボード
           %li.admin-menu-item
-            = link_to '#', class: 'admin-menu-link' do
+            = link_to admin_articles_path, class: 'admin-menu-link' do
               %i.icon.icon-articles
               記事管理
           %li.admin-menu-item
-            = link_to '#', class: 'admin-menu-link' do
+            = link_to admin_pages_path, class: 'admin-menu-link' do
               %i.icon.icon-pages
               固定ページ
           %li.admin-menu-item
-            = link_to '#', class: 'admin-menu-link' do
+            = link_to admin_media_path, class: 'admin-menu-link' do
               %i.icon.icon-media
               メディア
           %li.admin-menu-item
-            = link_to '#', class: 'admin-menu-link' do
+            = link_to admin_users_path, class: 'admin-menu-link' do
+              %i.icon.icon-users
+              ユーザー管理
+          %li.admin-menu-item
+            = link_to edit_admin_settings_path, class: 'admin-menu-link' do
               %i.icon.icon-settings
               サイト設定
       
@@ -57,3 +66,23 @@
             .alert.alert-danger= alert
           
           = yield
+
+    .admin-global-styles
+      :css
+        .stat-card-link {
+          text-decoration: none;
+          color: inherit;
+          display: block;
+          transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .stat-card-link:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+          text-decoration: none;
+          color: inherit;
+        }
+
+        .stat-card {
+          cursor: pointer;
+        }

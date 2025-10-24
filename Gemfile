@@ -46,6 +46,9 @@ gem "image_processing", "~> 1.2"
 gem "sprockets-rails"
 gem "importmap-rails"
 
+# 国際化・日本語化
+gem "rails-i18n"
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
@@ -58,6 +61,8 @@ group :development, :test do
 
   # テストフレームワーク
   gem "rspec-rails", "~> 6.0"
+  gem "factory_bot_rails"      # テストデータの生成
+  gem "shoulda-matchers"       # RSpecの便利なマッチャー
 end
 
 group :development do
@@ -65,4 +70,26 @@ group :development do
   gem "faker"
   # ページング
   gem "kaminari"
+  
+  # 🚀 開発効率化ツール
+  gem "better_errors"          # 美しいエラー画面
+  gem "binding_of_caller"      # better_errorsでコンソール機能を有効化
+  gem "pry-rails"              # 強力なデバッガー（rails consoleの置き換え）
+  gem "pry-byebug"             # pryでブレークポイント機能
+  # gem "annotate"             # モデルファイルにスキーマ情報を自動追加（Rails 8未対応のため一時的に無効）
+  gem "rails-erd"              # データベース設計図(ERD)を自動生成
+  gem "bullet"                 # N+1クエリ問題を検出
+  gem "listen"                 # ファイル変更の監視（高速化）
+  gem "spring"                 # アプリケーション起動の高速化
+  gem "spring-watcher-listen"  # springでlistenを使用
+  
+  # 💎 コード品質・フォーマッター
+  gem "rubocop-performance"    # パフォーマンス改善のRuboCop拡張
+  gem "rubocop-rspec"          # RSpec用のRuboCop拡張
+  
+  # 📧 メール開発ツール
+  gem "letter_opener"          # 送信メールをブラウザで確認
+  
+  # 🗂️ ログ・出力改善
+  gem "awesome_print"          # 美しいオブジェクト出力
 end

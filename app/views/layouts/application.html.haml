@@ -8,7 +8,7 @@
     = csrf_meta_tags
     = csp_meta_tag
     = stylesheet_link_tag 'application', 'data-turbo-track': 'reload'
-    = javascript_include_tag 'application', 'data-turbo-track': 'reload', type: 'module'
+    = javascript_include_tag 'application', 'data-turbo-track': 'reload'
     - if @site_setting&.favicon_url.present?
       %link{rel: 'icon', type: 'image/png', href: @site_setting.favicon_url}
     - if @site_setting&.custom_css.present?

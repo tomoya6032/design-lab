@@ -1,0 +1,142 @@
+- content_for :page_title, 'テーマカスタマイズ'
+
+.theme-customization-container
+  .customization-header
+    %h2 #{@setting.theme_display_name}のカスタマイズ
+    %p フロントエンドの見た目を詳細に設定できます。
+
+  = form_with model: @setting, url: admin_theme_customization_path, method: :patch, local: true, html: { class: 'customization-form' } do |form|
+    .customization-grid
+      .customization-panel
+        %h3 
+          🎨
+          カラー設定
+        
+        .form-group
+          = form.label :primary_color, 'プライマリカラー'
+          .color-input-group
+            = form.color_field :primary_color, value: (@setting.primary_color.presence || '#007bff'), class: 'color-input'
+            = form.text_field :primary_color, value: (@setting.primary_color.presence || '#007bff'), class: 'color-text', placeholder: '#007bff'
+          %small.form-text メインボタンやリンクの色
+        
+        .form-group
+          = form.label :secondary_color, 'セカンダリカラー'
+          .color-input-group
+            = form.color_field :secondary_color, value: (@setting.secondary_color.presence || '#6c757d'), class: 'color-input'
+            = form.text_field :secondary_color, value: (@setting.secondary_color.presence || '#6c757d'), class: 'color-text', placeholder: '#6c757d'
+          %small.form-text サブボタンやグレーエリアの色
+        
+        .form-group
+          = form.label :accent_color, 'アクセントカラー'
+          .color-input-group
+            = form.color_field :accent_color, value: (@setting.accent_color.presence || '#ffc107'), class: 'color-input'
+            = form.text_field :accent_color, value: (@setting.accent_color.presence || '#ffc107'), class: 'color-text', placeholder: '#ffc107'
+          %small.form-text 強調表示やハイライトの色
+
+      .customization-panel
+        %h3
+          📝
+          フォント設定
+        
+        .form-group
+          = form.label :font_family, 'メインフォント'
+          = form.select :font_family, 
+            options_for_select([
+              ['システムフォント', 'system-ui, sans-serif'],
+              ['Noto Sans JP', '"Noto Sans JP", sans-serif'],
+              ['Hiragino Sans', '"Hiragino Kaku Gothic ProN", sans-serif'],
+              ['Yu Gothic', '"Yu Gothic Medium", "游ゴシック Medium", sans-serif'],
+              ['Roboto', '"Roboto", sans-serif'],
+              ['Open Sans', '"Open Sans", sans-serif']
+            ], @setting.font_family.presence || 'system-ui, sans-serif'),
+            {}, { class: 'form-control' }
+        
+        .form-group
+          = form.label :header_font, 'ヘッダーフォント'
+          = form.select :header_font,
+            options_for_select([
+              ['メインフォントと同じ', 'inherit'],
+              ['太字', 'bold'],
+              ['Noto Serif JP', '"Noto Serif JP", serif'],
+              ['Times New Roman', '"Times New Roman", serif'],
+              ['Georgia', '"Georgia", serif']
+            ], @setting.header_font.presence || 'bold'),
+            {}, { class: 'form-control' }
+
+      .customization-panel
+        %h3
+          📐
+          レイアウト設定
+        
+        .form-group
+          = form.label :header_height, 'ヘッダー高さ'
+          .input-with-unit
+            = form.number_field :header_height, value: (@setting.header_height.presence || 60), class: 'form-control', min: 40, max: 120
+            %span.unit px
+        
+        .form-group
+          = form.label :container_width, 'コンテナ幅'
+          .input-with-unit
+            = form.number_field :container_width, value: (@setting.container_width.presence || 1200), class: 'form-control', min: 800, max: 1600
+            %span.unit px
+        
+        .form-group
+          = form.label :sidebar_width, 'サイドバー幅'
+          .input-with-unit
+            = form.number_field :sidebar_width, value: (@setting.sidebar_width.presence || 300), class: 'form-control', min: 200, max: 400
+            %span.unit px
+
+      .customization-panel
+        %h3
+          ✨
+          デザイン設定
+        
+        .form-group
+          = form.label :border_radius, '角の丸み'
+          .input-with-unit
+            = form.number_field :border_radius, value: (@setting.border_radius.presence || 4), class: 'form-control', min: 0, max: 20
+            %span.unit px
+        
+        .form-group
+          = form.label :box_shadow, 'シャドウの強さ'
+          = form.select :box_shadow,
+            options_for_select([
+              ['なし', 'none'],
+              ['軽い', '0 1px 3px rgba(0,0,0,0.1)'],
+              ['標準', '0 2px 4px rgba(0,0,0,0.1)'],
+              ['強い', '0 4px 8px rgba(0,0,0,0.15)'],
+              ['とても強い', '0 8px 16px rgba(0,0,0,0.2)']
+            ], @setting.box_shadow.presence || '0 2px 4px rgba(0,0,0,0.1)'),
+            {}, { class: 'form-control' }
+        
+        .form-group
+          = form.label :animation_speed, 'アニメーション速度'
+          = form.select :animation_speed,
+            options_for_select([
+              ['なし', '0s'],
+              ['高速', '0.1s'],
+              ['標準', '0.2s'],
+              ['ゆっくり', '0.3s'],
+              ['とてもゆっくり', '0.5s']
+            ], @setting.animation_speed.presence || '0.2s'),
+            {}, { class: 'form-control' }
+
+    .preview-section
+      %h3 プレビュー
+      .preview-container
+        .preview-frame
+          .preview-header{style: "height: #{@setting.header_height.presence || 60}px; background: #{@setting.primary_color.presence || '#007bff'}"}
+            %span.preview-logo サイトロゴ
+          .preview-content
+            .preview-card{style: "border-radius: #{@setting.border_radius.presence || 4}px; box-shadow: #{@setting.box_shadow.presence || '0 2px 4px rgba(0,0,0,0.1)'}"}
+              %h4{style: "color: #{@setting.primary_color.presence || '#007bff'}; font-family: #{@setting.font_family.presence || 'system-ui, sans-serif'}"}
+                サンプル記事タイトル
+              %p{style: "font-family: #{@setting.font_family.presence || 'system-ui, sans-serif'}"}
+                こちらは記事の本文サンプルです。設定したフォントとカラーが適用されます。
+              %button.preview-button{style: "background: #{@setting.primary_color.presence || '#007bff'}; border-radius: #{@setting.border_radius.presence || 4}px"}
+                続きを読む
+
+    .customization-actions
+      = form.submit '設定を保存', class: 'btn btn-primary btn-lg'
+      = link_to 'リセット', admin_theme_customization_path, class: 'btn btn-outline-danger'
+      = link_to '戻る', edit_admin_settings_path, class: 'btn btn-secondary'

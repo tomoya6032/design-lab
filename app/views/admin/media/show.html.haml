@@ -1,0 +1,219 @@
+- content_for :page_title, @medium.title.presence || '無題のメディア'
+
+.media-detail-container
+  .media-detail-header
+    .media-actions
+      = link_to '編集', edit_admin_medium_path(@medium), class: 'btn btn-secondary'
+      = link_to '削除', admin_medium_path(@medium), method: :delete, 
+                data: { confirm: '本当に削除しますか？' }, class: 'btn btn-danger'
+      = link_to '一覧に戻る', admin_media_path, class: 'btn btn-outline-secondary'
+
+  .media-detail-content
+    .media-preview
+      - if @medium.file_type&.start_with?('image/')
+        %img.preview-image{src: @medium.file_url, alt: @medium.alt_text || @medium.title}
+      - elsif @medium.file_type&.start_with?('video/')
+        %video.preview-video{controls: true}
+          %source{src: @medium.file_url, type: @medium.file_type}
+          お使いのブラウザは動画の再生に対応していません。
+      - else
+        .preview-placeholder
+          %i.icon.icon-file
+          %h4= @medium.title.presence || '無題'
+          %p
+            = link_to 'ファイルを開く', @medium.file_url, target: '_blank', class: 'btn btn-primary'
+
+    .media-info-panel
+      %h3 メディア情報
+      
+      .info-group
+        %label タイトル
+        %p= @medium.title.presence || '未設定'
+      
+      .info-group
+        %label 説明
+        %p= @medium.description.presence || '未設定'
+      
+      .info-group
+        %label ファイルURL
+        %p
+          = link_to @medium.file_url, @medium.file_url, target: '_blank', class: 'file-url-link'
+      
+      .info-group
+        %label ファイルタイプ
+        %p
+          %span.file-type-badge= @medium.file_type || 'unknown'
+      
+      - if @medium.file_size.present?
+        .info-group
+          %label ファイルサイズ
+          %p= number_to_human_size(@medium.file_size)
+      
+      - if @medium.alt_text.present?
+        .info-group
+          %label alt属性
+          %p= @medium.alt_text
+      
+      .info-group
+        %label アップロード日
+        %p= @medium.created_at.strftime('%Y年%m月%d日 %H:%M')
+      
+      .info-group
+        %label 最終更新
+        %p= @medium.updated_at.strftime('%Y年%m月%d日 %H:%M')
+
+.media-detail-styles
+  :css
+    .media-detail-container {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .media-detail-header {
+      margin-bottom: 30px;
+      text-align: right;
+    }
+
+    .media-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+    }
+
+    .media-detail-content {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 30px;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      overflow: hidden;
+    }
+
+    .media-preview {
+      padding: 30px;
+      background: #f8f9fa;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 400px;
+    }
+
+    .preview-image {
+      max-width: 100%;
+      max-height: 100%;
+      border-radius: 4px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    .preview-video {
+      max-width: 100%;
+      max-height: 100%;
+      border-radius: 4px;
+    }
+
+    .preview-placeholder {
+      text-align: center;
+      color: #666;
+    }
+
+    .preview-placeholder i {
+      font-size: 64px;
+      color: #ccc;
+      margin-bottom: 20px;
+    }
+
+    .preview-placeholder h4 {
+      margin: 0 0 15px 0;
+      color: #333;
+    }
+
+    .media-info-panel {
+      padding: 30px;
+    }
+
+    .media-info-panel h3 {
+      margin: 0 0 25px 0;
+      color: #333;
+      border-bottom: 2px solid #f8f9fa;
+      padding-bottom: 10px;
+    }
+
+    .info-group {
+      margin-bottom: 20px;
+    }
+
+    .info-group label {
+      display: block;
+      font-weight: 600;
+      color: #666;
+      font-size: 12px;
+      text-transform: uppercase;
+      margin-bottom: 5px;
+    }
+
+    .info-group p {
+      margin: 0;
+      color: #333;
+      word-break: break-all;
+    }
+
+    .file-url-link {
+      color: #007bff;
+      text-decoration: none;
+    }
+
+    .file-url-link:hover {
+      text-decoration: underline;
+    }
+
+    .file-type-badge {
+      background: #e9ecef;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      text-transform: uppercase;
+      font-weight: 500;
+    }
+
+    .btn {
+      padding: 8px 16px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .btn-primary {
+      background: #007bff;
+      color: white;
+    }
+
+    .btn-secondary {
+      background: #6c757d;
+      color: white;
+    }
+
+    .btn-danger {
+      background: #dc3545;
+      color: white;
+    }
+
+    .btn-outline-secondary {
+      background: transparent;
+      color: #6c757d;
+      border: 1px solid #6c757d;
+    }
+
+    .btn:hover {
+      opacity: 0.9;
+    }
+
+    @media (max-width: 768px) {
+      .media-detail-content {
+        grid-template-columns: 1fr;
+      }
+    }

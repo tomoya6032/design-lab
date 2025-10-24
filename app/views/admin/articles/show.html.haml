@@ -1,0 +1,66 @@
+- content_for :page_title, @article.title
+
+.article-detail-container
+  .article-header
+    .article-meta
+      .status-badge{class: "status-#{@article.status}"}
+        = @article.status&.upcase
+      %span.article-date
+        = @article.published_at&.strftime('%Y年%m月%d日 %H:%M') || @article.created_at&.strftime('%Y年%m月%d日 %H:%M')
+    
+    %h1.article-title= @article.title
+    
+    - if @article.meta_description.present?
+      %p.article-description= @article.meta_description
+
+    - if @article.image_url.present?
+      .article-image
+        %img{src: @article.image_url, alt: @article.title}
+
+  .article-content
+    .content-wrapper
+      - if @article.content_json.present?
+        .article-body
+          = simple_format(@article.content_json)
+      - else
+        .no-content
+          %p コンテンツがありません。
+
+  - if @article.custom_fields.present?
+    .article-custom-fields
+      %h3 追加情報
+      - if @article.custom_fields['tags'].present?
+        .field-item
+          %strong タグ:
+          .tags
+            - @article.custom_fields['tags'].split(',').each do |tag|
+              %span.tag= tag.strip
+      
+      - if @article.custom_fields['category'].present?
+        .field-item
+          %strong カテゴリ:
+          %span.category= @article.custom_fields['category']
+
+  .article-info
+    %h3 記事情報
+    .info-grid
+      .info-item
+        %strong スラッグ:
+        %code= @article.slug
+      .info-item
+        %strong 作成者:
+        = @article.user&.email
+      .info-item
+        %strong 作成日時:
+        = @article.created_at&.strftime('%Y年%m月%d日 %H:%M')
+      .info-item
+        %strong 更新日時:
+        = @article.updated_at&.strftime('%Y年%m月%d日 %H:%M')
+
+  .article-actions
+    = link_to '編集', edit_admin_article_path(@article), class: 'btn btn-primary'
+    = link_to '記事一覧', admin_articles_path, class: 'btn btn-secondary'
+    = link_to '削除', admin_article_path(@article), method: :delete, 
+      confirm: '本当に削除しますか？', class: 'btn btn-danger'
+
+.article-detail-styles

@@ -1,0 +1,131 @@
+/* 記事詳細ページのスタイル */
+.article-detail {
+  min-height: 100vh;
+}
+
+.article-header {
+  background: #f8f9fa;
+  padding: 60px 0 40px;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.article-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #212529;
+  margin-bottom: 20px;
+  line-height: 1.3;
+}
+
+.article-meta {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  color: #6c757d;
+  font-size: 0.95rem;
+  margin-bottom: 15px;
+}
+
+.article-date {
+  font-weight: 500;
+}
+
+.article-author {
+  font-weight: 500;
+}
+
+.article-category {
+  background: #007bff;
+  color: white;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.article-tags {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.tag {
+  background: #e9ecef;
+  color: #495057;
+  padding: 3px 10px;
+  border-radius: 15px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.article-content {
+  padding: 60px 0;
+}
+
+.article-image {
+  margin-bottom: 40px;
+  text-align: center;
+}
+
+.article-image img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.article-body {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: #212529;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.article-body p {
+  margin-bottom: 20px;
+}
+
+.article-navigation {
+  padding: 40px 0;
+  background: #f8f9fa;
+  border-top: 1px solid #e9ecef;
+  text-align: center;
+}
+
+.btn {
+  display: inline-block;
+  padding: 12px 24px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.btn-secondary {
+  background: #6c757d;
+  color: white;
+}
+
+.btn-secondary:hover {
+  background: #545b62;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 768px) {
+  .article-title {
+    font-size: 2rem;
+  }
+  
+  .article-meta {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  
+  .article-body {
+    font-size: 1rem;
+  }
+}

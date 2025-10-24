@@ -1,0 +1,37 @@
+!!!
+%html{lang: 'ja'}
+  %head
+    %meta{charset: 'utf-8'}
+    %meta{name: 'viewport', content: 'width=device-width, initial-scale=1'}
+    %title
+      - if content_for?(:title)
+        = yield(:title)
+        \- 
+      = @site_setting&.site_name || 'Design Lab CMS'
+    
+    = csrf_meta_tags
+    = csp_meta_tag
+    
+    = stylesheet_link_tag 'application', 'data-turbo-track': 'reload'
+    = stylesheet_link_tag 'site_articles', 'data-turbo-track': 'reload'
+    = javascript_importmap_tags
+    
+  %body.site-layout
+    %header.site-header
+      .container
+        %nav.navbar
+          = link_to root_path, class: 'navbar-brand' do
+            = @site_setting&.site_name || 'Design Lab'
+          
+          %ul.navbar-nav
+            %li.nav-item
+              = link_to 'ホーム', root_path, class: 'nav-link'
+            %li.nav-item
+              = link_to '管理画面', admin_root_path, class: 'nav-link'
+    
+    %main.site-main
+      = yield
+    
+    %footer.site-footer
+      .container
+        %p &copy; 2025 #{@site_setting&.site_name || 'Design Lab CMS'}. All rights reserved.

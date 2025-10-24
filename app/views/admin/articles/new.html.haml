@@ -1,0 +1,65 @@
+- content_for :page_title, '新規記事作成'
+
+.article-form-container
+  .form-header
+    %h2 新規記事作成
+    %p 新しい記事を作成します。
+
+  = form_with model: [:admin, @article], local: true, html: { class: 'article-form' } do |form|
+    - if @article.errors.any?
+      .alert.alert-danger
+        %h4 入力エラーがあります：
+        %ul
+          - @article.errors.full_messages.each do |message|
+            %li= message
+
+    .form-section
+      .form-group
+        = form.label :title, 'タイトル'
+        = form.text_field :title, class: 'form-control', placeholder: '記事のタイトルを入力してください'
+      
+      .form-group
+        = form.label :slug, 'URL スラッグ'
+        = form.text_field :slug, class: 'form-control', placeholder: 'article-url-slug'
+        %small.form-text URL に使用される識別子です（自動生成されます）
+
+    .form-section
+      .form-group
+        = form.label :content_json, 'コンテンツ'
+        = form.text_area :content_json, rows: 15, class: 'form-control content-editor', placeholder: '記事の内容を入力してください...'
+        %small.form-text Markdown記法が使用できます
+
+    .form-section
+      .form-row
+        .form-group.half-width
+          = form.label :status, 'ステータス'
+          = form.select :status, options_for_select([['下書き', 'draft'], ['公開', 'published'], ['非公開', 'private']], @article.status || 'draft'), {}, { class: 'form-control' }
+        
+        .form-group.half-width
+          = form.label :published_at, '公開日時'
+          = form.datetime_local_field :published_at, class: 'form-control'
+
+    .form-section
+      .form-group
+        = form.label :meta_description, 'メタ説明'
+        = form.text_area :meta_description, rows: 3, class: 'form-control', placeholder: 'SEO用の記事説明（160文字以内推奨）'
+        %small.form-text 検索結果に表示される説明文です
+
+      .form-group
+        = form.label :image_url, 'アイキャッチ画像URL'
+        = form.url_field :image_url, class: 'form-control', placeholder: 'https://example.com/image.jpg'
+
+    .form-section.custom-fields
+      %h4 カスタムフィールド
+      .custom-field-item
+        %label タグ
+        = text_field_tag 'article[custom_fields][tags]', (@article.custom_fields&.dig('tags') || '').to_s, class: 'form-control', placeholder: 'タグ1, タグ2, タグ3'
+        %small.form-text カンマ区切りで入力してください
+
+      .custom-field-item
+        %label カテゴリ
+        = text_field_tag 'article[custom_fields][category]', (@article.custom_fields&.dig('category') || '').to_s, class: 'form-control', placeholder: 'カテゴリ名'
+
+    .form-actions
+      = form.submit '記事を作成', class: 'btn btn-primary btn-lg'
+      = link_to 'キャンセル', admin_articles_path, class: 'btn btn-secondary'

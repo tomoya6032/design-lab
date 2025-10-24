@@ -1,0 +1,192 @@
+- content_for :page_title, 'ユーザー編集'
+
+.user-edit-container
+  = form_with model: [:admin, @user], local: true, html: { class: 'user-edit-form' } do |form|
+    - if @user.errors.any?
+      .alert.alert-danger
+        %h4 #{@user.errors.count}件のエラーがあります:
+        %ul
+          - @user.errors.full_messages.each do |message|
+            %li= message
+
+    .form-section
+      %h3 基本情報
+      
+      .form-row
+        .form-group.half-width
+          = form.label :first_name, '名前（姓）'
+          = form.text_field :first_name, class: 'form-control'
+        
+        .form-group.half-width
+          = form.label :last_name, '名前（名）'
+          = form.text_field :last_name, class: 'form-control'
+      
+      .form-group
+        = form.label :email, 'メールアドレス'
+        = form.email_field :email, class: 'form-control'
+      
+      .form-group
+        = form.label :role, '権限'
+        = form.select :role, 
+          options_for_select(User.role_options.map { |k, v| [v, k] }, @user.role), 
+          {}, 
+          { class: 'form-control' }
+        %small.form-text
+          %strong 管理者:
+          全ての機能にアクセス可能
+          %br
+          %strong 編集者:
+          記事・ページの作成・編集が可能
+          %br
+          %strong ユーザー:
+          閲覧のみ
+
+    .form-section
+      %h3 パスワード変更
+      %p.password-note パスワードを変更する場合のみ入力してください
+      
+      .form-group
+        = form.label :password, '新しいパスワード'
+        = form.password_field :password, class: 'form-control', autocomplete: 'new-password'
+        %small.form-text 6文字以上で入力してください
+      
+      .form-group
+        = form.label :password_confirmation, 'パスワード確認'
+        = form.password_field :password_confirmation, class: 'form-control', autocomplete: 'new-password'
+
+    .form-actions
+      = form.submit 'ユーザー情報を更新', class: 'btn btn-primary'
+      = link_to 'キャンセル', admin_user_path(@user), class: 'btn btn-secondary'
+      = link_to '一覧に戻る', admin_users_path, class: 'btn btn-outline-secondary'
+
+.user-edit-styles
+  :css
+    .user-edit-container {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .user-edit-form {
+      background: white;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .alert {
+      padding: 15px;
+      border-radius: 4px;
+      margin-bottom: 20px;
+    }
+
+    .alert-danger {
+      background: #f8d7da;
+      border: 1px solid #f5c6cb;
+      color: #721c24;
+    }
+
+    .alert h4 {
+      margin: 0 0 10px 0;
+      font-size: 16px;
+    }
+
+    .alert ul {
+      margin: 0;
+      padding-left: 20px;
+    }
+
+    .form-section {
+      margin-bottom: 30px;
+    }
+
+    .form-section h3 {
+      margin: 0 0 20px 0;
+      color: #333;
+      border-bottom: 2px solid #f8f9fa;
+      padding-bottom: 10px;
+    }
+
+    .form-row {
+      display: flex;
+      gap: 15px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group.half-width {
+      flex: 1;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 600;
+      color: #333;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #ced4da;
+      border-radius: 4px;
+      font-size: 16px;
+    }
+
+    .form-control:focus {
+      border-color: #007bff;
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(0,123,255,0.25);
+    }
+
+    .form-text {
+      font-size: 12px;
+      color: #6c757d;
+      margin-top: 4px;
+      line-height: 1.4;
+    }
+
+    .password-note {
+      color: #666;
+      font-style: italic;
+      margin-bottom: 15px;
+    }
+
+    .form-actions {
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 1px solid #f8f9fa;
+      text-align: right;
+    }
+
+    .btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+      text-decoration: none;
+      display: inline-block;
+      margin-left: 10px;
+    }
+
+    .btn-primary {
+      background: #007bff;
+      color: white;
+    }
+
+    .btn-secondary {
+      background: #6c757d;
+      color: white;
+    }
+
+    .btn-outline-secondary {
+      background: transparent;
+      color: #6c757d;
+      border: 1px solid #6c757d;
+    }
+
+    .btn:hover {
+      opacity: 0.9;
+    }

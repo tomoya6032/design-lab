@@ -1,0 +1,133 @@
+- content_for :page_title, '新規メディア追加'
+
+.media-upload-container
+  = form_with model: [:admin, @medium], local: true, html: { class: 'media-upload-form', multipart: true } do |form|
+    .form-section
+      %h3 メディア情報
+      
+      .form-group
+        = form.label :title, 'タイトル'
+        = form.text_field :title, class: 'form-control', placeholder: 'メディアのタイトルを入力'
+      
+      .form-group
+        = form.label :description, '説明'
+        = form.text_area :description, rows: 3, class: 'form-control', placeholder: 'メディアの説明を入力（任意）'
+      
+      .form-group
+        = form.label :file_url, 'ファイルURL'
+        = form.url_field :file_url, class: 'form-control', placeholder: 'https://example.com/image.jpg'
+        %small.form-text ファイルの直接URLを入力してください
+      
+      .form-group
+        = form.label :file_type, 'ファイルタイプ'
+        = form.select :file_type, 
+          options_for_select([
+            ['画像 (JPEG)', 'image/jpeg'],
+            ['画像 (PNG)', 'image/png'],
+            ['画像 (GIF)', 'image/gif'],
+            ['画像 (WebP)', 'image/webp'],
+            ['動画 (MP4)', 'video/mp4'],
+            ['動画 (WebM)', 'video/webm'],
+            ['PDF文書', 'application/pdf'],
+            ['Word文書', 'application/msword'],
+            ['その他', 'application/octet-stream']
+          ], @medium.file_type), 
+          { prompt: 'ファイルタイプを選択' }, 
+          { class: 'form-control' }
+      
+      .form-group
+        = form.label :file_size, 'ファイルサイズ（バイト）'
+        = form.number_field :file_size, class: 'form-control', placeholder: '例: 1024000'
+      
+      .form-group
+        = form.label :alt_text, 'alt属性（画像の場合）'
+        = form.text_field :alt_text, class: 'form-control', placeholder: '画像の代替テキスト'
+        %small.form-text 画像の内容を説明するテキスト（アクセシビリティ向上）
+
+    .form-actions
+      = form.submit 'メディアを追加', class: 'btn btn-primary'
+      = link_to 'キャンセル', admin_media_path, class: 'btn btn-secondary'
+
+.media-upload-styles
+  :css
+    .media-upload-container {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .media-upload-form {
+      background: white;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .form-section h3 {
+      margin: 0 0 20px 0;
+      color: #333;
+      border-bottom: 2px solid #f8f9fa;
+      padding-bottom: 10px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 600;
+      color: #333;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #ced4da;
+      border-radius: 4px;
+      font-size: 16px;
+    }
+
+    .form-control:focus {
+      border-color: #007bff;
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(0,123,255,0.25);
+    }
+
+    .form-text {
+      font-size: 12px;
+      color: #6c757d;
+      margin-top: 4px;
+    }
+
+    .form-actions {
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 1px solid #f8f9fa;
+      text-align: right;
+    }
+
+    .btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+      text-decoration: none;
+      display: inline-block;
+      margin-left: 10px;
+    }
+
+    .btn-primary {
+      background: #007bff;
+      color: white;
+    }
+
+    .btn-secondary {
+      background: #6c757d;
+      color: white;
+    }
+
+    .btn:hover {
+      opacity: 0.9;
+    }
