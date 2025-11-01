@@ -74,4 +74,10 @@ Rails.application.configure do
   
   # 🗂️ Better Errors設定
   # BetterErrors.application_root = Rails.root.to_s
+  
+  # Assets設定 - 開発環境で動的コンパイル
+  config.assets.debug = true
+  config.assets.compile = true
+  config.assets.digest = false  # 開発環境ではdigestを無効化
+  config.assets.check_precompiled_asset = false
 end

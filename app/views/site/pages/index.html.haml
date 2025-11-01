@@ -1,0 +1,27 @@
+- content_for :title, '固定ページ一覧'
+
+.container
+  .main-content
+    .hero-section
+      %h1.hero-title 固定ページ一覧
+      %p.hero-description サイトで公開されている固定ページの一覧です
+
+    .pages-listing
+      - if @pages.any?
+        .pages-grid
+          - @pages.each do |page|
+            .page-card
+              - if page.featured_image.present?
+                .page-image
+                  = link_to site_page_path(page) do
+                    %img{src: url_for(page.featured_image), alt: page.title}
+              .page-content
+                %h2.page-title
+                  = link_to page.title, site_page_path(page)
+                - if page.meta_description.present?
+                  %p.page-description= truncate(page.meta_description, length: 150)
+                .page-meta
+                  %time.page-date= page.updated_at.strftime('%Y年%m月%d日更新')
+      - else
+        .no-pages
+          %p 公開されている固定ページがありません。

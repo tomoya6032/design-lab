@@ -1,82 +1,164 @@
 - content_for :title, 'ホーム'
 
-.hero-section
-  .hero-container
-    .hero-content
-      %h1.hero-title Design Labへようこそ
-      %p.hero-description 高速で美しい、モダンなウェブサイトを簡単に作成・管理できるCMSです
-      .hero-actions
-        = link_to 'はじめる', '#', class: 'btn btn-primary btn-large'
-        = link_to 'もっと詳しく', '#', class: 'btn btn-secondary btn-large'
+- if @site_setting&.hero_background_image&.attached?
+  .hero-section.with-background{style: "background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(#{url_for(@site_setting.hero_background_image)}); background-size: cover; background-position: center; background-repeat: no-repeat;"}
+    .hero-container
+      .hero-content
+        %h1.hero-title Design Labへようこそ
+        %p.hero-description 高速で美しい、モダンなウェブサイトを簡単に作成・管理できるCMSです
+- else
+  .hero-section
+    .hero-container
+      .hero-content
+        %h1.hero-title Design Labへようこそ
+        %p.hero-description 高速で美しい、モダンなウェブサイトを簡単に作成・管理できるCMSです
 
-%div.debug-info{style: "background: #f5f5f5; padding: 10px; margin: 20px 0; border: 1px solid #ddd;"}
-  %p 記事数: #{@recent_articles.count}
-  %p 記事のステータス: #{Article.all.map(&:status).join(', ')}
-  %p 公開記事数: #{Article.published.count}
+%section.problems-section
+  .container
+    %h2.section-title こんなお悩みありませんか？
+    %p.section-subtitle 以下のような課題があれば当社が解決します！まずはご相談ください。
+    
+    .problems-grid
+      .problems-row.top-row
+        .problem-card
+          .problem-icon
+            = image_tag 'growth-image.png', class: 'problem-image', alt: '売り上げ成長'
+          .problem-content
+            %h3.problem-title 売り上げ成長
+            %p.problem-description ビジネスの売上向上に課題を感じていませんか？競合他社との差別化が難しく、思うように売上が伸びない...そんな状況から脱却したいとお考えの経営者様へ。私たちは豊富な経験と実績に基づいた効果的な戦略立案から実行支援まで、売上成長の全プロセスをトータルサポートいたします。
+        
+        .problem-card
+          .problem-icon
+            = image_tag 'customer-image.png', class: 'problem-image', alt: '集客'
+          .problem-content
+            %h3.problem-title 集客
+            %p.problem-description 新規顧客の獲得に苦戦していませんか？広告費をかけても思うような効果が得られない、見込み客は集まるが成約に繋がらない、どの集客手法が自社に適しているか分からない...そんなお悩みを抱えていませんか？私たちは貴社のターゲット層を深く分析し、最適な集客戦略を立案・実行いたします。
+        
+        .problem-card
+          .problem-icon
+            = image_tag 'sales-tool-image.png', class: 'problem-image', alt: '営業ツール'
+          .problem-content
+            %h3.problem-title 営業ツール
+            %p.problem-description 営業効率を上げるツールをお探しですか？営業担当者の業務負担が重く、顧客管理が煩雑になっている、提案資料の作成に時間がかかりすぎる、営業プロセスが属人化してしまっている...こうした課題を解決するため、私たちは貴社の営業スタイルに合わせた最適なツール選定から導入・運用支援まで包括的にサポートいたします。
+      
+      .problems-row.bottom-row
+        .problem-card
+          .problem-icon
+            = image_tag 'IMG_5943.JPG', class: 'problem-image', alt: 'webサイト'
+          .problem-content
+            %h3.problem-title webサイト
+            %p.problem-description 効果的なwebサイトの構築・運用にお困りですか？既存のサイトが古くて使いにくい、スマホ対応ができていない、SEO対策が不十分でアクセス数が伸びない、問い合わせに繋がらない...そんな課題を抱えていませんか？私たちは最新の技術とマーケティング戦略を駆使して、成果の出るwebサイト作りを全面的にサポートいたします。
+        
+        .problem-card
+          .problem-icon
+            = image_tag 'IMG_0379.jpeg', class: 'problem-image', alt: '外注したい'
+          .problem-content
+            %h3.problem-title webサイトを外注したい
+            %p.problem-description 信頼できる外注先をお探しですか？過去に外注で失敗した経験がある、予算内で品質の高いサイトを作りたい、制作後のサポートも含めて任せたい、技術的なことが分からず不安...そんなお悩みをお持ちではありませんか？私たちは豊富な実績と確かな技術力、そして丁寧なコミュニケーションで、お客様のご要望を形にいたします。
+
+%section.why-choose-us-section
+  .container
+    %h2.section-title Design Labが選ばれる3つのポイント
+    .points-grid
+      .point-item
+        .point-visual
+          .point-image
+            = image_tag 'IMG_0379.jpeg', class: 'point-icon-image', alt: '高速表示'
+        .point-content
+          .point-number POINT 1
+          %h3.point-title 圧倒的な高速表示
+          %p.point-description 最新の技術スタックとCDN配信により、ページの読み込み速度を大幅に向上。ユーザーの離脱率を下げ、SEO評価も向上します。モバイルファーストの設計で、どんなデバイスからでも快適にアクセスできます。
+      
+      .point-item
+        .point-visual
+          .point-image
+            = image_tag 'IMG_0379.jpeg', class: 'point-icon-image', alt: 'デザインシステム'
+        .point-content
+          .point-number POINT 2
+          %h3.point-title 美しいデザインシステム
+          %p.point-description テーマカラーの変更だけで、サイト全体の印象を瞬時に変更可能。プロのデザイナーが設計した美しいコンポーネントとレイアウトで、ブランドの個性を最大限に表現できます。
+      
+      .point-item
+        .point-visual
+          .point-image
+            = image_tag 'IMG_0379.jpeg', class: 'point-icon-image', alt: '管理システム'
+        .point-content
+          .point-number POINT 3
+          %h3.point-title 直感的な管理システム
+          %p.point-description WYSIWYGエディターを搭載し、HTMLの知識がなくても美しいコンテンツを作成可能。記事の公開・下書き管理、画像アップロード、SEO設定まで、すべてを一つの管理画面で完結できます。
 
 - if @recent_articles.any?
   %section.recent-articles-section
     .container
-      %h2.section-title 最新の記事
-      .articles-grid
-        - @recent_articles.each do |article|
-          .article-card
-            - if article.image_url.present?
-              .article-image
-                %img{src: article.image_url, alt: article.title}
-            .article-content
-              %h3.article-title
-                = link_to article.title, site_article_path(article.slug)
-              %p.article-excerpt
-                - if article.content_json.is_a?(String)
-                  = truncate(strip_tags(article.content_json), length: 100)
-                - elsif article.content_json.is_a?(Hash)
-                  = truncate(strip_tags(article.content_json.dig('content')), length: 100)
-                - else
-                  = truncate(article.meta_description.presence || '', length: 100)
-              .article-meta
-                %time.article-date= article.published_at&.strftime('%Y年%m月%d日')
+      %h2.section-title 最新のコラム
+      .content-with-sidebar
+        .main-content
+          .articles-grid
+            - @recent_articles.each do |article|
+              .article-card
+                = link_to safe_article_path(article), class: 'article-link' do
+                  .article-thumbnail
+                    - if article_featured_image_url(article)
+                      = article_featured_image_tag(article, class: 'article-thumbnail-image')
+                    - else
+                      .article-no-image
+                        %i.icon-document
+                  .article-info
+                    %h3.article-title= article.title
+                    %time.article-date= article.published_at&.strftime('%Y年%m月%d日')
+          .section-action
+            = link_to site_articles_path, class: 'btn btn-cta' do
+              %span.btn-text コラム一覧を見る
+              %i.btn-icon →
+        
+        .sidebar
+          = render 'shared/sidebar'
 - else
   %section.no-articles-section
     .container
       %h2.section-title 記事はまだありません
       %p 管理画面から記事を作成し、公開してください。
 
-- if @featured_pages.any?
-  %section.featured-pages-section
+- if @portfolios.any?
+  %section.portfolios-section
     .container
-      %h2.section-title 主要ページ
-      .pages-grid
-        - @featured_pages.each do |page|
-          .page-card
-            %h3.page-title
-              = link_to page.title, '#'
-            %p.page-excerpt
-              - if page.content_json.is_a?(String)
-                = truncate(strip_tags(page.content_json), length: 80)
-              - elsif page.content_json.is_a?(Hash)
-                = truncate(strip_tags(page.content_json.dig('content')), length: 80)
-              - else
-                = truncate(page.meta_description.presence || '', length: 80)
+      %h2.section-title 制作実績
+      %p.section-subtitle これまでに手がけたWebサイトの一部をご紹介いたします
+      
+      .portfolios-grid
+        - @portfolios.each do |portfolio|
+          .portfolio-item
+            .portfolio-images
+              .image-container.pc-image
+                - if portfolio.pc_images.any?
+                  .portfolio-screenshots-grid
+                    - portfolio.pc_images.limit(2).each_with_index do |pc_image, index|
+                      = image_tag pc_image, class: 'portfolio-screenshot', alt: "#{portfolio.title} PC版#{index + 1}"
+                - else
+                  .no-image PC版画像なし
+                %span.device-label PC画面（#{portfolio.pc_images.count}枚）
+              .image-container.sp-image
+                - if portfolio.sp_images.any?
+                  .portfolio-screenshots-grid
+                    - portfolio.sp_images.limit(2).each_with_index do |sp_image, index|
+                      = image_tag sp_image, class: 'portfolio-screenshot', alt: "#{portfolio.title} SP版#{index + 1}"
+                - else
+                  .no-image SP版画像なし
+                %span.device-label スマートフォン画面（#{portfolio.sp_images.count}枚）
+            
+            .portfolio-content
+              %h3.portfolio-title= portfolio.title
+              .portfolio-meta
+                %span.production-period
+                  %i.icon-clock
+                  制作期間: #{portfolio.production_period}
+              %p.portfolio-description= truncate(portfolio.description, length: 120)
+            -#   %a.portfolio-link{href: "#", onclick: "return false;"} 詳細を見る
+- else
+  %section.no-portfolios-section
+    .container
+      %h2.section-title 制作実績
+      %p 制作実績はまだ登録されていません。管理画面から追加してください。
+      = link_to '管理画面へ', admin_portfolios_path, class: 'btn btn-primary'
 
-%section.features-section
-  .container
-    %h2.section-title 特徴
-    .features-grid
-      .feature-item
-        .feature-icon
-          %i.icon.icon-speed
-        %h3.feature-title 高速表示
-        %p.feature-description 最新技術による高速なページ読み込み
-      
-      .feature-item
-        .feature-icon
-          %i.icon.icon-responsive
-        %h3.feature-title レスポンシブ
-        %p.feature-description 全デバイスに対応した美しいデザイン
-      
-      .feature-item
-        .feature-icon
-          %i.icon.icon-easy
-        %h3.feature-title 簡単管理
-        %p.feature-description 直感的な管理画面で楽々コンテンツ更新
+

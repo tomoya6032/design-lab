@@ -1,0 +1,199 @@
+// Sidebar Styles
+.content-with-sidebar {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 40px;
+  align-items: start;
+}
+
+.main-content {
+  min-width: 0; // グリッドオーバーフロー防止
+}
+
+.sidebar {
+  background: $light-color;
+  border-radius: $border-radius;
+  padding: 0;
+  position: sticky;
+  top: 20px;
+}
+
+// Sidebar Widgets
+.sidebar-widget {
+  background: white;
+  border-radius: $border-radius;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-lg;
+  box-shadow: $box-shadow;
+  
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.widget-title {
+  font-size: 1.1rem;
+  font-weight: $font-weight-bold;
+  color: $dark-color;
+  margin-bottom: $spacing-md;
+  padding-bottom: $spacing-sm;
+  border-bottom: 2px solid $primary-color;
+}
+
+// Search Widget
+.search-form {
+  .search-input-group {
+    display: flex;
+    gap: $spacing-sm;
+  }
+  
+  .search-input {
+    flex: 1;
+    padding: $spacing-sm $spacing-md;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    
+    &:focus {
+      outline: none;
+      border-color: $primary-color;
+      box-shadow: 0 0 0 0.2rem rgba($primary-color, 0.25);
+    }
+  }
+  
+  .search-button {
+    padding: $spacing-sm $spacing-md;
+    font-size: 0.9rem;
+    white-space: nowrap;
+  }
+}
+
+// Categories Widget
+.category-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.category-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: $spacing-sm 0;
+  border-bottom: 1px solid #e9ecef;
+  
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.category-link {
+  color: $dark-color;
+  text-decoration: none;
+  font-weight: 500;
+  flex: 1;
+  
+  &:hover {
+    color: $primary-color;
+  }
+}
+
+.category-count {
+  color: $secondary-color;
+  font-size: 0.85rem;
+  background: $light-color;
+  padding: 2px 8px;
+  border-radius: 12px;
+}
+
+// Tags Widget
+.tag-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-sm;
+}
+
+.tag-link {
+  background: $light-color;
+  color: $secondary-color;
+  padding: 4px 10px;
+  border-radius: 15px;
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 500;
+  transition: $transition;
+  
+  &:hover {
+    background: $primary-color;
+    color: white;
+  }
+}
+
+// Recent Posts Widget
+.recent-posts-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.recent-post-item {
+  padding: $spacing-sm 0;
+  border-bottom: 1px solid #e9ecef;
+  
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.recent-post-link {
+  color: $dark-color;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  display: block;
+  margin-bottom: 4px;
+  
+  &:hover {
+    color: $primary-color;
+  }
+}
+
+.recent-post-date {
+  color: $secondary-color;
+  font-size: 0.8rem;
+}
+
+// No Items Message
+.no-items {
+  color: $secondary-color;
+  font-size: 0.9rem;
+  text-align: center;
+  margin: 0;
+  padding: $spacing-md 0;
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .content-with-sidebar {
+    grid-template-columns: 1fr;
+    gap: $spacing-lg;
+  }
+  
+  .sidebar {
+    position: static;
+    order: -1; // サイドバーを上に表示
+  }
+  
+  .sidebar-widget {
+    margin-bottom: $spacing-md;
+  }
+  
+  .search-form .search-input-group {
+    flex-direction: column;
+  }
+  
+  .search-button {
+    width: 100%;
+  }
+}

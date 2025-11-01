@@ -13,7 +13,6 @@
     = csp_meta_tag
     
     = stylesheet_link_tag 'application', 'data-turbo-track': 'reload'
-    = stylesheet_link_tag 'site_articles', 'data-turbo-track': 'reload'
     = javascript_importmap_tags
     
   %body.site-layout
@@ -23,15 +22,33 @@
           = link_to root_path, class: 'navbar-brand' do
             = @site_setting&.site_name || 'Design Lab'
           
-          %ul.navbar-nav
-            %li.nav-item
-              = link_to 'ホーム', root_path, class: 'nav-link'
-            %li.nav-item
-              = link_to '管理画面', admin_root_path, class: 'nav-link'
+          .navbar-icons
+            = link_to 'https://twitter.com', class: 'icon-link twitter', target: '_blank', rel: 'noopener' do
+              %img{src: 'https://cdn-icons-png.flaticon.com/24/25/25694.png', alt: 'Twitter', class: 'icon-image'}
+            = link_to 'https://facebook.com', class: 'icon-link facebook', target: '_blank', rel: 'noopener' do
+              %img{src: 'https://cdn-icons-png.flaticon.com/24/124/124010.png', alt: 'Facebook', class: 'icon-image'}
+            = link_to 'https://linkedin.com', class: 'icon-link linkedin', target: '_blank', rel: 'noopener' do
+              %img{src: 'https://cdn-icons-png.flaticon.com/24/145/145807.png', alt: 'LinkedIn', class: 'icon-image'}
+            = link_to 'https://github.com', class: 'icon-link github', target: '_blank', rel: 'noopener' do
+              %img{src: 'https://cdn-icons-png.flaticon.com/24/25/25231.png', alt: 'GitHub', class: 'icon-image'}
+    
+    %nav.main-navigation
+      .container
+        %ul.main-nav-list
+          %li.main-nav-item
+            = link_to 'ホーム', root_path, class: 'main-nav-link'
+          - if @navigation_pages.present?
+            - @navigation_pages.limit(3).each do |page|
+              %li.main-nav-item
+                = link_to page.title, site_page_path(page), class: 'main-nav-link'
     
     %main.site-main
       = yield
     
     %footer.site-footer
       .container
-        %p &copy; 2025 #{@site_setting&.site_name || 'Design Lab CMS'}. All rights reserved.
+        .footer-content
+          %p &copy; 2025 #{@site_setting&.site_name || 'Design Lab CMS'}. All rights reserved.
+          .footer-links
+            = link_to '私たちについて', site_pages_path, class: 'footer-link'
+            = link_to '管理画面', admin_root_path, class: 'footer-link'

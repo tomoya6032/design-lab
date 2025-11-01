@@ -13,6 +13,8 @@
     = csp_meta_tag
     = stylesheet_link_tag 'application', 'data-turbo-track': 'reload'
     = javascript_include_tag 'application', 'data-turbo-track': 'reload'
+    = javascript_include_tag 'admin/rich_editor', 'data-turbo-track': 'reload'
+    = javascript_include_tag 'admin/image_upload', 'data-turbo-track': 'reload'
   %body.admin-body
     %header.admin-header
       .admin-header-content
@@ -44,6 +46,10 @@
             = link_to admin_media_path, class: 'admin-menu-link' do
               %i.icon.icon-media
               メディア
+          %li.admin-menu-item
+            = link_to admin_portfolios_path, class: 'admin-menu-link' do
+              %i.icon.icon-portfolio
+              制作実績
           %li.admin-menu-item
             = link_to admin_users_path, class: 'admin-menu-link' do
               %i.icon.icon-users

@@ -4,9 +4,23 @@ Rails.application.routes.draw do
   # 管理画面
   namespace :admin do
     get 'dashboard', to: 'dashboard#index'
-    resources :articles
-    resources :pages
+    resources :articles do
+      collection do
+        post 'fetch_ogp'
+        post 'upload_images'
+      end
+    end
+    resources :pages do
+      collection do
+        post 'fetch_ogp'
+        post 'upload_images'
+        patch 'update_navigation'
+      end
+    end
     resources :media
+    resources :portfolios do
+      delete 'images/:id', to: 'portfolios#destroy_image', as: 'destroy_image'
+    end
     resources :users, only: [:index, :show, :edit, :update, :destroy]
     resource :settings, only: [:show, :edit, :update]
     get 'theme-customization', to: 'theme_customization#edit'
@@ -17,9 +31,13 @@ Rails.application.routes.draw do
   # フロントエンド
   namespace :site do
     get 'home/index'
-    resources :articles, only: [:show]
+    resources :articles, only: [:index, :show]
+    resources :pages, only: [:index, :show]
     root 'home#index'  # /site のルートパス
   end
+  
+  # 固定ページ用の短縮ルート
+  get 'page/:id', to: 'site/pages#show', as: :page
   
   # API
   namespace :api do

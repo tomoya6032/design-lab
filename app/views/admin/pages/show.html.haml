@@ -1,0 +1,54 @@
+- content_for :page_title, @page.title
+
+.article-detail-container
+  .article-header
+    .article-meta
+      .status-badge{class: "status-#{@page.status}"}
+        = @page.status&.upcase
+      %span.article-date
+        = @page.created_at&.strftime('%Y年%m月%d日 %H:%M')
+    
+    %h1.article-title= @page.title
+    
+    - if @page.meta_description.present?
+      %p.article-description= @page.meta_description
+
+    - if @page.featured_image.present?
+      .article-image
+        %img{src: url_for(@page.featured_image), alt: @page.title}
+
+  .article-content
+    .content-wrapper
+      - if @page.content_json.present?
+        .article-body
+          = raw @page.content_json
+      - else
+        .no-content
+          %p コンテンツがありません。
+
+  .article-info
+    %h3 ページ情報
+    .info-grid
+      .info-item
+        %strong スラッグ:
+        %code= @page.slug
+      .info-item
+        %strong ステータス:
+        %span.status{class: @page.status}= @page.status.humanize
+      .info-item
+        %strong 作成者:
+        = @page.user&.email
+      .info-item
+        %strong 作成日時:
+        = @page.created_at&.strftime('%Y年%m月%d日 %H:%M')
+      .info-item
+        %strong 更新日時:
+        = @page.updated_at&.strftime('%Y年%m月%d日 %H:%M')
+
+  .article-actions
+    = link_to '編集', edit_admin_page_path(@page), class: 'btn btn-primary'
+    = link_to 'ページ一覧', admin_pages_path, class: 'btn btn-secondary'
+    = link_to '削除', admin_page_path(@page), method: :delete, 
+      confirm: 'このページを削除してもよろしいですか？', class: 'btn btn-danger'
+
+.article-detail-styles

@@ -1,0 +1,71 @@
+- content_for :page_title, '制作実績の編集'
+
+.admin-actions
+  = link_to '詳細を見る', admin_portfolio_path(@portfolio), class: 'btn btn-secondary'
+  = link_to '一覧に戻る', admin_portfolios_path, class: 'btn btn-secondary'
+
+.admin-form-container
+  = form_with model: [:admin, @portfolio], local: true, multipart: true, class: 'admin-form' do |form|
+    - if @portfolio.errors.any?
+      .alert.alert-danger
+        %h4= pluralize(@portfolio.errors.count, "個のエラー") + "があります："
+        %ul
+          - @portfolio.errors.full_messages.each do |message|
+            %li= message
+
+    .form-group
+      = form.label :title, 'サイトタイトル', class: 'form-label required'
+      = form.text_field :title, class: 'form-control'
+
+    .form-group
+      = form.label :production_period, '制作期間', class: 'form-label required'
+      = form.text_field :production_period, class: 'form-control'
+
+    .form-group
+      = form.label :description, 'サイトの特徴', class: 'form-label required'
+      = form.text_area :description, class: 'form-control', rows: 8
+
+    .form-group
+      = form.label :pc_images, 'PC画面のスクリーンショット（最大2枚）', class: 'form-label'
+      - if @portfolio.pc_images.any?
+        .current-images
+          %p 現在の画像:
+          .images-grid
+            - @portfolio.pc_images.each_with_index do |pc_image, index|
+              .image-item
+                = image_tag pc_image, class: 'preview-image', style: 'max-width: 250px; height: auto; margin: 10px;'
+                = link_to '削除', admin_portfolio_destroy_image_path(@portfolio, pc_image.id), method: :delete, 
+                          class: 'btn btn-sm btn-danger delete-image', 
+                          data: { confirm: 'この画像を削除しますか？' }
+      .image-upload-container
+        = form.file_field :pc_images, class: 'form-control', accept: 'image/*', multiple: true, data: { max_files: 2 }
+        %small.form-text.text-muted 新しい画像を追加できます（最大2枚まで）
+
+    .form-group
+      = form.label :sp_images, 'スマートフォン画面のスクリーンショット（最大2枚）', class: 'form-label'
+      - if @portfolio.sp_images.any?
+        .current-images
+          %p 現在の画像:
+          .images-grid
+            - @portfolio.sp_images.each_with_index do |sp_image, index|
+              .image-item
+                = image_tag sp_image, class: 'preview-image', style: 'max-width: 180px; height: auto; margin: 10px;'
+                = link_to '削除', admin_portfolio_destroy_image_path(@portfolio, sp_image.id), method: :delete, 
+                          class: 'btn btn-sm btn-danger delete-image',
+                          data: { confirm: 'この画像を削除しますか？' }
+      .image-upload-container
+        = form.file_field :sp_images, class: 'form-control', accept: 'image/*', multiple: true, data: { max_files: 2 }
+        %small.form-text.text-muted 新しい画像を追加できます（最大2枚まで）
+
+    .form-group
+      = form.label :display_order, '表示順', class: 'form-label'
+      = form.number_field :display_order, class: 'form-control'
+
+    .form-group
+      .form-check
+        = form.check_box :published, class: 'form-check-input', id: 'portfolio_published'
+        = form.label :published, '公開する', class: 'form-check-label', for: 'portfolio_published'
+
+    .form-actions
+      = form.submit '制作実績を更新', class: 'btn btn-primary'
+      = link_to 'キャンセル', admin_portfolios_path, class: 'btn btn-secondary'

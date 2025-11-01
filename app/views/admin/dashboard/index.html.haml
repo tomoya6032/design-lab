@@ -31,18 +31,42 @@
         %p.stat-label ユーザー数
 
 .dashboard-content
-  .dashboard-section
-    %h3 最近の記事
-    .recent-articles
-      - @recent_articles&.each do |article|
-        .article-item
-          %h4= link_to article.title, admin_article_path(article)
-          %p.article-meta
-            作成日: #{article.created_at.strftime('%Y年%m月%d日')}
-            ステータス: #{article.status}
-      - if @recent_articles.blank?
-        %p.no-content まだ記事がありません。
-        = link_to '新しい記事を作成', new_admin_article_path, class: 'btn btn-primary'
+  .dashboard-row
+    .dashboard-section.dashboard-half
+      %h3 最近の記事（10件）
+      .recent-articles
+        - @recent_articles&.each do |article|
+          .article-item
+            %h4= link_to article.title, admin_article_path(article), class: 'item-title'
+            %p.article-meta
+              作成日: #{article.created_at.strftime('%Y年%m月%d日')}
+              ステータス: 
+              %span{class: "status-#{article.status}"}= article.status == 'published' ? '公開' : '下書き'
+        - if @recent_articles.blank?
+          %p.no-content まだ記事がありません。
+          = link_to '新しい記事を作成', new_admin_article_path, class: 'btn btn-primary'
+        - else
+          .section-footer
+            = link_to '記事一覧を見る', admin_articles_path, class: 'btn btn-secondary btn-sm'
+    
+    .dashboard-section.dashboard-half
+      %h3 最近の固定ページ（10件）
+      .recent-pages
+        - @recent_pages&.each do |page|
+          .page-item
+            %h4= link_to page.title, admin_page_path(page), class: 'item-title'
+            %p.page-meta
+              更新日: #{page.updated_at.strftime('%Y年%m月%d日')}
+              ステータス: 
+              %span{class: "status-#{page.status}"}= page.status == 'published' ? '公開' : '下書き'
+              - if page.show_in_navigation
+                %span.nav-indicator ナビ表示
+        - if @recent_pages.blank?
+          %p.no-content まだ固定ページがありません。
+          = link_to '新しいページを作成', new_admin_page_path, class: 'btn btn-primary'
+        - else
+          .section-footer
+            = link_to 'ページ一覧を見る', admin_pages_path, class: 'btn btn-secondary btn-sm'
   
   .dashboard-section
     %h3 サイト設定

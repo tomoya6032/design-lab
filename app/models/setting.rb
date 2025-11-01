@@ -1,7 +1,9 @@
 class Setting < ApplicationRecord
   # シングルトンパターンでサイト設定を管理
-  validates :site_name, presence: true
-  validates :theme, inclusion: { in: %w[modern classic minimal] }
+  has_one_attached :hero_background_image
+  
+  validates :site_name, presence: true  
+  validates :theme, inclusion: { in: %w[orange red earth-green pearl-black modern classic minimal] }
   
   # サイト設定の取得（シングルトン）
   def self.current
@@ -17,15 +19,16 @@ class Setting < ApplicationRecord
   # 利用可能なテーマ一覧
   def self.theme_options
     {
-      'modern' => 'モダンテーマ',
-      'classic' => 'クラシックテーマ',
-      'minimal' => 'ミニマルテーマ'
+      'orange' => 'オレンジテーマ',
+      'red' => 'レッドテーマ',
+      'earth-green' => 'アースグリーンテーマ',
+      'pearl-black' => 'パールブラックテーマ'
     }
   end
   
   # テーマの表示名
   def theme_display_name
-    self.class.theme_options[theme] || 'モダンテーマ'
+    self.class.theme_options[theme] || 'オレンジテーマ'
   end
   
   # テーマカスタマイズのデフォルト値

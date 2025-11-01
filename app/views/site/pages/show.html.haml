@@ -1,0 +1,40 @@
+- content_for :title, @page.title
+- content_for :meta_description, @page.meta_description if @page.meta_description.present?
+
+%article.article-detail
+  .container
+    .article-layout
+      .main-content
+        - if @page.featured_image.present?
+          .article-featured-image-top
+            %img.featured-image.top-featured-image{src: url_for(@page.featured_image), alt: @page.title}
+        
+        .article-header
+          %h1.article-title= @page.title
+          .article-meta
+            %time.article-date= @page.updated_at.strftime('%Y年%m月%d日更新')
+            %span.article-author 管理者
+
+        .article-content
+          - if @page.show_table_of_contents && @page.content_json.present?
+            - toc_data = generate_table_of_contents(@page.content_json)
+            - if toc_data
+              = toc_data[:toc]
+              .article-body
+                = raw toc_data[:content]
+            - else
+              .article-body
+                = raw @page.content_json
+          - elsif @page.content_json.present?
+            .article-body
+              = raw @page.content_json
+          - else
+            .no-content
+              %p このページにはまだコンテンツがありません。
+
+      .sidebar
+        = render 'shared/sidebar'
+
+  .article-navigation
+    .container
+      = link_to '固定ページ一覧に戻る', site_pages_path, class: 'btn btn-secondary'

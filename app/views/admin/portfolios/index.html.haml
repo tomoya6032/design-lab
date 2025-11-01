@@ -1,0 +1,37 @@
+- content_for :page_title, '制作実績管理'
+
+.admin-content-actions
+  = link_to '新しい制作実績を作成', new_admin_portfolio_path, class: 'btn btn-primary'
+
+.admin-table-container
+  - if @portfolios.any?
+    %table.admin-table
+      %thead
+        %tr
+          %th 表示順
+          %th タイトル
+          %th 制作期間
+          %th 公開状態
+          %th 作成日
+          %th アクション
+        %tbody
+          - @portfolios.each do |portfolio|
+            %tr
+              %td= portfolio.display_order
+              %td= portfolio.title
+              %td= portfolio.production_period
+              %td
+                - if portfolio.published?
+                  %span.status.published 公開中
+                - else
+                  %span.status.draft 下書き
+              %td= portfolio.created_at.strftime('%Y年%m月%d日')
+              %td.actions
+                = link_to '詳細', admin_portfolio_path(portfolio), class: 'btn btn-sm btn-secondary'
+                = link_to '編集', edit_admin_portfolio_path(portfolio), class: 'btn btn-sm btn-primary'
+                = link_to '削除', admin_portfolio_path(portfolio), method: :delete,
+                          data: { confirm: '本当に削除しますか？' }, class: 'btn btn-sm btn-danger'
+  - else
+    .admin-empty-state
+      %p 制作実績がまだ登録されていません。
+    -#   = link_to '最初の制作実績を作成する', new_admin_portfolio_path, class: 'btn btn-primary'

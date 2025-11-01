@@ -1,0 +1,560 @@
+// Articles Pages Styles
+
+// Page Header
+.page-header {
+  background: linear-gradient(135deg, $primary-color 0%, #6610f2 100%);
+  color: white;
+  padding: 80px 0 60px;
+  text-align: center;
+}
+
+.page-title {
+  font-size: 2.5rem;
+  font-weight: $font-weight-bold;
+  margin-bottom: 15px;
+}
+
+.page-description {
+  font-size: 1.1rem;
+  opacity: 0.9;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+// Articles List Section
+.articles-list-section {
+  padding: 80px 0;
+  
+  .content-with-sidebar {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 40px;
+    align-items: start;
+  }
+  
+  .main-content {
+    width: 100%;
+  }
+  
+  .articles-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 30px;
+  }
+}
+
+// Article Card Styles
+.article-card {
+  background: white;
+  border-radius: $border-radius;
+  box-shadow: $box-shadow;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  }
+  
+  .article-image {
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+    
+    .article-list-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+    
+    &:hover .article-list-image {
+      transform: scale(1.05);
+    }
+  }
+  
+  .article-content {
+    padding: 20px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    
+    .article-title {
+      margin: 0 0 15px 0;
+      font-size: 1.3rem;
+      font-weight: $font-weight-bold;
+      line-height: 1.4;
+      
+      a {
+        color: $dark-color;
+        text-decoration: none;
+        transition: color 0.3s ease;
+        
+        &:hover {
+          color: $primary-color;
+        }
+      }
+    }
+    
+    .article-excerpt {
+      margin: 0 0 15px 0;
+      color: #666;
+      line-height: 1.6;
+      font-size: 0.95rem;
+      flex: 1;
+    }
+    
+    .article-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: auto;
+      
+      .article-date {
+        font-size: 0.9rem;
+        color: $secondary-color;
+        font-weight: 500;
+      }
+      
+      .article-category {
+        background: $primary-color;
+        color: white;
+        padding: 4px 12px;
+        border-radius: 15px;
+        font-size: 0.8rem;
+        font-weight: 500;
+      }
+    }
+  }
+}
+
+// Article Detail Page
+.article-detail {
+  min-height: 100vh;
+  background: white;
+  
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
+  }
+  
+  .article-layout {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 40px;
+    align-items: start;
+  }
+  
+  .main-content {
+    width: 100%;
+    
+    .article-featured-image-top {
+      margin-bottom: 30px;
+      text-align: center;
+      
+      .top-featured-image {
+        max-width: 680px;
+        max-height: 480px;
+        width: auto;
+        height: auto;
+        border-radius: $border-radius;
+        box-shadow: $box-shadow;
+        display: block;
+        margin: 0 auto;
+        object-fit: cover;
+      }
+    }
+  }
+}
+
+.article-header {
+  margin-bottom: 30px;
+  
+  .article-title {
+    font-size: 2.5rem;
+    font-weight: $font-weight-bold;
+    color: $dark-color;
+    margin-bottom: 20px;
+    line-height: 1.3;
+  }
+  
+  .article-meta {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    color: $secondary-color;
+    font-size: 0.95rem;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+  }
+  
+  .article-date {
+    font-weight: 500;
+  }
+  
+  .article-author {
+    font-weight: 500;
+  }
+  
+  .article-category-label {
+    font-weight: 500;
+    color: $dark-color;
+  }
+  
+  .article-category {
+    background: $primary-color;
+    color: white;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    margin-left: 5px;
+  }
+  
+  .article-tags {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    
+    .tag {
+      background: #e9ecef;
+      color: #495057;
+      padding: 3px 10px;
+      border-radius: 15px;
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+  }
+}
+
+.article-content {
+  // 目次スタイル
+  .table-of-contents {
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: $border-radius;
+    padding: 20px;
+    margin-bottom: 30px;
+    
+    .toc-title {
+      font-size: 1.2rem;
+      font-weight: $font-weight-bold;
+      color: $dark-color;
+      margin-bottom: 15px;
+      border-bottom: 2px solid $primary-color;
+      padding-bottom: 8px;
+    }
+    
+    .toc-list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      
+      .toc-item {
+        margin-bottom: 8px;
+        
+        &.toc-h2 {
+          margin-left: 0;
+          font-weight: 600;
+        }
+        
+        &.toc-h3 {
+          margin-left: 20px;
+          font-weight: 500;
+        }
+        
+        &.toc-h4 {
+          margin-left: 40px;
+          font-weight: 400;
+        }
+        
+        .toc-link {
+          color: $dark-color;
+          text-decoration: none;
+          padding: 4px 8px;
+          border-radius: 4px;
+          display: inline-block;
+          transition: all 0.2s ease;
+          
+          &:hover {
+            background: $primary-color;
+            color: white;
+            text-decoration: none;
+          }
+        }
+      }
+    }
+  }
+  
+  .article-body {
+    font-size: 18px;
+    line-height: 1.8;
+    color: $dark-color;
+    
+    p {
+      margin-bottom: 20px;
+      font-size: 18px;
+    }
+    
+    // 見出しの上の余白を倍にする
+    h2, h3, h4 {
+      margin-top: 60px;
+      margin-bottom: 20px;
+      font-weight: $font-weight-bold;
+    }
+    
+    h2 {
+      font-size: 1.8rem;
+      color: $dark-color;
+      border-bottom: 2px solid $primary-color;
+      padding-bottom: 8px;
+    }
+    
+    h3 {
+      font-size: 22px;
+      color: $dark-color;
+    }
+    
+    h4 {
+      font-size: 1.3rem;
+      color: $dark-color;
+    }
+    
+    // 記事内の画像スタイル
+    img {
+      width: 80%;
+      max-width: 80%;
+      height: auto;
+      border-radius: $border-radius;
+      box-shadow: $box-shadow;
+      margin: 20px auto;
+      display: block;
+    }
+  }
+}
+
+.article-navigation {
+  padding: 40px 0;
+  background: white;
+  border-top: 1px solid #e9ecef;
+  text-align: center;
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .article-detail {
+    .container {
+      padding: 20px 15px;
+    }
+    
+    .article-layout {
+      grid-template-columns: 1fr;
+      gap: 30px;
+    }
+  }
+  
+  .article-header {
+    .article-title {
+      font-size: 2rem;
+    }
+    
+    .article-meta {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+    }
+  }
+  
+  .article-content .article-body {
+    font-size: 1rem;
+    
+    img {
+      width: 90%;
+      max-width: 90%;
+    }
+  }
+  
+  // 記事一覧のレスポンシブ
+  .articles-list-section {
+    padding: 40px 0;
+    
+    .content-with-sidebar {
+      grid-template-columns: 1fr;
+      gap: 30px;
+    }
+    
+    .articles-grid {
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+  }
+  
+  .article-card {
+    .article-image {
+      height: 180px;
+    }
+    
+    .article-content {
+      padding: 15px;
+      
+      .article-title {
+        font-size: 1.2rem;
+      }
+      
+      .article-meta {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+      }
+    }
+  }
+}
+
+// No Articles Section
+.no-articles-section {
+  padding: 80px 0;
+  text-align: center;
+  
+  .section-title {
+    font-size: 2rem;
+    color: $dark-color;
+    margin-bottom: 20px;
+  }
+  
+  p {
+    font-size: 1.1rem;
+    color: $secondary-color;
+    margin-bottom: 30px;
+  }
+  
+  .section-action {
+    margin-top: 30px;
+  }
+}
+
+// SNS Link Card Styles for article content
+.sns-link-card {
+  border: 1px solid #e1e5e9;
+  border-radius: 8px;
+  overflow: hidden;
+  margin: 20px auto;
+  background: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.2s ease;
+  max-width: 700px;
+  width: 100%;
+  height: 180px;
+  display: flex;
+  flex-direction: row;
+  
+  &:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  }
+  
+  .sns-card-image {
+    width: 200px !important;
+    max-width: 200px !important;
+    height: 180px !important;
+    object-fit: cover;
+    display: block;
+    flex-shrink: 0;
+    margin: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+  }
+  
+  .sns-card-content {
+    padding: 18px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 500px;
+    
+    .sns-card-title {
+      margin: 0 0 10px 0;
+      font-size: 17px;
+      font-weight: 600;
+      color: $dark-color;
+      line-height: 1.3;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    
+    .sns-card-description {
+      margin: 0 0 14px 0;
+      font-size: 15px;
+      color: #666;
+      line-height: 1.5;
+      display: -webkit-box;
+      -webkit-line-clamp: 4;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      flex: 1;
+    }
+    
+    .sns-card-site {
+      display: block;
+      font-size: 12px;
+      color: #999;
+      margin-bottom: 10px;
+    }
+    
+    .sns-card-link {
+      display: inline-block;
+      background: $primary-color;
+      color: white;
+      padding: 8px 16px;
+      border-radius: 4px;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 500;
+      transition: background 0.2s ease;
+      align-self: flex-start;
+      
+      &:hover {
+        background: darken($primary-color, 10%);
+        text-decoration: none;
+        color: white;
+      }
+    }
+  }
+}
+// 記事内の挿入画像のスタイル
+.article-content .article-body {
+  .image-row {
+    display: flex;
+    gap: 15px;
+    margin: 25px 0;
+    justify-content: flex-start;
+    
+    .image-item {
+      flex: 1;
+      max-width: 48%;
+      
+      .inserted-image {
+        width: 100% !important;
+        max-width: 100% !important;
+        height: auto !important;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        margin: 0 !important;
+        display: block !important;
+      }
+    }
+    
+    // 1枚だけの場合の調整
+    &:has(.image-item:only-child) {
+      .image-item {
+        max-width: 48%;
+      }
+    }
+  }
+}

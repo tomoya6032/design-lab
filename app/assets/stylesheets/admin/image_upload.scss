@@ -1,0 +1,113 @@
+// Image Upload Styles
+.image-section {
+  .section-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 16px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #495057;
+    
+    i {
+      font-size: 18px;
+      color: #6c757d;
+    }
+  }
+  
+  .image-upload-label {
+    display: block;
+    padding: 24px;
+    border: 2px dashed #dee2e6;
+    border-radius: 8px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: #f8f9fa;
+    
+    &:hover {
+      border-color: #adb5bd;
+      background: #e9ecef;
+    }
+    
+    &.drag-over {
+      border-color: #007bff;
+      background: #e3f2fd;
+      transform: scale(1.02);
+    }
+  }
+  
+  .image-upload-input {
+    width: 100%;
+    padding: 8px 0;
+  }
+  
+  .image-preview-container {
+    margin-top: 16px;
+    
+    .current-image,
+    .preview-placeholder {
+      text-align: center;
+      padding: 16px;
+      border: 1px solid #e9ecef;
+      border-radius: 8px;
+      background: #f8f9fa;
+    }
+    
+    .preview-image {
+      max-width: 100%;
+      max-height: 300px;
+      width: auto;
+      height: auto;
+      border-radius: 4px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      
+      // 記事内での表示サイズ（80%制限）
+      &.article-featured-image {
+        max-width: 80%;
+        height: auto;
+        margin: 16px auto;
+        display: block;
+      }
+    }
+    
+    .image-info {
+      margin-top: 8px;
+      font-size: 14px;
+      color: #6c757d;
+      font-style: italic;
+    }
+  }
+  
+  .form-group {
+    margin-bottom: 20px;
+  }
+}
+
+// 記事表示時のアイキャッチ画像スタイル
+.article-content {
+  .featured-image-container {
+    width: 100%;
+    text-align: center;
+    margin: 24px 0;
+    
+    .featured-image {
+      max-width: 80%;
+      height: auto;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      transition: transform 0.3s ease;
+      
+      &:hover {
+        transform: scale(1.02);
+      }
+    }
+    
+    .image-caption {
+      margin-top: 8px;
+      font-size: 14px;
+      color: #6c757d;
+      font-style: italic;
+    }
+  }
+}

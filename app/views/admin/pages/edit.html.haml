@@ -1,0 +1,163 @@
+- content_for :page_title, "ページ編集: #{@page.title}"
+
+.modern-article-form
+  .form-header
+    .header-content
+      %h1.form-title
+        %i.icon-edit
+        ページ編集
+      %p.form-description
+        タイトル：#{@page.title}
+
+  = form_with model: [:admin, @page], local: true, html: { class: 'enhanced-form', multipart: true } do |form|
+    - if @page.errors.any?
+      .alert.alert-danger
+        %h4= "#{@page.errors.count}つのエラーがあります："
+        %ul
+          - @page.errors.full_messages.each do |message|
+            %li= message
+
+    .form-section
+      .form-group
+        = form.label :title, 'ページタイトル'
+        = form.text_field :title, class: 'form-control', required: true, placeholder: 'ページのタイトルを入力してください'
+      
+      .form-group
+        = form.label :slug, 'URL スラッグ'
+        = form.text_field :slug, class: 'form-control', placeholder: 'page-url-slug'
+        %small.form-text URL に使用される識別子です（自動生成されます）
+
+      .form-group
+        = form.label :meta_description, 'メタ説明'
+        = form.text_area :meta_description, class: 'form-control', rows: 3, placeholder: 'SEOに使用される説明文（検索結果に表示されます）'
+
+    .form-section.content-section
+      .form-group
+        = form.label :content_json, 'コンテンツ', class: 'section-label'
+        .wysiwyg-editor-container
+          .editor-toolbar
+            .format-buttons
+              %button.toolbar-btn{type: 'button', data: {command: 'bold'}}
+                %i.icon-bold
+                %span 太字
+              %button.toolbar-btn{type: 'button', data: {command: 'italic'}}
+                %i.icon-italic
+                %span 斜体
+              %button.toolbar-btn{type: 'button', data: {command: 'underline'}}
+                %i.icon-underline
+                %span 下線
+              %button.toolbar-btn{type: 'button', data: {command: 'strikeThrough'}}
+                %i.icon-strike
+                %span 取り消し線
+              %button.toolbar-btn{type: 'button', data: {command: 'h2'}}
+                %i.icon-heading
+                %span H2
+              %button.toolbar-btn{type: 'button', data: {command: 'h3'}}
+                %i.icon-heading
+                %span H3
+              %button.toolbar-btn{type: 'button', data: {command: 'h4'}}
+                %i.icon-heading
+                %span H4
+              %button.toolbar-btn{type: 'button', data: {command: 'yellow-marker'}}
+                %i.icon-marker
+                %span 黄マーカー
+              %button.toolbar-btn{type: 'button', data: {command: 'pink-marker'}}
+                %i.icon-marker
+                %span ピンクマーカー
+              %button.toolbar-btn{type: 'button', data: {command: 'link'}}
+                %i.icon-link
+                %span リンク
+              %button.toolbar-btn{type: 'button', data: {command: 'sns-link'}}
+                %i.icon-sns
+                %span SNSリンク
+              %button.toolbar-btn{type: 'button', data: {command: 'image'}}
+                %i.icon-image
+                %span 画像
+            .control-buttons
+              %button.toolbar-btn.cancel-btn{type: 'button', data: {command: 'removeFormat'}}
+                %i.icon-cancel
+                %span 装飾解除
+              %button.toolbar-btn.clear-btn{type: 'button', data: {command: 'selectAll'}}
+                %i.icon-select
+                %span 全選択
+          .editor-content{contenteditable: 'true', data: {placeholder: 'ページの内容を入力してください...'}}
+            - if @page.persisted? && @page.content_json.present?
+              = @page.content_json.html_safe
+          = form.hidden_field :content_json, id: 'content_json_hidden'
+          %small.form-hint リアルタイムで装飾が確認できます
+          
+          // リンク挿入モーダル
+          .link-modal{style: 'display: none;'}
+            .modal-content
+              %h3 リンクを挿入
+              .form-group
+                %label URL:
+                %input.link-url{type: 'url', placeholder: 'https://example.com'}
+              .form-group
+                %label 表示テキスト:
+                %input.link-text{type: 'text', placeholder: 'リンクテキスト'}
+              .modal-actions
+                %button.btn.btn-primary.insert-link{type: 'button'} 挿入
+                %button.btn.btn-secondary.cancel-link{type: 'button'} キャンセル
+          
+          // SNSリンク挿入モーダル
+          .sns-link-modal{style: 'display: none;'}
+            .modal-content
+              %h3 SNSリンクを挿入
+              .form-group
+                %label URL:
+                %input.sns-url{type: 'url', placeholder: 'https://x.com/username/status/...'}
+              .form-group
+                %button.btn.btn-info.fetch-ogp{type: 'button'} プレビューを取得
+              .ogp-preview{style: 'display: none;'}
+                .preview-content
+                  %img.ogp-image{alt: 'OGP画像'}
+                  .ogp-info
+                    %h4.ogp-title
+                    %p.ogp-description
+                    %small.ogp-site
+              .modal-actions
+                %button.btn.btn-primary.insert-sns-link{type: 'button', style: 'display: none;'} 挿入
+                %button.btn.btn-secondary.cancel-sns-link{type: 'button'} キャンセル
+        
+        // 画像挿入モーダル
+        .image-modal{style: 'display: none;'}
+          .modal-content
+            %h3 画像を挿入
+            .form-group
+              %label 画像を選択:
+              %input.image-input{type: 'file', accept: 'image/*', multiple: true}
+              %small.form-text 最大5枚まで選択できます（横並び2枚、3枚目以降は改行）
+            .image-preview-container{style: 'display: none;'}
+              %h4 プレビュー:
+              .image-preview-grid
+            .modal-actions
+              %button.btn.btn-primary.insert-images{type: 'button', disabled: true} 挿入
+              %button.btn.btn-secondary.cancel-images{type: 'button'} キャンセル
+
+    .form-section.settings-section
+      .section-header
+        %h3.section-title{style: 'text-align: left;'} ページ設定
+        %p.section-description 公開設定と表示オプションを設定してください
+      
+      .form-row
+        .form-group.col-6
+          = form.label :status, 'ステータス'
+          = form.select :status, options_for_select([['下書き', 'draft'], ['公開', 'published'], ['非公開', 'private']], @page.status), {}, { class: 'form-control' }
+        
+        .form-group.col-6
+          = form.label :show_table_of_contents, '目次表示設定'
+          .checkbox-wrapper
+            = form.check_box :show_table_of_contents, { class: 'form-checkbox' }
+            = form.label :show_table_of_contents, 'H2-H4タグから目次を自動生成', class: 'checkbox-label'
+
+      .form-row
+        .form-group.col-12
+          = form.label :show_in_navigation, 'ナビゲーション表示設定'
+          .checkbox-wrapper
+            = form.check_box :show_in_navigation, { class: 'form-checkbox' }
+            = form.label :show_in_navigation, 'サイトのナビゲーションメニューに表示する', class: 'checkbox-label'
+
+    .form-actions
+      = form.submit 'ページを更新', class: 'btn btn-primary btn-lg'
+      = link_to 'キャンセル', admin_page_path(@page), class: 'btn btn-secondary btn-lg'

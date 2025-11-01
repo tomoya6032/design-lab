@@ -1,0 +1,71 @@
+// Mixins
+@mixin container {
+  max-width: $container-max-width;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+@mixin button-base {
+  display: inline-block;
+  padding: 12px 24px;
+  border-radius: $border-radius;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.95rem;
+  transition: $transition;
+  border: 2px solid transparent;
+  cursor: pointer;
+}
+
+@mixin button-primary {
+  @include button-base;
+  background: $primary-color;
+  color: white;
+  border-color: $primary-color;
+  
+  &:hover {
+    background: darken($primary-color, 10%);
+    border-color: darken($primary-color, 10%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba($primary-color, 0.3);
+  }
+}
+
+@mixin button-outline-primary {
+  @include button-base;
+  color: $primary-color;
+  border-color: $primary-color;
+  background: transparent;
+  
+  &:hover {
+    background: $primary-color;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba($primary-color, 0.3);
+  }
+}
+
+@mixin card {
+  background: white;
+  border-radius: $border-radius * 1.5;
+  overflow: hidden;
+  box-shadow: $box-shadow;
+  transition: $transition;
+  
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+  }
+}
+
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin text-truncate {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}

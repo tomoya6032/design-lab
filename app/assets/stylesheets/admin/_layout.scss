@@ -1,0 +1,50 @@
+// Admin Layout Styles
+.admin-layout {
+  min-height: 100vh;
+  display: flex;
+}
+
+.admin-sidebar {
+  width: 250px;
+  background: $dark-color;
+  color: white;
+  padding: $spacing-lg;
+  
+  .admin-brand {
+    font-size: 1.25rem;
+    font-weight: $font-weight-bold;
+    margin-bottom: $spacing-xl;
+    color: white;
+    text-decoration: none;
+  }
+  
+  .nav-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    
+    .nav-item {
+      margin-bottom: $spacing-sm;
+      
+      .nav-link {
+        display: block;
+        padding: $spacing-sm $spacing-md;
+        color: #adb5bd;
+        text-decoration: none;
+        border-radius: 4px;
+        transition: $transition;
+        
+        &:hover, &.active {
+          background: rgba(255, 255, 255, 0.1);
+          color: white;
+        }
+      }
+    }
+  }
+}
+
+.admin-main {
+  flex: 1;
+  padding: $spacing-lg;
+  background: $light-color;
+}

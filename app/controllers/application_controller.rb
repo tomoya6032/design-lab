@@ -4,6 +4,7 @@ class ApplicationController < ActionController::Base
   
   before_action :configure_permitted_parameters, if: :devise_controller?
   before_action :load_site_setting, unless: -> { request.path.start_with?('/api/') }
+  before_action :load_navigation_pages, unless: -> { request.path.start_with?('/admin') || request.path.start_with?('/api/') }
   
   private
   
@@ -14,6 +15,10 @@ class ApplicationController < ActionController::Base
   
   def load_site_setting
     @site_setting = Setting.current
+  end
+  
+  def load_navigation_pages
+    @navigation_pages = Page.where(show_in_navigation: true, status: :published).order(:title)
   end
   
   # ログイン成功後のリダイレクト先

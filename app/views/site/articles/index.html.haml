@@ -1,0 +1,43 @@
+- content_for :title, 'コラム一覧'
+
+.page-header
+  .container
+    %h1.page-title コラム一覧
+    %p.page-description 最新のコラム記事をご覧いただけます
+
+- if @articles.any?
+  %section.articles-list-section
+    .container
+      .content-with-sidebar
+        .main-content
+          .articles-grid
+            - @articles.each do |article|
+              .article-card
+                - if article_featured_image_url(article)
+                  .article-image
+                    = article_featured_image_tag(article, class: 'article-list-image')
+                .article-content
+                  %h3.article-title
+                    = link_to article.title, safe_article_path(article)
+                  %p.article-excerpt
+                    - if article.content_json.is_a?(String)
+                      = truncate(strip_tags(article.content_json), length: 120)
+                    - elsif article.content_json.is_a?(Hash)
+                      = truncate(strip_tags(article.content_json.dig('content')), length: 120)
+                    - else
+                      = truncate(article.meta_description.presence || '', length: 120)
+                  .article-meta
+                    %time.article-date= article.published_at&.strftime('%Y年%m月%d日')
+                    - if article.custom_fields && article.custom_fields['category'].present?
+                      %span.article-category= article.custom_fields['category']
+        
+        .sidebar
+          = render 'shared/sidebar'
+
+- else  
+  %section.no-articles-section
+    .container
+      %h2.section-title コラム記事はまだありません
+      %p 管理画面から記事を作成し、公開してください。
+      .section-action
+        = link_to 'ホームに戻る', root_path, class: 'btn btn-primary'

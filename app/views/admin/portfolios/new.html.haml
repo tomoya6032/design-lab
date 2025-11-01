@@ -1,0 +1,52 @@
+- content_for :page_title, '制作実績の新規作成'
+
+.admin-content-actions
+  = link_to '一覧に戻る', admin_portfolios_path, class: 'btn btn-secondary'
+
+.admin-form-container
+  = form_with model: [:admin, @portfolio], local: true, multipart: true, class: 'admin-form' do |form|
+    - if @portfolio.errors.any?
+      .alert.alert-danger
+        %h4= pluralize(@portfolio.errors.count, "個のエラー") + "があります："
+        %ul
+          - @portfolio.errors.full_messages.each do |message|
+            %li= message
+
+    .form-group
+      = form.label :title, 'サイトタイトル', class: 'form-label required'
+      = form.text_field :title, class: 'form-control', placeholder: '例: 株式会社○○様 コーポレートサイト'
+
+    .form-group
+      = form.label :production_period, '制作期間', class: 'form-label required'
+      = form.text_field :production_period, class: 'form-control', placeholder: '例: 3ヶ月、2週間、1ヶ月半'
+
+    .form-group
+      = form.label :description, 'サイトの特徴', class: 'form-label required'
+      = form.text_area :description, class: 'form-control', rows: 8, 
+                       placeholder: 'このサイトの特徴や工夫した点、使用した技術などを詳しく記載してください。'
+
+    .form-group
+      = form.label :pc_images, 'PC画面のスクリーンショット（最大2枚）', class: 'form-label required'
+      .image-upload-container
+        = form.file_field :pc_images, class: 'form-control', accept: 'image/*', multiple: true, data: { max_files: 2 }
+        %small.form-text.text-muted デスクトップ版のスクリーンショットを最大2枚までアップロードしてください
+
+    .form-group
+      = form.label :sp_images, 'スマートフォン画面のスクリーンショット（最大2枚）', class: 'form-label required'
+      .image-upload-container
+        = form.file_field :sp_images, class: 'form-control', accept: 'image/*', multiple: true, data: { max_files: 2 }
+        %small.form-text.text-muted スマートフォン版のスクリーンショットを最大2枚までアップロードしてください
+
+    .form-group
+      = form.label :display_order, '表示順', class: 'form-label'
+      = form.number_field :display_order, class: 'form-control', value: 0
+      %small.form-text.text-muted 数字が小さいほど上に表示されます
+
+    .form-group
+      .form-check
+        = form.check_box :published, class: 'form-check-input', id: 'portfolio_published'
+        = form.label :published, '公開する', class: 'form-check-label', for: 'portfolio_published'
+
+    .form-actions
+      = form.submit '制作実績を作成', class: 'btn btn-primary'
+      = link_to 'キャンセル', admin_portfolios_path, class: 'btn btn-secondary'

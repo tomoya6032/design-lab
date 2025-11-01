@@ -1,0 +1,61 @@
+- content_for :page_title, @portfolio.title
+
+.admin-content-actions
+  = link_to '編集', edit_admin_portfolio_path(@portfolio), class: 'btn btn-primary'
+  = link_to '一覧に戻る', admin_portfolios_path, class: 'btn btn-secondary'
+
+.admin-detail-container
+  .portfolio-detail
+    .detail-section
+      %h3 基本情報
+      .info-grid
+        .info-item
+          %strong タイトル:
+          %span= @portfolio.title
+        .info-item
+          %strong 制作期間:
+          %span= @portfolio.production_period
+        .info-item
+          %strong 表示順:
+          %span= @portfolio.display_order
+        .info-item
+          %strong 公開状態:
+          - if @portfolio.published?
+            %span.status.published 公開中
+          - else
+            %span.status.draft 下書き
+        .info-item
+          %strong 作成日:
+          %span= @portfolio.created_at.strftime('%Y年%m月%d日 %H:%M')
+        .info-item
+          %strong 更新日:
+          %span= @portfolio.updated_at.strftime('%Y年%m月%d日 %H:%M')
+
+    .detail-section
+      %h3 サイトの特徴
+      .description-content
+        = simple_format(@portfolio.description)
+
+    - if @portfolio.pc_images.any?
+      .detail-section
+        %h3 PC画面（#{@portfolio.pc_images.count}枚）
+        .images-gallery
+          - @portfolio.pc_images.each_with_index do |pc_image, index|
+            .image-container{style: 'display: inline-block; margin: 10px;'}
+              = image_tag pc_image, class: 'portfolio-image', style: 'max-width: 45%; height: auto; border: 1px solid #ddd; border-radius: 8px;'
+              %p.image-caption PC画面 #{index + 1}
+
+    - if @portfolio.sp_images.any?
+      .detail-section
+        %h3 スマートフォン画面（#{@portfolio.sp_images.count}枚）
+        .images-gallery
+          - @portfolio.sp_images.each_with_index do |sp_image, index|
+            .image-container{style: 'display: inline-block; margin: 10px;'}
+              = image_tag sp_image, class: 'portfolio-image', style: 'max-width: 300px; height: auto; border: 1px solid #ddd; border-radius: 8px;'
+              %p.image-caption SP画面 #{index + 1}
+
+    .detail-actions
+      = link_to '編集', edit_admin_portfolio_path(@portfolio), class: 'btn btn-primary'
+      = link_to '削除', admin_portfolio_path(@portfolio), method: :delete,
+                data: { confirm: '本当に削除しますか？' }, class: 'btn btn-danger'
+      = link_to '一覧に戻る', admin_portfolios_path, class: 'btn btn-secondary'

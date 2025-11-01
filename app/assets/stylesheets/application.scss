@@ -1,18 +1,22 @@
-/*
- * This is a manifest file that'll be compiled into application.css, which will include all the files
- * listed below.
- *
- * Any CSS and SCSS file within this directory, lib/assets/stylesheets, or any plugin's
- * vendor/assets/stylesheets directory can be referenced here using a relative path.
- *
- * You're free to add application-wide styles to this file and they'll appear at the bottom of the
- * compiled file so the styles you add here take precedence over styles defined in any other CSS/SCSS
- * files in this directory. Styles in this file should be added after the last require_* statement.
- * It is generally better to create a new file per style scope.
- *
- *= require_tree .
- *= require_self
- */
+// SCSS Import Structure
+// =====================
+
+// 共通スタイル
+@import 'shared/variables';
+@import 'shared/mixins';
+@import 'shared/base';
+@import 'shared/components';
+@import 'shared/sidebar';
+
+// サイト（フロントエンド）スタイル
+@import 'site/layout';
+@import 'site/home';
+@import 'site/articles';
+
+// 管理画面スタイル  
+@import 'admin/layout';
+@import 'admin/dashboard';
+@import 'admin/forms';
 
 /* 基本スタイル */
 body {
@@ -28,6 +32,19 @@ body {
   margin: 0 auto;
   padding: 0 20px;
 }
+
+/* サイトレイアウト */
+.site-layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.site-main {
+  flex: 1;
+}
+
+
 
 /* ボタンスタイル */
 .btn {
@@ -203,45 +220,83 @@ body {
 .site-header {
   background-color: #ffffff;
   border-bottom: 1px solid #e1e5e9;
-  padding: 20px 0;
+  padding: 15px 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.header-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 20px;
+.navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
 }
 
-.site-title {
+.navbar-brand {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #007bff;
+  text-decoration: none;
   margin: 0;
-  font-size: 24px;
 }
 
-.site-title a {
-  color: #333;
+.navbar-brand:hover {
+  color: #0056b3;
   text-decoration: none;
 }
 
-.nav-menu {
+.navbar-nav {
   display: flex;
   list-style: none;
   margin: 0;
   padding: 0;
-  gap: 30px;
+  gap: 25px;
+  align-items: center;
+}
+
+.nav-item {
+  margin: 0;
 }
 
 .nav-link {
-  color: #333;
+  color: #495057;
   text-decoration: none;
   font-weight: 500;
-  transition: color 0.3s ease;
+  font-size: 0.95rem;
+  padding: 8px 16px;
+  border-radius: 6px;
+  transition: all 0.3s ease;
 }
 
 .nav-link:hover {
-  color: #0073aa;
+  color: #007bff;
+  background-color: #f8f9fa;
+  text-decoration: none;
+}
+
+/* レスポンシブ対応 - ヘッダー */
+@media (max-width: 768px) {
+  .navbar {
+    flex-direction: column;
+    gap: 15px;
+    padding: 15px 20px;
+  }
+  
+  .navbar-nav {
+    gap: 15px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .navbar-brand {
+    font-size: 1.25rem;
+  }
+  
+  .nav-link {
+    padding: 6px 12px;
+    font-size: 0.9rem;
+  }
 }
 
 /* ヒーローセクション */
@@ -342,17 +397,21 @@ body {
 
 /* フッター */
 .site-footer {
-  background-color: #23282d;
+  background-color: #343a40;
   color: white;
   padding: 40px 0;
-  margin-top: 60px;
+  margin-top: 80px;
+  border-top: 1px solid #495057;
 }
 
-.footer-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 20px;
+.site-footer .container {
   text-align: center;
+}
+
+.site-footer p {
+  margin: 0;
+  color: #adb5bd;
+  font-size: 0.9rem;
 }
 
 .alert {
@@ -371,4 +430,80 @@ body {
   background-color: #f8d7da;
   border-color: #f5c6cb;
   color: #721c24;
+}
+
+/* ホームページ用スタイル */
+.recent-articles-section .section-action {
+  text-align: center;
+  margin-top: 40px;
+}
+
+.hero-section {
+  background: linear-gradient(135deg, #007bff 0%, #6610f2 100%);
+  color: white;
+  padding: 100px 0;
+  text-align: center;
+}
+
+.hero-container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.hero-title {
+  font-size: 3rem;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+.hero-description {
+  font-size: 1.25rem;
+  margin-bottom: 40px;
+  opacity: 0.9;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.btn-large {
+  padding: 15px 30px;
+  font-size: 1.1rem;
+}
+
+.recent-articles-section {
+  padding: 80px 0;
+}
+
+.section-title {
+  text-align: center;
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 50px;
+  color: #212529;
+}
+
+.articles-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 30px;
+  margin-bottom: 40px;
+}
+
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 2rem;
+  }
+  
+  .hero-actions {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .articles-grid {
+    grid-template-columns: 1fr;
+  }
 }

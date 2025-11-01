@@ -1,0 +1,38 @@
+.sidebar-widget.search-widget
+  %h3.widget-title サイト内検索
+  = form_with url: site_articles_path, method: :get, local: true, class: 'search-form' do |form|
+    .search-input-group
+      = form.text_field :search, placeholder: 'キーワードを入力...', value: params[:search], class: 'search-input'
+      = form.submit '検索', class: 'search-button btn btn-primary'
+
+.sidebar-widget.categories-widget
+  %h3.widget-title カテゴリー
+  - if @categories && @categories.any?
+    %ul.category-list
+      - @categories.each do |category|
+        %li.category-item
+          = link_to category[:name], site_articles_path(category: category[:name]), class: 'category-link'
+          %span.category-count (#{category[:count]})
+  - else
+    %p.no-items カテゴリーはありません
+
+.sidebar-widget.tags-widget
+  %h3.widget-title タグ
+  - if @tags && @tags.any?
+    .tag-cloud
+      - @tags.each do |tag|
+        = link_to tag[:name], site_articles_path(tag: tag[:name]), class: 'tag-link'
+  - else
+    %p.no-items タグはありません
+
+.sidebar-widget.recent-posts-widget
+  %h3.widget-title 最近の投稿
+  - if @recent_sidebar_articles && @recent_sidebar_articles.any?
+    %ul.recent-posts-list
+      - @recent_sidebar_articles.each do |article|
+        - if article && article.id && article.title
+          %li.recent-post-item
+            = link_to article.title, safe_article_path(article), class: 'recent-post-link'
+            %time.recent-post-date= article.published_at&.strftime('%m/%d')
+  - else
+    %p.no-items 最近の投稿はありません

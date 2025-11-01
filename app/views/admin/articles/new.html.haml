@@ -1,11 +1,14 @@
 - content_for :page_title, '新規記事作成'
 
-.article-form-container
+.modern-article-form
   .form-header
-    %h2 新規記事作成
-    %p 新しい記事を作成します。
+    .header-content
+      %h1.form-title
+        %i.icon-edit
+        新規記事作成
+      %p.form-description 新しい記事を作成して公開しましょう
 
-  = form_with model: [:admin, @article], local: true, html: { class: 'article-form' } do |form|
+  = form_with model: [:admin, @article], local: true, html: { class: 'enhanced-form' } do |form|
     - if @article.errors.any?
       .alert.alert-danger
         %h4 入力エラーがあります：
@@ -23,11 +26,103 @@
         = form.text_field :slug, class: 'form-control', placeholder: 'article-url-slug'
         %small.form-text URL に使用される識別子です（自動生成されます）
 
-    .form-section
+    .form-section.content-section
       .form-group
-        = form.label :content_json, 'コンテンツ'
-        = form.text_area :content_json, rows: 15, class: 'form-control content-editor', placeholder: '記事の内容を入力してください...'
-        %small.form-text Markdown記法が使用できます
+        = form.label :content_json, 'コンテンツ', class: 'section-label'
+        .wysiwyg-editor-container
+          .editor-toolbar
+            .format-buttons
+              %button.toolbar-btn{type: 'button', data: {command: 'bold'}}
+                %i.icon-bold
+                %span 太字
+              %button.toolbar-btn{type: 'button', data: {command: 'underline'}}
+                %i.icon-underline
+                %span 下線
+              %button.toolbar-btn{type: 'button', data: {command: 'h2'}}
+                %i.icon-heading
+                %span H2
+              %button.toolbar-btn{type: 'button', data: {command: 'h3'}}
+                %i.icon-heading
+                %span H3
+              %button.toolbar-btn{type: 'button', data: {command: 'h4'}}
+                %i.icon-heading
+                %span H4
+              %button.toolbar-btn{type: 'button', data: {command: 'yellow-marker'}}
+                %i.icon-marker
+                %span 黄マーカー
+              %button.toolbar-btn{type: 'button', data: {command: 'pink-marker'}}
+                %i.icon-marker
+                %span ピンクマーカー
+              %button.toolbar-btn{type: 'button', data: {command: 'link'}}
+                %i.icon-link
+                %span リンク
+              %button.toolbar-btn{type: 'button', data: {command: 'sns-link'}}
+                %i.icon-sns
+                %span SNSリンク
+              %button.toolbar-btn{type: 'button', data: {command: 'image'}}
+                %i.icon-image
+                %span 画像
+            .control-buttons
+              %button.toolbar-btn.cancel-btn{type: 'button', data: {command: 'removeFormat'}}
+                %i.icon-cancel
+                %span 装飾解除
+              %button.toolbar-btn.clear-btn{type: 'button', data: {command: 'selectAll'}}
+                %i.icon-select
+                %span 全選択
+          .editor-content{contenteditable: 'true', data: {placeholder: '記事の内容を入力してください...'}}
+            - if @article.persisted? && @article.content_json.present?
+              = @article.content_json.html_safe
+          = form.hidden_field :content_json, id: 'content_json_hidden'
+          %small.form-hint リアルタイムで装飾が確認できます
+          
+          // リンク挿入モーダル
+          .link-modal{style: 'display: none;'}
+            .modal-content
+              %h3 リンクを挿入
+              .form-group
+                %label URL:
+                %input.link-url{type: 'url', placeholder: 'https://example.com'}
+              .form-group
+                %label 表示テキスト:
+                %input.link-text{type: 'text', placeholder: 'リンクテキスト'}
+              .modal-actions
+                %button.btn.btn-primary.insert-link{type: 'button'} 挿入
+                %button.btn.btn-secondary.cancel-link{type: 'button'} キャンセル
+          
+          // SNSリンク挿入モーダル
+          .sns-link-modal{style: 'display: none;'}
+            .modal-content
+              %h3 SNSリンクを挿入
+              .form-group
+                %label URL:
+                %input.sns-url{type: 'url', placeholder: 'https://x.com/username/status/...'}
+              .form-group
+                %button.btn.btn-info.fetch-ogp{type: 'button'} プレビューを取得
+              .ogp-preview{style: 'display: none;'}
+                .preview-content
+                  %img.ogp-image{alt: 'OGP画像'}
+                  .ogp-info
+                    %h4.ogp-title
+                    %p.ogp-description
+                    %small.ogp-site
+              .modal-actions
+                %button.btn.btn-primary.insert-sns-link{type: 'button', style: 'display: none;'} 挿入
+                %button.btn.btn-secondary.cancel-sns-link{type: 'button'} キャンセル
+          
+          // 画像挿入モーダル
+          .image-modal{style: 'display: none;'}
+            .modal-content
+              %h3 画像を挿入
+              .form-group
+                %label 画像を選択:
+                %input.image-input{type: 'file', accept: 'image/*', multiple: true}
+                %small.form-text 最大5枚まで選択できます（横並び2枚、3枚目以降は改行）
+              .image-preview-container{style: 'display: none;'}
+                %h4 プレビュー:
+                .image-preview-grid
+              .modal-actions
+                %button.btn.btn-primary.insert-images{type: 'button', disabled: true} 挿入
+                %button.btn.btn-secondary.cancel-images{type: 'button'} キャンセル
 
     .form-section
       .form-row
@@ -38,6 +133,11 @@
         .form-group.half-width
           = form.label :published_at, '公開日時'
           = form.datetime_local_field :published_at, class: 'form-control'
+      
+      .form-group
+        .checkbox-group
+          = form.check_box :show_table_of_contents, class: 'form-checkbox'
+          = form.label :show_table_of_contents, '目次を表示する（H2、H3、H4タグから自動生成）', class: 'checkbox-label'
 
     .form-section
       .form-group
@@ -45,20 +145,58 @@
         = form.text_area :meta_description, rows: 3, class: 'form-control', placeholder: 'SEO用の記事説明（160文字以内推奨）'
         %small.form-text 検索結果に表示される説明文です
 
+    .form-section.image-section
+      %h3.section-title
+        %i.icon-image
+        アイキャッチ画像
+      
       .form-group
-        = form.label :image_url, 'アイキャッチ画像URL'
+        = form.label :featured_image, '画像ファイルをアップロード', class: 'image-upload-label'
+        = form.file_field :featured_image, class: 'image-upload-input', accept: 'image/*'
+        %small.form-text JPG、PNG、GIF形式に対応（推奨サイズ: 1200x630px）
+        
+        .image-preview-container
+          - if @article.featured_image.attached?
+            .current-image
+              %img.preview-image{src: @article.featured_image, alt: 'アイキャッチ画像'}
+              %p.image-info 現在の画像
+          .preview-placeholder{style: 'display: none;'}
+            %img.preview-image{alt: 'プレビュー'}
+            %p.image-info 選択した画像のプレビュー
+
+      .form-group
+        = form.label :image_url, '外部画像URL（代替）'
         = form.url_field :image_url, class: 'form-control', placeholder: 'https://example.com/image.jpg'
+        %small.form-text 画像ファイルの代わりに外部URLを使用する場合
 
-    .form-section.custom-fields
-      %h4 カスタムフィールド
-      .custom-field-item
-        %label タグ
-        = text_field_tag 'article[custom_fields][tags]', (@article.custom_fields&.dig('tags') || '').to_s, class: 'form-control', placeholder: 'タグ1, タグ2, タグ3'
-        %small.form-text カンマ区切りで入力してください
+    .form-section.taxonomy-section
+      %h3.section-title
+        %i.icon-tags
+        分類・タグ
+      
+      .form-row
+        .form-group.category-group
+          = form.label :category, 'カテゴリ', class: 'field-label'
+          .category-selector
+            = text_field_tag 'article[custom_fields][category]', (@article.custom_fields&.dig('category') || '').to_s, class: 'category-input', placeholder: '新しいカテゴリ名'
+            - if @existing_categories&.any?
+              .category-suggestions
+                %span.suggestions-label 既存のカテゴリ:
+                - @existing_categories.each do |category|
+                  %button.category-tag{type: 'button', data: {category: category}}
+                    = category
 
-      .custom-field-item
-        %label カテゴリ
-        = text_field_tag 'article[custom_fields][category]', (@article.custom_fields&.dig('category') || '').to_s, class: 'form-control', placeholder: 'カテゴリ名'
+        .form-group.tags-group
+          = form.label :tags, 'タグ', class: 'field-label'
+          .tags-selector
+            = text_field_tag 'article[custom_fields][tags]', (@article.custom_fields&.dig('tags') || '').to_s, class: 'tags-input', placeholder: 'タグをカンマ区切りで入力'
+            - if @existing_tags&.any?
+              .tags-suggestions
+                %span.suggestions-label 既存のタグ:
+                .tags-cloud
+                  - @existing_tags.each do |tag|
+                    %button.tag-item{type: 'button', data: {tag: tag}}
+                      = tag
 
     .form-actions
       = form.submit '記事を作成', class: 'btn btn-primary btn-lg'

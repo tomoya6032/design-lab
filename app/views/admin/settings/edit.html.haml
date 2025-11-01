@@ -42,55 +42,77 @@
           = link_to 'キャンセル', admin_root_path, class: 'btn btn-secondary'
 
       .tab-content{data: {content: 'theme'}}
-        %h3 テーマ設定
-        %p.theme-description サイトの外観を3つのパターンから選択できます。
+        %h3 カラーテーマ設定
+        %p.theme-description サイトのメインカラーを4つのテーマから選択できます。
         
-        .theme-options
-          .theme-option
-            = form.radio_button :theme, 'modern', class: 'theme-radio', id: 'theme_modern'
-            = form.label :theme_modern, class: 'theme-label' do
-              .theme-preview.theme-modern
-                .preview-header
-                .preview-content
-                  .preview-line.long
-                  .preview-line.medium
-                  .preview-line.short
+        .color-theme-options
+          .color-theme-option
+            = form.radio_button :theme, 'orange', class: 'color-theme-radio', id: 'theme_orange'
+            = form.label :theme_orange, class: 'color-theme-label' do
+              .color-theme-preview.theme-orange
+                .color-swatch.primary-color
+                .color-swatch.secondary-color
+                .color-swatch.accent-color
               .theme-info
-                %h4 モダンテーマ
-                %p 洗練されたモダンなデザイン。グラデーションとシャドウを活用した現代的な外観です。
+                %h4 オレンジテーマ
+                %p 暖かみのあるオレンジ系のカラーパレット。エネルギッシュで親しみやすい印象を与えます。
           
-          .theme-option
-            = form.radio_button :theme, 'classic', class: 'theme-radio', id: 'theme_classic'
-            = form.label :theme_classic, class: 'theme-label' do
-              .theme-preview.theme-classic
-                .preview-header
-                .preview-content
-                  .preview-line.long
-                  .preview-line.medium
-                  .preview-line.short
+          .color-theme-option
+            = form.radio_button :theme, 'red', class: 'color-theme-radio', id: 'theme_red'
+            = form.label :theme_red, class: 'color-theme-label' do
+              .color-theme-preview.theme-red
+                .color-swatch.primary-color
+                .color-swatch.secondary-color
+                .color-swatch.accent-color
               .theme-info
-                %h4 クラシックテーマ
-                %p 伝統的で読みやすいデザイン。セリフフォントとクラシックなレイアウトを採用。
+                %h4 レッドテーマ
+                %p 情熱的なレッド系のカラーパレット。力強く印象的な外観を演出します。
 
-          .theme-option
-            = form.radio_button :theme, 'minimal', class: 'theme-radio', id: 'theme_minimal'
-            = form.label :theme_minimal, class: 'theme-label' do
-              .theme-preview.theme-minimal
-                .preview-header
-                .preview-content
-                  .preview-line.long
-                  .preview-line.medium
-                  .preview-line.short
+          .color-theme-option
+            = form.radio_button :theme, 'earth-green', class: 'color-theme-radio', id: 'theme_earth_green'
+            = form.label :theme_earth_green, class: 'color-theme-label' do
+              .color-theme-preview.theme-earth-green
+                .color-swatch.primary-color
+                .color-swatch.secondary-color
+                .color-swatch.accent-color
               .theme-info
-                %h4 ミニマルテーマ
-                %p シンプルで無駄のないデザイン。コンテンツに集中できるミニマルな外観です。
+                %h4 アースグリーンテーマ
+                %p 自然を感じるグリーン系のカラーパレット。落ち着きと安らぎを与える印象です。
 
-        .theme-customization
-          %h4 テーマカスタマイズ
-          %p 選択したテーマをさらに詳細にカスタマイズできます。
-          .customization-actions
-            = link_to 'テーマをカスタマイズ', admin_theme_customization_path, class: 'btn btn-outline-primary'
-            %small.form-text カラー、フォント、レイアウトなどを詳細に設定できます
+          .color-theme-option
+            = form.radio_button :theme, 'pearl-black', class: 'color-theme-radio', id: 'theme_pearl_black'
+            = form.label :theme_pearl_black, class: 'color-theme-label' do
+              .color-theme-preview.theme-pearl-black
+                .color-swatch.primary-color
+                .color-swatch.secondary-color
+                .color-swatch.accent-color
+              .theme-info
+                %h4 パールブラックテーマ
+                %p 洗練されたブラック系のカラーパレット。高級感とモダンな印象を演出します。
+
+        .hero-background-section
+          %h4 ヒーローセクション背景画像
+          %p トップページのヒーローセクションに表示する背景画像を設定できます。
+          
+          .form-group
+            = form.label :hero_background_image, '背景画像を選択'
+            = form.file_field :hero_background_image, class: 'form-control', accept: 'image/*'
+            %small.form-text 推奨サイズ: 1920px × 600px（JPG, PNG形式）
+          
+          - if @setting.hero_background_image.present?
+            .current-background-preview
+              %h5 現在の背景画像
+              .background-image-preview
+                %img{src: url_for(@setting.hero_background_image), alt: '現在の背景画像', style: 'max-width: 300px; height: auto; border-radius: 8px;'}
+              .background-actions
+                = link_to '背景画像を削除', admin_settings_path, method: :patch, 
+                  params: { setting: { remove_hero_background: true } }, 
+                  class: 'btn btn-outline-danger btn-sm',
+                  confirm: '背景画像を削除してもよろしいですか？'
+
+        .settings-actions-theme
+          = form.submit 'テーマ設定を保存', class: 'btn btn-primary btn-lg'
+          = link_to 'キャンセル', admin_root_path, class: 'btn btn-secondary'
 
       .tab-content{data: {content: 'seo'}}
         %h3 SEO設定

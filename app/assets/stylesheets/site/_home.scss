@@ -1,0 +1,901 @@
+// Home Page Styles
+.hero-section {
+  background: linear-gradient(135deg, $primary-color 0%, #6610f2 100%);
+  color: white;
+  padding: 100px 0;
+  text-align: center;
+  position: relative;
+
+  // 背景画像がある場合のスタイル
+  &.with-background {
+    .hero-title, .hero-description {
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+      position: relative;
+      z-index: 2;
+    }
+    
+    // 背景画像のオーバーレイ効果を強化
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.3);
+      z-index: 1;
+    }
+  }
+}
+
+.hero-container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.hero-title {
+  font-size: 3rem;
+  font-weight: $font-weight-bold;
+  margin-bottom: 20px;
+}
+
+.hero-description {
+  font-size: 1.25rem;
+  margin-bottom: 0;
+  opacity: 0.9;
+}
+
+// Recent Articles Section
+.recent-articles-section {
+  padding: 80px 0;
+  
+  .section-title {
+    text-align: center;
+    font-size: 2.5rem;
+    font-weight: $font-weight-bold;
+    margin-bottom: 50px;
+    color: $dark-color;
+  }
+  
+  .articles-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 30px;
+    margin-bottom: 40px;
+  }
+  
+  .section-action {
+    text-align: center;
+    margin-top: 50px;
+    position: relative;
+    
+    // 背景の装飾
+    &::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 200px;
+      height: 200px;
+      background: radial-gradient(circle, rgba($primary-color, 0.1) 0%, transparent 70%);
+      border-radius: 50%;
+      z-index: -1;
+    }
+  }
+}
+
+.article-card {
+  @include card;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: $transition;
+  
+  &:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+  }
+}
+
+.article-link {
+  display: block;
+  height: 100%;
+  text-decoration: none;
+  color: inherit;
+  
+  &:hover {
+    text-decoration: none;
+    color: inherit;
+  }
+}
+
+.article-thumbnail {
+  height: 180px;
+  overflow: hidden;
+  position: relative;
+  background: $light-color;
+  
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+  }
+  
+  .article-no-image {
+    @include flex-center;
+    height: 100%;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    color: $secondary-color;
+    font-size: 3rem;
+  }
+}
+
+.article-card:hover .article-thumbnail img {
+  transform: scale(1.1);
+}
+
+.article-info {
+  padding: 20px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.article-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  line-height: 1.4;
+  margin-bottom: 10px;
+  color: $dark-color;
+}
+
+.article-date {
+  font-size: 0.9rem;
+  color: $secondary-color;
+}
+
+// No Articles Section
+.no-articles-section {
+  padding: 100px 0;
+  text-align: center;
+  
+  .section-title {
+    font-size: 2.5rem;
+    font-weight: $font-weight-bold;
+    margin-bottom: 20px;
+    color: $dark-color;
+  }
+  
+  p {
+    font-size: 1.1rem;
+    color: $secondary-color;
+  }
+}
+
+// Content with Sidebar Layout
+.content-with-sidebar {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 50px;
+  align-items: start;
+}
+
+.main-content {
+  min-width: 0; // Prevents grid blowout
+}
+
+// Responsive Design
+@media (max-width: 992px) {
+  .content-with-sidebar {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+  
+  .hero-title {
+    font-size: 2.5rem;
+  }
+  
+  .recent-articles-section {
+    .section-action {
+      margin-top: 30px;
+      
+      &::before {
+        width: 150px;
+        height: 150px;
+      }
+    }
+  }
+}
+
+@media (max-width: 576px) {
+  .hero-title {
+    font-size: 2rem;
+  }
+  
+  .hero-description {
+    font-size: 1rem;
+  }
+  
+  .recent-articles-section .section-title,
+  .no-articles-section .section-title {
+    font-size: 2rem;
+  }
+}
+
+// Problems Section
+.problems-section {
+  padding: 80px 0;
+  background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+  
+  .section-title {
+    text-align: center;
+    font-size: 2.8rem;
+    font-weight: $font-weight-bold;
+    margin-bottom: 20px;
+    color: $dark-color;
+    position: relative;
+    
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 4px;
+      background: linear-gradient(90deg, $primary-color, $warning-color);
+      border-radius: 2px;
+    }
+  }
+  
+  .section-subtitle {
+    text-align: center;
+    font-size: 1.2rem;
+    color: $primary-color;
+    font-weight: 600;
+    margin-bottom: 50px;
+    max-width: 680px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .problems-grid {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .problems-row {
+    display: grid;
+    gap: 30px;
+    margin-bottom: 30px;
+    
+    &.top-row {
+      grid-template-columns: repeat(3, 1fr);
+    }
+    
+    &.bottom-row {
+      grid-template-columns: repeat(2, 1fr);
+      max-width: 800px;
+      margin: 0 auto;
+    }
+  }
+  
+  .problem-card {
+    @include card;
+    padding: 0;
+    text-align: center;
+    transition: $transition;
+    background: white;
+    border: 2px solid transparent;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba($primary-color, 0.1), transparent);
+      transition: left 0.6s ease;
+      z-index: 1;
+    }
+    
+    &:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+      border-color: $primary-color;
+      
+      &::before {
+        left: 100%;
+      }
+      
+      .problem-icon i {
+        transform: scale(1.2);
+      }
+      
+      .problem-icon .problem-image {
+        transform: scale(1.05);
+      }
+    }
+  }
+  
+  .problem-icon {
+    margin-bottom: 20px;
+    width: 100%;
+    height: 150px;
+    overflow: hidden;
+    border-radius: 12px 12px 0 0;
+    
+    i {
+      font-size: 3.5rem;
+      display: block;
+      transition: transform 0.3s ease;
+      line-height: 1;
+    }
+    
+    .problem-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+      border-radius: 0;
+    }
+  }
+  
+  .problem-content {
+    padding: 25px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  
+  .problem-title {
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 15px;
+    color: $dark-color;
+    line-height: 1.3;
+  }
+  
+  .problem-description {
+    font-size: 1rem;
+    line-height: 1.7;
+    color: $secondary-color;
+    margin: 0;
+  }
+}
+
+// Why Choose Us Section
+.why-choose-us-section {
+  padding: 100px 0;
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+  
+  .section-title {
+    text-align: center;
+    font-size: 2.8rem;
+    font-weight: $font-weight-bold;
+    margin-bottom: 20px;
+    color: $dark-color;
+    position: relative;
+    
+    &::before {
+      content: '';
+      position: absolute;
+      top: -15px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 6px;
+      background: linear-gradient(90deg, $primary-color, $success-color);
+      border-radius: 3px;
+    }
+    
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -15px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 120px;
+      height: 2px;
+      background: $secondary-color;
+      opacity: 0.3;
+    }
+  }
+  
+  .points-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 60px;
+    max-width: 1000px;
+    margin: 60px auto 0;
+  }
+  
+  .point-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 2rem;
+    margin-bottom: 3rem;
+    padding: 2rem;
+    background: linear-gradient(135deg, rgba($primary-color, 0.08), rgba($success-color, 0.05));
+    border-radius: 16px;
+    border: 1px solid rgba($primary-color, 0.15);
+    transition: all 0.3s ease;
+    
+    &:last-child {
+      margin-bottom: 0;
+    }
+    
+    &:hover {
+      background: linear-gradient(135deg, rgba($primary-color, 0.12), rgba($success-color, 0.08));
+      border-color: rgba($primary-color, 0.25);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba($primary-color, 0.15);
+      
+      .point-image {
+        transform: scale(1.05);
+        background: linear-gradient(135deg, rgba($primary-color, 0.25), rgba($success-color, 0.15));
+        border-color: rgba($primary-color, 0.4);
+        box-shadow: 0 15px 40px rgba($primary-color, 0.2);
+      }
+      
+      .point-icon-image {
+        transform: scale(1.05);
+        opacity: 1;
+      }
+    }
+  }
+  
+  .point-visual {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .point-image {
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    @include flex-center;
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, rgba($primary-color, 0.15), rgba($success-color, 0.1));
+    border: 3px solid rgba($primary-color, 0.2);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    
+    &::before {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, rgba($primary-color, 0.1), rgba($success-color, 0.05));
+      z-index: -1;
+    }
+    
+    .point-icon-image {
+      width: 154px;
+      height: 154px;
+      border-radius: 50%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+      position: relative;
+      z-index: 1;
+      opacity: 0.9;
+      mix-blend-mode: multiply;
+    }
+  }
+  
+  .point-icon {
+    font-size: 4rem;
+    color: white;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    
+    &.icon-lightning::before {
+      content: "⚡";
+    }
+    
+    &.icon-palette::before {
+      content: "🎨";
+    }
+    
+    &.icon-gear::before {
+      content: "⚙️";
+    }
+  }
+  
+  .point-content {
+    .point-number {
+      display: inline-block;
+      background: linear-gradient(90deg, $primary-color, $success-color);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      margin-bottom: 10px;
+    }
+    
+    .point-title {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 15px;
+      color: $dark-color;
+      line-height: 1.3;
+    }
+    
+    .point-description {
+      font-size: 1.1rem;
+      line-height: 1.8;
+      color: $secondary-color;
+      margin: 0;
+    }
+  }
+}
+
+// レスポンシブ対応 - 新しいセクション用
+@media (max-width: 768px) {
+  .why-choose-us-section {
+    .section-title {
+      font-size: 2.2rem;
+    }
+    
+    .point-item {
+      grid-template-columns: 1fr !important;
+      gap: 30px;
+      text-align: center;
+      
+      .point-content {
+        text-align: center !important;
+        order: 2 !important;
+      }
+      
+      .point-visual {
+        order: 1 !important;
+      }
+    }
+    
+    .point-image {
+      width: 120px;
+      height: 120px;
+      
+      .point-icon-image {
+        width: 120px;
+        height: 120px;
+      }
+    }
+    
+    .point-icon {
+      font-size: 3rem;
+    }
+    
+    .point-title {
+      font-size: 1.5rem;
+    }
+  }
+  
+  .problems-section {
+    .problems-row {
+      &.top-row,
+      &.bottom-row {
+        grid-template-columns: 1fr;
+        max-width: 100%;
+      }
+    }
+    
+    .section-title {
+      font-size: 2.2rem;
+    }
+    
+    .problem-icon i {
+      font-size: 3rem;
+    }
+    
+    .problem-icon {
+      height: 120px;
+      
+      .problem-image {
+        width: 100%;
+        height: 100%;
+      }
+    }
+    
+    // Portfolios responsive styles
+    .portfolios-grid {
+      grid-template-columns: 1fr;
+      gap: 30px;
+    }
+    
+    .portfolio-item {
+      .portfolio-images {
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+        
+        .image-container {
+          &.pc-image,
+          &.sp-image {
+            max-width: 280px;
+            
+            .portfolio-screenshots-grid {
+              justify-content: center;
+            }
+            
+            .portfolio-screenshot {
+              &:not(:only-child) {
+                max-width: calc(50% - 5px);
+              }
+            }
+          }
+        }
+      }
+      
+      .portfolio-content {
+        padding: 20px;
+        
+        .portfolio-title {
+          font-size: 1.3rem;
+        }
+      }
+    }
+  }
+}
+
+// Portfolios Section
+.portfolios-section {
+  padding: 100px 0;
+  background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+  
+  .section-title {
+    text-align: center;
+    font-size: 2.8rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: $dark-color;
+    position: relative;
+    
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 4px;
+      background: linear-gradient(90deg, $primary-color, $success-color);
+      border-radius: 2px;
+    }
+  }
+  
+  .section-subtitle {
+    text-align: center;
+    font-size: 1.2rem;
+    color: $secondary-color;
+    margin-bottom: 60px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .portfolios-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(800px, 1fr));
+    gap: 50px;
+    margin-top: 60px;
+  }
+  
+  .portfolio-item {
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    border: 1px solid rgba($primary-color, 0.1);
+    
+    &:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.12);
+      border-color: rgba($primary-color, 0.2);
+    }
+  }
+  
+  .portfolio-images {
+    display: flex;
+    background: #f8f9fa;
+    padding: 40px;
+    gap: 30px;
+    justify-content: center;
+    align-items: flex-start;
+    
+    .image-container {
+      position: relative;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      display: flex;
+      flex-direction: column;
+      
+      &.pc-image {
+        flex: 3;
+        max-width: 600px;
+        
+        .portfolio-screenshots-grid {
+          display: flex;
+          gap: 10px;
+          flex-wrap: wrap;
+        }
+      }
+      
+      &.sp-image {
+        flex: 1;
+        max-width: 280px;
+        
+        .portfolio-screenshots-grid {
+          display: flex;
+          gap: 8px;
+          flex-wrap: wrap;
+        }
+      }
+      
+      .device-label {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        background: rgba($primary-color, 0.9);
+        color: white;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 0.8rem;
+        font-weight: 600;
+      }
+    }
+    
+    .portfolio-screenshot {
+      flex: 1;
+      min-width: 0;
+      height: auto;
+      display: block;
+      transition: transform 0.3s ease;
+      border-radius: 6px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      
+      &:hover {
+        transform: scale(1.05);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+      }
+      
+      // 複数画像の場合の調整
+      &:not(:only-child) {
+        max-width: calc(50% - 4px);
+        min-height: 160px;
+        object-fit: cover;
+      }
+      
+      // 単一画像の場合
+      &:only-child {
+        min-height: 200px;
+        object-fit: cover;
+      }
+    }
+    
+    .no-image {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #e9ecef;
+      color: #6c757d;
+      font-size: 0.9rem;
+      padding: 40px 20px;
+      text-align: center;
+    }
+  }
+  
+  .portfolio-content {
+    padding: 30px;
+    
+    .portfolio-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 15px;
+      color: $dark-color;
+      line-height: 1.3;
+    }
+    
+    .portfolio-meta {
+      margin-bottom: 15px;
+      
+      .production-period {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: $secondary-color;
+        font-size: 0.95rem;
+        
+        .icon-clock::before {
+          content: "⏱️";
+        }
+      }
+    }
+    
+    .portfolio-description {
+      color: $secondary-color;
+      line-height: 1.7;
+      margin-bottom: 20px;
+      font-size: 1rem;
+    }
+    
+    .portfolio-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: $primary-color;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.95rem;
+      transition: all 0.3s ease;
+      
+      &::after {
+        content: "→";
+        transition: transform 0.3s ease;
+      }
+      
+      &:hover {
+        color: darken($primary-color, 10%);
+        
+        &::after {
+          transform: translateX(4px);
+        }
+      }
+    }
+  }
+  
+  // レスポンシブ対応
+  @media (min-width: 1200px) {
+    .portfolios-grid {
+      grid-template-columns: repeat(auto-fit, minmax(900px, 1fr));
+    }
+    
+    .portfolio-images {
+      .image-container {
+        &.pc-image {
+          max-width: 700px;
+        }
+        
+        &.sp-image {
+          max-width: 320px;
+        }
+      }
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .portfolios-grid {
+      grid-template-columns: 1fr;
+      gap: 30px;
+    }
+    
+    .portfolio-images {
+      flex-direction: column;
+      gap: 20px;
+      
+      .image-container {
+        &.pc-image {
+          max-width: 100%;
+        }
+        
+        &.sp-image {
+          max-width: 100%;
+        }
+      }
+    }
+  }
+}
