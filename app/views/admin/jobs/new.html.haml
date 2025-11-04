@@ -1,0 +1,70 @@
+- content_for :page_title, '求人情報の新規作成'
+
+.admin-actions
+  = link_to '一覧に戻る', admin_jobs_path, class: 'btn btn-secondary'
+
+.admin-form-container
+  = form_with model: [:admin, @job], local: true, multipart: true, class: 'admin-form' do |form|
+    - if @job.errors.any?
+      .alert.alert-danger
+        %h4= pluralize(@job.errors.count, "個のエラー") + "があります："
+        %ul
+          - @job.errors.full_messages.each do |message|
+            %li= message
+
+    .form-group
+      = form.label :title, '求人タイトル', class: 'form-label required'
+      = form.text_field :title, class: 'form-control', placeholder: '例: Webデザイナー募集'
+
+    .form-group
+      = form.label :job_type, '職種', class: 'form-label required'
+      = form.text_field :job_type, class: 'form-control', placeholder: '例: Webデザイナー、エンジニア、マーケター'
+
+    .form-group
+      = form.label :description, '募集内容', class: 'form-label required'
+      = form.text_area :description, class: 'form-control', rows: 8, 
+                       placeholder: '職務内容、求めるスキル、働く環境について詳しく記載してください。'
+
+    .form-group
+      = form.label :capacity, '定員', class: 'form-label'
+      = form.text_field :capacity, class: 'form-control', placeholder: '例: 2名、若干名'
+
+    .form-group
+      = form.label :salary_range, '想定年収', class: 'form-label'
+      = form.text_field :salary_range, class: 'form-control', placeholder: '例: 300万円〜500万円'
+
+    .form-group
+      = form.label :expectations, '期待していること', class: 'form-label'
+      = form.text_area :expectations, class: 'form-control', rows: 5, 
+                       placeholder: 'この職種に期待すること、成長してほしい方向性などを記載してください。'
+
+    .form-group
+      = form.label :senior_message, '同じ職種の先輩からのエール', class: 'form-label'
+      = form.text_area :senior_message, class: 'form-control', rows: 5, 
+                       placeholder: '先輩社員からの応援メッセージやアドバイスを記載してください。'
+
+    .form-group
+      = form.label :hero_images, 'メイン画像・イラスト（最大3枚）', class: 'form-label'
+      .image-upload-container
+        = form.file_field :hero_images, class: 'form-control', accept: 'image/*', multiple: true, data: { max_files: 3 }
+        %small.form-text.text-muted 求人ページのメイン画像やイラストを最大3枚までアップロードしてください
+
+    .form-group
+      = form.label :detail_images, '詳細画像・イラスト（最大5枚）', class: 'form-label'
+      .image-upload-container
+        = form.file_field :detail_images, class: 'form-control', accept: 'image/*', multiple: true, data: { max_files: 5 }
+        %small.form-text.text-muted 職場環境や業務内容を表現する画像・イラストを最大5枚までアップロードしてください
+
+    .form-group
+      = form.label :display_order, '表示順', class: 'form-label'
+      = form.number_field :display_order, class: 'form-control', value: 0
+      %small.form-text.text-muted 数字が小さいほど上に表示されます
+
+    .form-group
+      .form-check
+        = form.check_box :published, class: 'form-check-input', id: 'job_published'
+        = form.label :published, '公開する', class: 'form-check-label', for: 'job_published'
+
+    .form-actions
+      = form.submit '求人情報を作成', class: 'btn btn-primary'
+      = link_to 'キャンセル', admin_jobs_path, class: 'btn btn-secondary'

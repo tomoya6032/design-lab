@@ -21,6 +21,9 @@ Rails.application.routes.draw do
     resources :portfolios do
       delete 'images/:id', to: 'portfolios#destroy_image', as: 'destroy_image'
     end
+    resources :jobs do
+      delete 'images/:id', to: 'jobs#destroy_image', as: 'destroy_image'
+    end
     resources :users, only: [:index, :show, :edit, :update, :destroy]
     resource :settings, only: [:show, :edit, :update]
     get 'theme-customization', to: 'theme_customization#edit'
@@ -33,6 +36,7 @@ Rails.application.routes.draw do
     get 'home/index'
     resources :articles, only: [:index, :show]
     resources :pages, only: [:index, :show]
+    resources :jobs, only: [:index, :show]
     root 'home#index'  # /site のルートパス
   end
   

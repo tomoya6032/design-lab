@@ -30,6 +30,30 @@
   font-size: 1.1rem;
 }
 
+.btn-lg {
+  padding: 15px 30px;
+  font-size: 1.1rem;
+}
+
+.btn-block {
+  display: block;
+  width: 100%;
+}
+
+.btn-outline-secondary {
+  @include button-base;
+  color: $secondary-color;
+  border-color: $secondary-color;
+  background: transparent;
+  
+  &:hover {
+    background: $secondary-color;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba($secondary-color, 0.3);
+  }
+}
+
 // CTA Button (Call to Action)
 .btn-cta {
   @include button-base;

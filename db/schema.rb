@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_11_01_212525) do
+ActiveRecord::Schema[8.0].define(version: 2025_11_04_000216) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -57,6 +57,23 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_01_212525) do
     t.boolean "show_table_of_contents"
     t.index ["slug"], name: "index_articles_on_slug", unique: true
     t.index ["user_id"], name: "index_articles_on_user_id"
+  end
+
+  create_table "jobs", force: :cascade do |t|
+    t.string "title", null: false
+    t.string "job_type", null: false
+    t.text "description"
+    t.string "capacity"
+    t.string "salary_range"
+    t.text "expectations"
+    t.text "senior_message"
+    t.boolean "published", default: false
+    t.integer "display_order", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["display_order"], name: "index_jobs_on_display_order"
+    t.index ["job_type"], name: "index_jobs_on_job_type"
+    t.index ["published"], name: "index_jobs_on_published"
   end
 
   create_table "media", force: :cascade do |t|

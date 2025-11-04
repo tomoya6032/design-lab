@@ -161,4 +161,50 @@
       %p 制作実績はまだ登録されていません。管理画面から追加してください。
       = link_to '管理画面へ', admin_portfolios_path, class: 'btn btn-primary'
 
+- if @featured_jobs.any?
+  %section.jobs-section
+    .container
+      %h2.section-title 私たちと一緒に働きませんか？
+      %p.section-subtitle 素晴らしいチームの一員として、共に成長していきましょう
+      
+      .jobs-grid
+        - @featured_jobs.each do |job|
+          .job-card
+            .job-card-header
+              - if job.hero_image
+                .job-image
+                  = image_tag job.hero_image, class: 'job-hero-image', alt: job.title
+              - else
+                .job-image.no-image
+                  %i.icon-briefcase
+              .job-badge= job.job_type
+            
+            .job-card-content
+              %h3.job-title= job.title
+              %p.job-description= job.truncated_description(80)
+              
+              .job-meta
+                - if job.capacity.present?
+                  .job-meta-item
+                    %i.icon-users
+                    %span= job.capacity
+                - if job.salary_range.present?
+                  .job-meta-item
+                    %i.icon-yen
+                    %span= job.salary_range
+              
+              = link_to site_job_path(job), class: 'job-detail-link' do
+                詳細を見る
+                %i.icon-arrow-right
+      
+      .section-action
+        = link_to site_jobs_path, class: 'btn btn-cta' do
+          %span.btn-text 全ての求人を見る
+          %i.btn-icon →
+- else
+  %section.no-jobs-section
+    .container
+      %h2.section-title 求人情報
+      %p 現在募集中の求人はございません。最新情報をお待ちください。
+
 

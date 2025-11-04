@@ -40,6 +40,35 @@ h1, h2, h3, h4, h5, h6 {
   content: '✨';
 }
 
+// Job-related icons
+.icon-briefcase::before {
+  content: '💼';
+}
+
+.icon-users::before {
+  content: '👥';
+}
+
+.icon-yen::before {
+  content: '💰';
+}
+
+.icon-arrow-right::before {
+  content: '→';
+}
+
+.icon-send::before {
+  content: '📧';
+}
+
+.icon-arrow-left::before {
+  content: '←';
+}
+
+.icon-home::before {
+  content: '🏠';
+}
+
 h1 { font-size: 2.5rem; }
 h2 { font-size: 2rem; }
 h3 { font-size: 1.75rem; }

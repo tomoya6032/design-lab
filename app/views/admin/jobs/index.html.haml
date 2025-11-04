@@ -1,0 +1,91 @@
+- content_for :page_title, '求人管理'
+
+- if @jobs.any?
+  .jobs-stats
+    .stats-item
+      %span.stats-number= @jobs.count
+      %span.stats-label 総求人数
+    .stats-item
+      %span.stats-number= @jobs.published.count
+      %span.stats-label 公開中
+    .stats-item
+      %span.stats-number= @jobs.where(published: false).count
+      %span.stats-label 下書き
+
+.admin-table-container
+  %table.admin-table.jobs-table
+    %thead
+      %tr
+        %th.job-basic-info
+          %i.icon-briefcase
+          基本情報
+        %th.job-details
+          %i.icon-info
+          詳細
+        %th.job-status
+          %i.icon-status
+          ステータス
+        %th.job-actions
+          %i.icon-tools
+          操作
+    %tbody
+      - @jobs.each do |job|
+        %tr.job-row{class: job.published? ? 'published' : 'draft'}
+          %td.job-basic-info
+            .job-main-info
+              .job-title-row
+                %h4.job-title= job.title
+                %span.job-type-badge= job.job_type
+              .job-meta-row
+                - if job.hero_image
+                  .job-image-preview
+                    = image_tag job.hero_image, class: 'job-thumbnail'
+                    %span.image-indicator 画像あり
+                - else
+                  .no-image-indicator
+                    %i.icon-no-image
+                    %span 画像なし
+          %td.job-details
+            .detail-item
+              %span.detail-label 定員:
+              %span.detail-value= job.capacity.present? ? job.capacity : '未設定'
+            .detail-item
+              %span.detail-label 年収:
+              %span.detail-value= job.salary_range.present? ? job.salary_range : '未設定'
+            .detail-item
+              %span.detail-label 説明:
+              %span.detail-value.job-description= truncate(job.description, length: 50)
+          %td.job-status
+            .status-info
+              - if job.published?
+                %span.status-badge.published
+                  %i.icon-check
+                  公開中
+              - else
+                %span.status-badge.draft
+                  %i.icon-clock
+                  下書き
+              .status-meta
+                %small.display-order 表示順: #{job.display_order}
+                %small.created-date 作成: #{job.created_at.strftime('%Y/%m/%d')}
+          %td.job-actions
+            .action-buttons
+              = link_to admin_job_path(job), class: 'btn btn-sm btn-outline-primary', title: '詳細を見る' do
+                %i.icon-eye
+                詳細
+              = link_to edit_admin_job_path(job), class: 'btn btn-sm btn-outline-secondary', title: '編集' do
+                %i.icon-edit
+                編集
+              = link_to admin_job_path(job), method: :delete, 
+                        class: 'btn btn-sm btn-outline-danger', title: '削除',
+                        data: { confirm: 'この求人情報を削除してもよろしいですか？' } do
+                %i.icon-trash
+                削除
+
+.admin-content-actions
+  = link_to '新しい求人を作成', new_admin_job_path, class: 'btn btn-primary'
+
+- if @jobs.empty?
+  .empty-state
+    %h3 求人情報がありません
+    %p 「新しい求人を作成」ボタンから求人情報を作成してください。

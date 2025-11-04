@@ -7,6 +7,7 @@ class Site::HomeController < ApplicationController
     @recent_articles = Article.published.recent.with_featured_image.limit(8)
     @featured_pages = Page.published.limit(3)
     @portfolios = Portfolio.published.ordered.limit(6)
+    @featured_jobs = Job.published.ordered.limit(3)
     
     # サイドバー用データ
     @categories = get_categories

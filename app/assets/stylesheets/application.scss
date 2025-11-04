@@ -12,11 +12,13 @@
 @import 'site/layout';
 @import 'site/home';
 @import 'site/articles';
+@import 'site/jobs';
 
 // 管理画面スタイル  
 @import 'admin/layout';
 @import 'admin/dashboard';
 @import 'admin/forms';
+@import 'admin/jobs';
 
 /* 基本スタイル */
 body {

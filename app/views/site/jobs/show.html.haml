@@ -1,0 +1,88 @@
+- content_for :title, @job.title
+- content_for :meta_description, @job.description.present? ? truncate(strip_tags(@job.description), length: 160) : "#{@job.title} - #{@job.job_type}の求人情報"
+
+%section.job-detail-hero
+  .container
+    .job-hero-content
+      .job-hero-text
+        %h1.job-detail-title= @job.title
+        %p.job-detail-type= @job.job_type
+        .job-basic-info
+          - if @job.capacity.present?
+            .info-item
+              %i.icon-users
+              %span 募集人数: #{@job.capacity}
+          - if @job.salary_range.present?
+            .info-item
+              %i.icon-yen
+              %span 想定年収: #{@job.salary_range}
+      
+      - if @job.hero_image
+        .job-hero-image
+          = image_tag @job.hero_image, class: 'hero-image', alt: @job.title
+
+%section.job-detail-content
+  .container
+    .job-content-grid
+      .job-main-content
+        .content-section
+          %h2.content-title 募集内容
+          .content-text
+            = simple_format(@job.description)
+
+        - if @job.expectations.present?
+          .content-section
+            %h2.content-title 期待していること
+            .content-text.expectations
+              = simple_format(@job.expectations)
+
+        - if @job.senior_message.present?
+          .content-section.senior-message
+            %h2.content-title 同じ職種の先輩からのエール
+            .message-content
+              %blockquote.senior-quote
+                = simple_format(@job.senior_message)
+              .message-author
+                %span.author-title #{@job.job_type}の先輩より
+
+      .job-sidebar
+        .job-summary-card
+          %h3.card-title 募集要項
+          %table.job-summary-table
+            %tr
+              %th 職種
+              %td= @job.job_type
+            - if @job.capacity.present?
+              %tr
+                %th 募集人数
+                %td= @job.capacity
+            - if @job.salary_range.present?
+              %tr
+                %th 想定年収
+                %td= @job.salary_range
+        
+        .action-card
+          %h3.card-title エントリー
+          %p ご興味をお持ちいただいた方は、お気軽にお問い合わせください。
+          = link_to '#', class: 'btn btn-primary btn-lg btn-block' do
+            エントリーする
+            %i.icon-send
+
+- if @job.detail_images.any?
+  %section.job-gallery
+    .container
+      %h2.section-title 職場の様子
+      .gallery-grid
+        - @job.detail_images.each_with_index do |image, index|
+          .gallery-item
+            = image_tag image, class: 'gallery-image', alt: "#{@job.title} 職場画像#{index + 1}"
+
+%section.job-back-section
+  .container
+    .back-actions
+      = link_to site_jobs_path, class: 'btn btn-outline-primary' do
+        %i.icon-arrow-left
+        求人一覧に戻る
+      = link_to site_root_path, class: 'btn btn-outline-secondary' do
+        %i.icon-home
+        ホームに戻る

@@ -1,0 +1,85 @@
+- content_for :page_title, @job.title
+
+- content_for :admin_actions do
+  = link_to '編集', edit_admin_job_path(@job), class: 'btn btn-primary'
+  = link_to '一覧に戻る', admin_jobs_path, class: 'btn btn-secondary'
+  = link_to '削除', admin_job_path(@job), method: :delete, 
+            class: 'btn btn-danger',
+            data: { confirm: 'この求人情報を削除してもよろしいですか？' }
+
+%article.article-detail
+  .container
+    .article-layout
+      .main-content        
+        .article-header
+          %h1.article-title= @job.title
+          .article-meta
+            %time.article-date= @job.updated_at.strftime('%Y年%m月%d日更新')
+            %span.article-author 管理者
+
+        .job-detail-preview
+    .job-meta-info
+      .row
+        .col-md-6
+          %h3 基本情報
+          %table.table.table-striped
+            %tr
+              %th 職種
+              %td= @job.job_type
+            %tr
+              %th 定員
+              %td= @job.capacity.present? ? @job.capacity : '未設定'
+            %tr
+              %th 想定年収
+              %td= @job.salary_range.present? ? @job.salary_range : '未設定'
+            %tr
+              %th 公開状態
+              %td
+                - if @job.published?
+                  %span.status-badge.published 公開中
+                - else
+                  %span.status-badge.draft 下書き
+            %tr
+              %th 表示順
+              %td= @job.display_order
+            %tr
+              %th 作成日
+              %td= @job.created_at.strftime('%Y年%m月%d日 %H:%M')
+            %tr
+              %th 更新日
+              %td= @job.updated_at.strftime('%Y年%m月%d日 %H:%M')
+
+        .col-md-6
+          %h3 メイン画像
+          - if @job.hero_images.any?
+            .images-grid
+              - @job.hero_images.each do |hero_image|
+                = image_tag hero_image, class: 'img-thumbnail', style: 'max-width: 150px; margin: 5px;'
+          - else
+            %p.text-muted メイン画像は設定されていません
+
+    .job-content-preview
+      .row
+        .col-12
+          %h3 募集内容
+          .content-box
+            = simple_format(@job.description)
+
+        - if @job.expectations.present?
+          .col-md-6
+            %h3 期待していること
+            .content-box
+              = simple_format(@job.expectations)
+
+        - if @job.senior_message.present?
+          .col-md-6
+            %h3 先輩からのエール
+            .content-box
+              = simple_format(@job.senior_message)
+
+        - if @job.detail_images.any?
+          .col-12
+            %h3 詳細画像
+            .images-grid
+              - @job.detail_images.each do |detail_image|
+                = image_tag detail_image, class: 'img-thumbnail', style: 'max-width: 200px; margin: 10px;'

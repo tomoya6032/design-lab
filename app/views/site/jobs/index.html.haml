@@ -1,0 +1,58 @@
+- content_for :title, '求人情報'
+
+%section.jobs-hero-section
+  .container
+    %h1.jobs-hero-title 一緒に働く仲間を募集しています
+    %p.jobs-hero-description 私たちと一緒に、素晴らしいプロダクトを作りませんか？
+
+%section.jobs-section
+  .container
+    - if @jobs.any?
+      - if @job_types.any?
+        .job-types-filter
+          %h2.section-title 職種から探す
+          .job-types-grid
+            - @job_types.each do |job_type|
+              %a.job-type-card{href: "##{job_type.parameterize}"}
+                .job-type-icon
+                .job-type-name= job_type
+                .job-count= "#{@jobs.by_job_type(job_type).count}件"
+
+      .jobs-listing
+        - @job_types.each do |job_type|
+          %section.job-type-section{id: job_type.parameterize}
+            %h2.job-type-title= job_type
+            .jobs-grid
+              - @jobs.by_job_type(job_type).each do |job|
+                .job-card
+                  .job-card-header
+                    - if job.hero_image
+                      .job-image
+                        = image_tag job.hero_image, class: 'job-hero-image', alt: job.title
+                    - else
+                      .job-image.no-image
+                        %i.icon-briefcase
+                    .job-badge= job.job_type
+                  
+                  .job-card-content
+                    %h3.job-title= job.title
+                    %p.job-description= job.truncated_description(100)
+                    
+                    .job-meta
+                      - if job.capacity.present?
+                        .job-meta-item
+                          %i.icon-users
+                          %span= job.capacity
+                      - if job.salary_range.present?
+                        .job-meta-item
+                          %i.icon-yen
+                          %span= job.salary_range
+                    
+                    = link_to site_job_path(job), class: 'job-detail-link' do
+                      詳細を見る
+                      %i.icon-arrow-right
+    - else
+      .empty-jobs-state
+        %h2 現在募集中の求人はございません
+        %p 求人情報が公開されましたら、こちらでお知らせいたします。
+        = link_to '他のページを見る', site_root_path, class: 'btn btn-primary'

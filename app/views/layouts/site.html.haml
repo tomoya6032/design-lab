@@ -16,6 +16,7 @@
     = javascript_importmap_tags
     
   %body.site-layout
+    / DEBUG: site.html.haml layout loaded
     %header.site-header
       .container
         %nav.navbar
@@ -37,8 +38,10 @@
         %ul.main-nav-list
           %li.main-nav-item
             = link_to 'ホーム', root_path, class: 'main-nav-link'
+          %li.main-nav-item
+            = link_to '求人情報', site_jobs_path, class: 'main-nav-link'
           - if @navigation_pages.present?
-            - @navigation_pages.limit(3).each do |page|
+            - @navigation_pages.limit(2).each do |page|
               %li.main-nav-item
                 = link_to page.title, site_page_path(page), class: 'main-nav-link'
     
