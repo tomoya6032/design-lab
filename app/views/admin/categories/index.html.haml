@@ -1,0 +1,24 @@
+- content_for :page_title, 'カテゴリ管理'
+
+.admin-content-actions
+  = link_to '新しいカテゴリを作成', new_admin_category_path, class: 'btn btn-primary'
+
+- if @categories.any?
+  .admin-table-container
+    %table.admin-table
+      %thead
+        %tr
+          %th カテゴリ名
+          %th スラッグ
+          %th 階層
+          %th 記事数
+          %th 作成日
+          %th アクション
+      %tbody
+        - @categories.each do |category|
+          = render 'category_row', category: category, level: 0
+- else
+  .empty-state
+    %h3 カテゴリがありません
+    %p カテゴリを作成して記事を整理しましょう
+    = link_to '最初のカテゴリを作成', new_admin_category_path, class: 'btn btn-primary'

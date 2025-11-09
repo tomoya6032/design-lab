@@ -51,19 +51,72 @@ class Admin::ArticlesController < ApplicationController
       render :edit, status: :unprocessable_entity
     end
   end
-  
-  def edit
-    load_taxonomy_data
-  end
 
-  def update
-    Rails.logger.debug "Updating article with params: #{article_params.inspect}"
+  def destroy
+    @article.destroy
+    redirect_to admin_articles_path, notice: '記事を削除しました。'
+  end
+  
+  def bulk_action
+    article_ids = params[:article_ids]
+    bulk_action = params[:bulk_action]
     
-    if @article.update(article_params)
-      redirect_to [:admin, @article], notice: '記事が更新されました'
+    # デバッグ情報
+    Rails.logger.info "🔧 一括操作実行: #{bulk_action}, 対象: #{article_ids&.length || 0}件"
+    
+    if article_ids.blank?
+      redirect_to admin_articles_path, alert: '❌ 操作する記事が選択されていません。'
+      return
+    end
+    
+    if bulk_action.blank?
+      redirect_to admin_articles_path, alert: '❌ 一括操作を選択してください。'
+      return
+    end
+    
+    success_count = 0
+    error_count = 0
+    
+    Article.where(id: article_ids).find_each do |article|
+      success = case bulk_action
+      when 'published'
+        article.update(status: 'published', published_at: Time.current)
+      when 'draft'
+        article.update(status: 'draft', published_at: nil)
+      when 'limited'
+        article.update(status: 'limited', published_at: nil)
+      when 'delete'
+        article.destroy
+      else
+        false
+      end
+      
+      if success
+        success_count += 1
+        Rails.logger.info "✅ 記事 #{article.id}: #{article.title} - #{bulk_action} 成功"
+      else
+        error_count += 1
+        Rails.logger.warn "❌ 記事 #{article.id}: #{article.title} - #{bulk_action} 失敗: #{article.errors.full_messages.join(', ')}"
+      end
+    end
+    
+    action_names = {
+      'published' => '公開',
+      'draft' => '下書きに変更',
+      'limited' => '限定公開',
+      'delete' => '削除'
+    }
+    
+    action_name = action_names[bulk_action]
+    
+    Rails.logger.info "📊 結果: 成功 #{success_count}件, エラー #{error_count}件"
+    
+    if success_count > 0 && error_count == 0
+      redirect_to admin_articles_path, notice: "✅ #{success_count}件の記事を#{action_name}しました。"
+    elsif success_count > 0 && error_count > 0
+      redirect_to admin_articles_path, notice: "⚠️ #{success_count}件の記事を#{action_name}しました。#{error_count}件でエラーが発生しました。"
     else
-      load_taxonomy_data
-      render :edit
+      redirect_to admin_articles_path, alert: "❌ 記事の#{action_name}に失敗しました。"
     end
   end
 

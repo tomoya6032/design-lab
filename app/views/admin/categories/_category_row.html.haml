@@ -1,0 +1,31 @@
+%tr.category-row{class: "level-#{level}"}
+  %td.category-name
+    - if level > 0
+      %span.hierarchy-indent{style: "margin-left: #{level * 20}px;"}
+        %i.icon-arrow-right
+    = category.name
+  %td.category-slug
+    %code= category.slug
+  %td.category-level
+    - if category.parent
+      = category.parent.name
+      %i.icon-arrow-right
+      = category.name
+    - else
+      %span.root-category ルートカテゴリ
+  %td.category-count
+    %span.badge.badge-info= category.articles.count
+  %td.category-date
+    = category.created_at.strftime('%Y/%m/%d')
+  %td.category-actions
+    = link_to admin_category_path(category), class: 'btn btn-sm btn-outline-primary' do
+      %i.icon-eye
+    = link_to edit_admin_category_path(category), class: 'btn btn-sm btn-outline-secondary' do
+      %i.icon-edit
+    = link_to admin_category_path(category), method: :delete, 
+      confirm: 'このカテゴリを削除してもよろしいですか？', 
+      class: 'btn btn-sm btn-outline-danger' do
+      %i.icon-trash
+
+- category.children.ordered.each do |child|
+  = render 'category_row', category: child, level: level + 1

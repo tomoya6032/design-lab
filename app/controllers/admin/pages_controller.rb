@@ -45,6 +45,73 @@ class Admin::PagesController < ApplicationController
     @page.destroy
     redirect_to admin_pages_path, notice: 'ページが削除されました。'
   end
+  
+  def bulk_action
+    page_ids = params[:page_ids]
+    bulk_action = params[:bulk_action]
+    
+    if page_ids.blank?
+      redirect_to admin_pages_path, alert: '操作するページが選択されていません。'
+      return
+    end
+    
+    if bulk_action.blank?
+      redirect_to admin_pages_path, alert: '一括操作を選択してください。'
+      return
+    end
+    
+    success_count = 0
+    error_count = 0
+    
+    page_ids.each do |id|
+      page = Page.find_by(id: id)
+      next unless page
+      
+      case bulk_action
+      when 'published'
+        if page.update(status: 'published')
+          success_count += 1
+        else
+          error_count += 1
+        end
+      when 'draft'
+        if page.update(status: 'draft')
+          success_count += 1
+        else
+          error_count += 1
+        end
+      when 'limited'
+        if page.update(status: 'limited')
+          success_count += 1
+        else
+          error_count += 1
+        end
+      when 'delete'
+        if page.destroy
+          success_count += 1
+        else
+          error_count += 1
+        end
+      end
+    end
+    
+    action_names = {
+      'published' => '公開',
+      'draft' => '下書きに変更',
+      'limited' => '限定公開',
+      'delete' => '削除'
+    }
+    
+    action_name = action_names[bulk_action]
+    
+    if success_count > 0 && error_count == 0
+      redirect_to admin_pages_path, notice: "#{success_count}件のページを#{action_name}しました。"
+    elsif success_count > 0 && error_count > 0
+      redirect_to admin_pages_path, notice: "#{success_count}件のページを#{action_name}しました。#{error_count}件でエラーが発生しました。"
+    else
+      redirect_to admin_pages_path, alert: "ページの#{action_name}に失敗しました。"
+    end
+  end
 
   def update_navigation
     # 全ページのshow_in_navigationをfalseに設定

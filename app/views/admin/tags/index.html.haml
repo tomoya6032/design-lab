@@ -1,0 +1,41 @@
+- content_for :page_title, 'タグ管理'
+
+.admin-content-actions
+  = link_to '新しいタグを作成', new_admin_tag_path, class: 'btn btn-primary'
+
+- if @tags.any?
+  .admin-table-container
+    %table.admin-table
+      %thead
+        %tr
+          %th タグ名
+          %th スラッグ
+          %th 記事数
+          %th 作成日
+          %th アクション
+      %tbody
+        - @tags.each do |tag|
+          %tr.tag-row
+            %td.tag-name
+              %span.tag-display{style: "background: #ff8c00; color: white; padding: 4px 8px; border-radius: 12px; font-size: 0.8rem;"}
+                = tag.name
+            %td.tag-slug
+              %code= tag.slug
+            %td.tag-count
+              %span.badge.badge-info= tag.articles.count
+            %td.tag-date
+              = tag.created_at.strftime('%Y/%m/%d')
+            %td.tag-actions
+              = link_to admin_tag_path(tag), class: 'btn btn-sm btn-outline-primary' do
+                %i.icon-eye
+              = link_to edit_admin_tag_path(tag), class: 'btn btn-sm btn-outline-secondary' do
+                %i.icon-edit
+              = link_to admin_tag_path(tag), method: :delete, 
+                confirm: 'このタグを削除してもよろしいですか？', 
+                class: 'btn btn-sm btn-outline-danger' do
+                %i.icon-trash
+- else
+  .empty-state
+    %h3 タグがありません
+    %p タグを作成して記事を分類しましょう
+    = link_to '最初のタグを作成', new_admin_tag_path, class: 'btn btn-primary'

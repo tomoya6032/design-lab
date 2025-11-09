@@ -1,10 +1,14 @@
 - content_for :title, '固定ページ一覧'
 
-.container
-  .main-content
-    .hero-section
+%section.hero-section{ style: @site_setting.hero_background_image.present? ? "background-image: url(#{url_for(@site_setting.hero_background_image)}); background-size: cover; background-position: center 40%; background-repeat: no-repeat;" : '' }
+  .hero-overlay
+  .container
+    .hero-content
       %h1.hero-title 固定ページ一覧
       %p.hero-description サイトで公開されている固定ページの一覧です
+
+.container
+  .main-content
 
     .pages-listing
       - if @pages.any?

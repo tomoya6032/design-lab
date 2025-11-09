@@ -3,7 +3,7 @@ class Page < ApplicationRecord
   has_one_attached :featured_image
   
   # ステータスのenum定義（Rails 8対応）
-  enum :status, { draft: 0, published: 1, scheduled: 2, archived: 3 }
+  enum :status, { draft: 0, published: 1, scheduled: 2, archived: 3, limited: 4 }
   
   # バリデーション
   validates :title, presence: true

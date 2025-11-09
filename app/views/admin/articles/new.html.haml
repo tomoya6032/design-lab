@@ -128,7 +128,7 @@
       .form-row
         .form-group.half-width
           = form.label :status, 'ステータス'
-          = form.select :status, options_for_select([['下書き', 'draft'], ['公開', 'published'], ['非公開', 'private']], @article.status || 'draft'), {}, { class: 'form-control' }
+          = form.select :status, options_for_select([['下書き', 'draft'], ['公開', 'published'], ['限定公開', 'limited']], @article.status || 'draft'), {}, { class: 'form-control' }
         
         .form-group.half-width
           = form.label :published_at, '公開日時'

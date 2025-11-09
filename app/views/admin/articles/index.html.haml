@@ -3,80 +3,104 @@
 .admin-content-actions
   = link_to '新規記事作成', new_admin_article_path, class: 'btn btn-primary'
 
-.admin-table-container
-  %table.admin-table
-    %thead
-      %tr
-        %th.checkbox-column
-          %input{type: 'checkbox', id: 'select-all'}
-        %th.title-column タイトル
-        %th.status-column ステータス
-        %th.category-column カテゴリ
-        %th.author-column 作成者
-        %th.date-column 作成日
-        %th.date-column 更新日
-        %th.actions-column 操作
+= form_with url: bulk_action_admin_articles_path, method: :patch, local: true, id: 'bulk-action-form' do |form|
+  .admin-table-container
+    %table.admin-table
+      %thead
+        %tr
+          %th.checkbox-column
+            %input{type: 'checkbox', id: 'select-all'}
+          %th.title-column タイトル
+          %th.status-column ステータス
+          %th.category-column カテゴリ
+          %th.author-column 作成者
+          %th.date-column 作成日
+          %th.date-column 更新日
+          %th.actions-column 操作
 
-    %tbody
-      - if @articles.any?
-        - @articles.each do |article|
-          %tr.article-row{data: {id: article.id}}
-            %td.checkbox-column
-              %input{type: 'checkbox', name: 'article_ids[]', value: article.id}
-            %td.title-column
-              .article-title-wrap
-                = link_to admin_article_path(article), class: 'article-title-link' do
-                  %strong= article.title
-                - if article.meta_description.present?
-                  %p.article-excerpt= truncate(article.meta_description, length: 80)
-            %td.status-column
-              %span.status-badge{class: "status-#{article.status}"}
-                = article.status == 'published' ? '公開' : '下書き'
-            %td.category-column
-              - if article.custom_fields && article.custom_fields['category'].present?
-                %span.category-tag= article.custom_fields['category']
-              - else
-                %span.no-category 未分類
-            %td.author-column 管理者
-            %td.date-column
-              .date-info
-                %time= article.created_at.strftime('%Y/%m/%d')
-                %span.time= article.created_at.strftime('%H:%M')
-            %td.date-column
-              .date-info
-                %time= article.updated_at.strftime('%Y/%m/%d')
-                %span.time= article.updated_at.strftime('%H:%M')
-            %td.actions-column
-              .action-buttons
-                = link_to '編集', edit_admin_article_path(article), class: 'btn btn-sm btn-secondary'
-                = link_to '表示', admin_article_path(article), class: 'btn btn-sm btn-info'
-                = link_to '削除', admin_article_path(article), method: :delete, 
-                          data: { confirm: '本当に削除しますか？' }, class: 'btn btn-sm btn-danger'
-      - else
-        %tr.no-items
-          %td{colspan: 8}
-            .no-items-message
-              %i.icon.icon-article
-              %p まだ記事がありません
-              = link_to '最初の記事を作成', new_admin_article_path, class: 'btn btn-primary'
+      %tbody
+        - if @articles.any?
+          - @articles.each do |article|
+            %tr.article-row{data: {id: article.id}}
+              %td.checkbox-column
+                %input.item-checkbox{type: 'checkbox', name: 'article_ids[]', value: article.id}
+              %td.title-column
+                .article-title-wrap
+                  = link_to admin_article_path(article), class: 'article-title-link' do
+                    %strong= article.title
+                  - if article.meta_description.present?
+                    %p.article-excerpt= truncate(article.meta_description, length: 80)
+              %td.status-column
+                %span.status-badge{class: "status-#{article.status}"}
+                  - case article.status
+                  - when 'published'
+                    公開
+                  - when 'limited'
+                    限定公開
+                  - else
+                    下書き
+              %td.category-column
+                - if article.custom_fields && article.custom_fields['category'].present?
+                  %span.category-tag= article.custom_fields['category']
+                - else
+                  %span.no-category 未分類
+              %td.author-column 管理者
+              %td.date-column
+                .date-info
+                  %time= article.created_at.strftime('%Y/%m/%d')
+                  %span.time= article.created_at.strftime('%H:%M')
+              %td.date-column
+                .date-info
+                  %time= article.updated_at.strftime('%Y/%m/%d')
+                  %span.time= article.updated_at.strftime('%H:%M')
+              %td.actions-column
+                .action-buttons
+                  = link_to '編集', edit_admin_article_path(article), class: 'btn btn-sm btn-secondary'
+                  = link_to '表示', admin_article_path(article), class: 'btn btn-sm btn-info'
+                  = link_to '削除', admin_article_path(article), method: :delete, 
+                            data: { confirm: '本当に削除しますか？' }, class: 'btn btn-sm btn-danger'
+        - else
+          %tr.no-items
+            %td{colspan: 8}
+              .no-items-message
+                %i.icon.icon-article
+                %p まだ記事がありません
+                = link_to '最初の記事を作成', new_admin_article_path, class: 'btn btn-primary'
 
-.admin-table-footer
-  .bulk-actions
-    %select.bulk-action-select{disabled: true}
-      %option{value: ''} 一括操作を選択
-      %option{value: 'publish'} 公開
-      %option{value: 'draft'} 下書きに戻す
-      %option{value: 'delete'} 削除
-    %button.btn.btn-secondary.bulk-action-btn{disabled: true} 実行
+  .admin-table-footer
+    .bulk-actions
+      %select{name: 'bulk_action', required: true}
+        %option{value: ''} 一括操作を選択
+        %option{value: 'published'} 公開
+        %option{value: 'draft'} 下書きに戻す
+        %option{value: 'limited'} 限定公開化
+        %option{value: 'delete'} 削除
+      = form.submit '実行', class: 'btn btn-secondary bulk-action-btn', 
+                   onclick: "return confirm('選択した記事に対して一括操作を実行しますか？');"
 
-  .pagination-info
-    = "#{@articles.count}件の記事"
+    .pagination-info
+      = "#{@articles.count}件の記事"
 
 .article-list-styles
   :css
     .admin-content-actions {
       margin-bottom: 20px;
       text-align: right;
+    }
+    
+    .bulk-actions {
+      margin-bottom: 15px;
+      padding: 10px;
+      background: #f8f9fa;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    
+    .selected-info {
+      color: #495057;
+      font-size: 14px;
     }
 
     .admin-table-container {
@@ -142,11 +166,14 @@
     }
 
     .status-draft {
-      background: #fff3cd;
-      color: #856404;
+      background: #ffc107;
+      color: #212529;
     }
-
-    .category-tag {
+    
+    .status-limited {
+      background: #ff9800;
+      color: white;
+    }    .category-tag {
       background: #e9ecef;
       padding: 2px 6px;
       border-radius: 3px;

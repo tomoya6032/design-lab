@@ -1,0 +1,35 @@
+- content_for :page_title, 'タグ作成'
+
+.admin-header
+  .admin-header-content
+    %h1.admin-title
+      %i.icon-plus
+      新しいタグを作成
+    %p.admin-subtitle タグを作成して記事を分類しましょう
+
+.admin-content
+  = form_with model: [:admin, @tag], local: true, class: 'admin-form' do |form|
+    - if @tag.errors.any?
+      .alert.alert-danger
+        %h4 入力エラーがあります：
+        %ul
+          - @tag.errors.full_messages.each do |message|
+            %li= message
+
+    .form-group
+      = form.label :name, 'タグ名'
+      = form.text_field :name, class: 'form-control', placeholder: 'タグ名を入力してください'
+      %small.form-text タグの表示名です
+
+    .form-group
+      = form.label :slug, 'スラッグ'
+      = form.text_field :slug, class: 'form-control', placeholder: 'tag-slug'
+      %small.form-text URL に使用される識別子です（自動生成されます）
+
+    .form-group
+      = form.label :description, '説明'
+      = form.text_area :description, class: 'form-control', rows: 3, placeholder: 'タグの説明を入力してください（任意）'
+
+    .form-actions
+      = form.submit 'タグを作成', class: 'btn btn-primary'
+      = link_to 'キャンセル', admin_tags_path, class: 'btn btn-secondary'

@@ -10,16 +10,25 @@
         
         .article-header
           %h1.article-title= @article.title
+          - if @article.status == 'limited'
+            .limited-access-badge
+              %i.icon-lock
+              %span 限定公開記事
           .article-meta
             %time.article-date= @article.published_at&.strftime('%Y年%m月%d日')
             %span.article-author= @article.user.first_name.present? ? "#{@article.user.first_name} #{@article.user.last_name}" : @article.user.email
-            - if @article.custom_fields && @article.custom_fields['category'].present?
-              %span.article-category-label カテゴリー：
-              %span.article-category= @article.custom_fields['category']
-            - if @article.custom_fields && @article.custom_fields['tags'].present?
-              .article-tags
-                - @article.custom_fields['tags'].split(',').each do |tag|
-                  %span.tag= tag.strip
+          
+          .article-taxonomy
+            - if @article.categories.any?
+              .article-category-section
+                %span.article-category-label カテゴリー：
+                - @article.categories.each do |category|
+                  = link_to category.name, site_articles_path(category: category.name), class: 'article-category'
+            - if @article.tags.any?
+              .article-tags-section
+                %span.article-tags-label タグ：
+                - @article.tags.each do |tag|
+                  = link_to tag.name, site_articles_path(tag: tag.name), class: 'article-tag'
 
         .article-content
           - if @article.show_table_of_contents
@@ -50,4 +59,24 @@
 
   .article-navigation
     .container
-      = link_to '記事一覧に戻る', root_path, class: 'btn btn-secondary'
+      = link_to '記事一覧に戻る', site_articles_path, class: 'btn btn-secondary'
+
+:css
+  .limited-access-badge {
+    display: inline-flex;
+    align-items: center;
+    background: #ff9800;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 4px rgba(255, 152, 0, 0.3);
+  }
+  
+  .limited-access-badge .icon-lock::before {
+    content: '🔒';
+    margin-right: 6px;
+    font-size: 12px;
+  }

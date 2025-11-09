@@ -6,7 +6,7 @@
       = form.submit '検索', class: 'search-button btn btn-primary'
 
 .sidebar-widget.categories-widget
-  %h3.widget-title カテゴリー
+  %h3.widget-title.category-title カテゴリー
   - if @categories && @categories.any?
     %ul.category-list
       - @categories.each do |category|
@@ -17,7 +17,7 @@
     %p.no-items カテゴリーはありません
 
 .sidebar-widget.tags-widget
-  %h3.widget-title タグ
+  %h3.widget-title.tag-title タグ
   - if @tags && @tags.any?
     .tag-cloud
       - @tags.each do |tag|

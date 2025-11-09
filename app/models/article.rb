@@ -2,8 +2,14 @@ class Article < ApplicationRecord
   belongs_to :user
   has_one_attached :featured_image
   
+  # カテゴリとタグの関連付け
+  has_many :article_categories, dependent: :destroy
+  has_many :categories, through: :article_categories
+  has_many :article_tags, dependent: :destroy
+  has_many :tags, through: :article_tags
+  
   # ステータスのenum定義（Rails 8対応）
-  enum :status, { draft: 0, published: 1, scheduled: 2, archived: 3 }
+  enum :status, { draft: 0, published: 1, scheduled: 2, archived: 3, limited: 4 }
   
   # バリデーション
   validates :title, presence: true

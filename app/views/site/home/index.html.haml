@@ -101,11 +101,17 @@
                     - if article_featured_image_url(article)
                       = article_featured_image_tag(article, class: 'article-thumbnail-image')
                     - else
-                      .article-no-image
-                        %i.icon-document
+                      = image_tag 'noimage-1.png', class: 'article-thumbnail-image no-image', alt: 'サムネイル画像なし'
                   .article-info
                     %h3.article-title= article.title
-                    %time.article-date= article.published_at&.strftime('%Y年%m月%d日')
+                    .article-meta
+                      %time.article-date= article.published_at&.strftime('%Y年%m月%d日')
+                      - if article.custom_fields && article.custom_fields['category'].present?
+                        %span.article-category= article.custom_fields['category']
+                    - if article.custom_fields && article.custom_fields['tags'].present?
+                      .article-tags
+                        - article.custom_fields['tags'].split(',').first(3).each do |tag|
+                          %span.article-tag= tag.strip
           .section-action
             = link_to site_articles_path, class: 'btn btn-cta' do
               %span.btn-text コラム一覧を見る

@@ -33,11 +33,28 @@
 
 .widget-title {
   font-size: 1.1rem;
-  font-weight: $font-weight-bold;
-  color: $dark-color;
+  font-weight: normal; // 太文字から通常の太さに変更
+  color: $dark-color; // 黒色に戻す
   margin-bottom: $spacing-md;
-  padding-bottom: $spacing-sm;
-  border-bottom: 2px solid $primary-color;
+  padding: $spacing-sm $spacing-md;
+  border-radius: 8px;
+  background: #f8f9fa; // 薄い灰色背景
+  
+  // カテゴリー用のスタイル
+  &.category-title {
+    background: $primary-color;
+    color: white;
+    font-weight: normal;
+    border-left: 4px solid darken($primary-color, 15%);
+  }
+  
+  // タグ用のスタイル
+  &.tag-title {
+    background: #ff8c00; // オレンジ色
+    color: white;
+    font-weight: normal;
+    border-left: 4px solid darken(#ff8c00, 15%);
+  }
 }
 
 // Search Widget

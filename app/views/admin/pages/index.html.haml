@@ -1,4 +1,6 @@
 - content_for :page_title, '固定ページ管理'
+- content_for :head do
+  = javascript_include_tag 'admin/pages', 'data-turbo-track': 'reload'
 
 .navigation-settings-section
   %h3 ナビゲーションメニュー設定
@@ -14,7 +16,13 @@
             - if current_page
               .selected-page
                 %span.page-title= current_page.title
-                %span.page-status{class: "status-#{current_page.status}"}= current_page.status == 'published' ? '公開' : '下書き'
+                - case current_page.status
+                - when 'published'
+                  %span.page-status.status-published 公開
+                - when 'limited'
+                  %span.page-status.status-limited 限定公開
+                - else
+                  %span.page-status.status-draft 下書き
                 = link_to '削除', '#', class: 'remove-nav-page btn btn-sm btn-outline-danger', data: {position: position}
             - else
               %span.empty-slot 未設定
@@ -31,71 +39,82 @@
 .admin-content-actions
   = link_to '新規ページ作成', new_admin_page_path, class: 'btn btn-primary'
 
-.admin-table-container
-  %table.admin-table
-    %thead
-      %tr
-        %th.checkbox-column
-          %input{type: 'checkbox', id: 'select-all-pages'}
-        %th.title-column タイトル
-        %th.slug-column スラッグ
-        %th.status-column ステータス
-        %th.author-column 作成者
-        %th.date-column 作成日
-        %th.date-column 更新日
-        %th.actions-column 操作
+= form_with url: bulk_action_admin_pages_path, method: :patch, local: true, id: 'bulk-action-form-pages' do |form|
+  .admin-table-container
+    %table.admin-table
+      %thead
+        %tr
+          %th.checkbox-column
+            %input{type: 'checkbox', id: 'select-all'}
+          %th.title-column タイトル
+          %th.slug-column スラッグ
+          %th.status-column ステータス
+          %th.author-column 作成者
+          %th.date-column 作成日
+          %th.date-column 更新日
+          %th.actions-column 操作
 
-    %tbody
-      - if @pages.any?
-        - @pages.each do |page|
-          %tr.page-row{data: {id: page.id}}
-            %td.checkbox-column
-              %input{type: 'checkbox', name: 'page_ids[]', value: page.id}
-            %td.title-column
-              .page-title-wrap
-                = link_to admin_page_path(page), class: 'page-title-link' do
-                  %strong= page.title
-                - if page.meta_description.present?
-                  %p.page-excerpt= truncate(page.meta_description, length: 80)
-            %td.slug-column
-              %code.slug-code= "/#{page.slug}"
-            %td.status-column
-              %span.status-badge{class: "status-#{page.status}"}
-                = page.status == 'published' ? '公開' : '下書き'
-            %td.author-column 管理者
-            %td.date-column
-              .date-info
-                %time= page.created_at.strftime('%Y/%m/%d')
-                %span.time= page.created_at.strftime('%H:%M')
-            %td.date-column
-              .date-info
-                %time= page.updated_at.strftime('%Y/%m/%d')
-                %span.time= page.updated_at.strftime('%H:%M')
-            %td.actions-column
-              .action-buttons
-                = link_to '編集', edit_admin_page_path(page), class: 'btn btn-sm btn-secondary'
-                = link_to '表示', admin_page_path(page), class: 'btn btn-sm btn-info'
-                = link_to '削除', admin_page_path(page), method: :delete, 
-                          data: { confirm: '本当に削除しますか？' }, class: 'btn btn-sm btn-danger'
-      - else
-        %tr.no-items
-          %td{colspan: 8}
-            .no-items-message
-              %i.icon.icon-page
-              %p まだ固定ページがありません
-              = link_to '最初のページを作成', new_admin_page_path, class: 'btn btn-primary'
+      %tbody
+        - if @pages.any?
+          - @pages.each do |page|
+            %tr.page-row{data: {id: page.id}}
+              %td.checkbox-column
+                %input.item-checkbox{type: 'checkbox', name: 'page_ids[]', value: page.id}
+              %td.title-column
+                .page-title-wrap
+                  = link_to admin_page_path(page), class: 'page-title-link' do
+                    %strong= page.title
+                  - if page.meta_description.present?
+                    %p.page-excerpt= truncate(page.meta_description, length: 80)
+              %td.slug-column
+                %code.slug-code= "/#{page.slug}"
+              %td.status-column
+                %span.status-badge{class: "status-#{page.status}"}
+                  - case page.status
+                  - when 'published'
+                    公開
+                  - when 'limited'
+                    限定公開
+                  - else
+                    下書き
+              %td.author-column 管理者
+              %td.date-column
+                .date-info
+                  %time= page.created_at.strftime('%Y/%m/%d')
+                  %span.time= page.created_at.strftime('%H:%M')
+              %td.date-column
+                .date-info
+                  %time= page.updated_at.strftime('%Y/%m/%d')
+                  %span.time= page.updated_at.strftime('%H:%M')
+              %td.actions-column
+                .action-buttons
+                  = link_to '編集', edit_admin_page_path(page), class: 'btn btn-sm btn-secondary'
+                  = link_to '表示', admin_page_path(page), class: 'btn btn-sm btn-info'
+                  = link_to '削除', admin_page_path(page), method: :delete, 
+                            data: { confirm: '本当に削除しますか？' }, class: 'btn btn-sm btn-danger'
+        - else
+          %tr.no-items
+            %td{colspan: 8}
+              .no-items-message
+                %i.icon.icon-page
+                %p まだ固定ページがありません
+                = link_to '最初のページを作成', new_admin_page_path, class: 'btn btn-primary'
 
-.admin-table-footer
-  .bulk-actions
-    %select.bulk-action-select{disabled: true}
-      %option{value: ''} 一括操作を選択
-      %option{value: 'publish'} 公開
-      %option{value: 'draft'} 下書きに戻す
-      %option{value: 'delete'} 削除
-    %button.btn.btn-secondary.bulk-action-btn{disabled: true} 実行
+  .admin-table-footer
+    .bulk-actions
+      %select#bulk-action-select.bulk-action-select{name: 'bulk_action'}
+        %option{value: ''} 一括操作を選択
+        %option{value: 'published'} 公開
+        %option{value: 'draft'} 下書きに戻す
+                %option{value: 'limited'} 限定公開化
+        %option{value: 'delete'} 削除
+      %button#bulk-action-button.btn.btn-secondary.bulk-action-btn{type: 'button', disabled: true} 実行
+      %span#selected-count-pages.selected-info{style: 'display: none; margin-left: 15px;'}
+        %strong{id: 'count-number-pages'} 0
+        件選択中
 
-  .pagination-info
-    = "#{@pages.count}件のページ"
+    .pagination-info
+      = "#{@pages.count}件のページ"
 
 .page-list-styles
   :css

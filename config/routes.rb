@@ -4,10 +4,13 @@ Rails.application.routes.draw do
   # 管理画面
   namespace :admin do
     get 'dashboard', to: 'dashboard#index'
+    resources :categories
+    resources :tags
     resources :articles do
       collection do
         post 'fetch_ogp'
         post 'upload_images'
+        patch 'bulk_action'
       end
     end
     resources :pages do
@@ -15,6 +18,7 @@ Rails.application.routes.draw do
         post 'fetch_ogp'
         post 'upload_images'
         patch 'update_navigation'
+        patch 'bulk_action'
       end
     end
     resources :media

@@ -13,36 +13,40 @@ class Site::ArticlesController < ApplicationController
                                  search_term, search_term, search_term)
     end
     
-    # PostgreSQLのJSONB検索を使用してカテゴリーフィルター
+    # カテゴリによるフィルタリング
     if params[:category].present?
-      @articles = @articles.where("custom_fields ->> 'category' = ?", params[:category])
+      category = Category.find_by(name: params[:category])
+      @articles = @articles.joins(:categories).where(categories: { id: category.id }) if category
+      @current_category = params[:category]
     end
     
-    # PostgreSQLのJSONB検索を使用してタグフィルター
+    # タグによるフィルタリング
     if params[:tag].present?
-      @articles = @articles.where("custom_fields ->> 'tags' ILIKE ?", "%#{params[:tag]}%")
+      tag = Tag.find_by(name: params[:tag])
+      @articles = @articles.joins(:tags).where(tags: { id: tag.id }) if tag
+      @current_tag = params[:tag]
     end
     
     # 必要な関連データと一緒に取得（eager loading）
-    @articles = @articles.includes(:featured_image_attachment).limit(20)
-    
-    # サイドバー用データ
-    @categories = get_categories
-    @tags = get_tags
-    @recent_sidebar_articles = Article.published.recent.with_featured_image.limit(5)
+    @articles = @articles.includes(:featured_image_attachment, :categories, :tags).limit(20)
   end
   
   def show
-    # 公開済みの記事のみ表示
-    unless @article.published? && @article.published_at <= Time.current
+    # 公開済みの記事または限定公開記事を表示
+    # 下書きの記事は表示しない
+    if @article.status == 'draft'
+      redirect_to root_path, alert: '記事が見つかりません'
+      return
+    end
+    
+    # 公開記事の場合は公開日時もチェック
+    if @article.status == 'published' && @article.published_at && @article.published_at > Time.current
       redirect_to root_path, alert: '記事が見つかりません'
       return
     end
     
     # サイドバー用のデータを読み込み
     @recent_articles = Article.published.recent.with_featured_image.limit(5).where.not(id: @article.id)
-    @categories = get_categories
-    @tags = get_tags
   end
   
   private
@@ -70,29 +74,5 @@ class Site::ArticlesController < ApplicationController
     @site_setting = Setting.current
   end
   
-  def get_categories
-    # カスタムフィールドからカテゴリーを集計
-    categories = {}
-    Article.published.each do |article|
-      if article.custom_fields && article.custom_fields['category'].present?
-        category = article.custom_fields['category']
-        categories[category] = (categories[category] || 0) + 1
-      end
-    end
-    categories.map { |name, count| { name: name, count: count } }.sort_by { |cat| -cat[:count] }
-  end
-  
-  def get_tags
-    # カスタムフィールドからタグを集計
-    tags = {}
-    Article.published.each do |article|
-      if article.custom_fields && article.custom_fields['tags'].present?
-        article_tags = article.custom_fields['tags'].split(',').map(&:strip)
-        article_tags.each do |tag|
-          tags[tag] = (tags[tag] || 0) + 1 if tag.present?
-        end
-      end
-    end
-    tags.map { |name, count| { name: name, count: count } }.sort_by { |tag| -tag[:count] }
-  end
+
 end

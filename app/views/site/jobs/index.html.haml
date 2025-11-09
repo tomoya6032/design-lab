@@ -1,9 +1,11 @@
 - content_for :title, '求人情報'
 
-%section.jobs-hero-section
+%section.hero-section{ style: @site_setting.hero_background_image.present? ? "background-image: url(#{url_for(@site_setting.hero_background_image)}); background-size: cover; background-position: center 40%; background-repeat: no-repeat;" : '' }
+  .hero-overlay
   .container
-    %h1.jobs-hero-title 一緒に働く仲間を募集しています
-    %p.jobs-hero-description 私たちと一緒に、素晴らしいプロダクトを作りませんか？
+    .hero-content
+      %h1.hero-title 一緒に働く仲間を募集しています
+      %p.hero-description 私たちと一緒に、素晴らしいプロダクトを作りませんか？
 
 %section.jobs-section
   .container

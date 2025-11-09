@@ -39,6 +39,14 @@
               %i.icon.icon-articles
               記事管理
           %li.admin-menu-item
+            = link_to admin_categories_path, class: 'admin-menu-link' do
+              %i.icon.icon-folder
+              カテゴリ管理
+          %li.admin-menu-item
+            = link_to admin_tags_path, class: 'admin-menu-link' do
+              %i.icon.icon-tag
+              タグ管理
+          %li.admin-menu-item
             = link_to admin_pages_path, class: 'admin-menu-link' do
               %i.icon.icon-pages
               固定ページ

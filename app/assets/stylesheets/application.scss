@@ -176,6 +176,72 @@ body {
   color: #23282d;
 }
 
+.admin-content-actions {
+  margin-bottom: 20px;
+  padding: 15px 0;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 10px;
+}
+
+.admin-table-container {
+  max-width: 100%;
+  overflow-x: auto;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  border-radius: 8px;
+  background: white;
+  border: 1px solid #e9ecef;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  
+  thead th {
+    background: #f8f9fa;
+    padding: 15px 12px;
+    text-align: left;
+    border-bottom: 2px solid #dee2e6;
+    font-weight: 600;
+    color: #495057;
+    font-size: 14px;
+  }
+  
+  tbody td {
+    padding: 12px;
+    border-bottom: 1px solid #dee2e6;
+    vertical-align: middle;
+    font-size: 14px;
+  }
+  
+  tbody tr:hover {
+    background-color: #f8f9fa;
+  }
+}
+
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  border: 1px solid #e9ecef;
+  
+  h3 {
+    margin: 0 0 10px 0;
+    color: #495057;
+    font-size: 18px;
+  }
+  
+  p {
+    margin: 0 0 20px 0;
+    color: #6c757d;
+    font-size: 14px;
+  }
+}
+
 /* ダッシュボード */
 .stats-grid {
   display: grid;
@@ -307,6 +373,9 @@ body {
   color: white;
   padding: 80px 0;
   text-align: center;
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
 }
 
 .hero-title {

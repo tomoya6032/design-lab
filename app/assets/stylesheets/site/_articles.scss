@@ -1,4 +1,41 @@
-// Articles Pages Styles
+// Articles Index Page Styles
+
+// フィルタリング状態表示
+.filter-status-section {
+  background: #f8f9fa;
+  padding: 15px 0;
+  border-bottom: 1px solid #e9ecef;
+  
+  .filter-status {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  
+  .filter-item {
+    background: white;
+    padding: 8px 12px;
+    border-radius: 20px;
+    border: 1px solid #dee2e6;
+    font-size: 14px;
+    
+    strong {
+      color: #495057;
+    }
+  }
+  
+  .filter-remove {
+    color: #dc3545;
+    text-decoration: none;
+    margin-left: 8px;
+    font-weight: bold;
+    
+    &:hover {
+      color: #c82333;
+    }
+  }
+}
 
 // Page Header
 .page-header {
@@ -44,6 +81,18 @@
 }
 
 // Article Card Styles
+.article-card-link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  height: 100%;
+  
+  &:hover {
+    text-decoration: none;
+    color: inherit;
+  }
+}
+
 .article-card {
   background: white;
   border-radius: $border-radius;
@@ -54,7 +103,7 @@
   display: flex;
   flex-direction: column;
   
-  &:hover {
+  .article-card-link:hover & {
     transform: translateY(-5px);
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
   }
@@ -216,19 +265,47 @@
     margin-left: 5px;
   }
   
-  .article-tags {
+  // カテゴリとタグの全体コンテナ
+  .article-taxonomy {
+    margin-top: 20px;
+  }
+  
+  // カテゴリセクション
+  .article-category-section {
     display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+  
+  .article-category-label {
+    font-size: 0.9rem;
+    color: $secondary-color;
+    font-weight: 500;
+  }
+  
+  // タグセクション
+  .article-tags-section {
+    display: flex;
+    align-items: center;
     gap: 8px;
     flex-wrap: wrap;
-    
-    .tag {
-      background: #e9ecef;
-      color: #495057;
-      padding: 3px 10px;
-      border-radius: 15px;
-      font-size: 0.8rem;
-      font-weight: 500;
-    }
+    margin-bottom: 12px;
+  }
+  
+  .article-tags-label {
+    font-size: 0.9rem;
+    color: $secondary-color;
+    font-weight: 500;
+  }
+  
+  .article-tag {
+    background: #ff8c00; // オレンジ色
+    color: white;
+    padding: 4px 12px;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: 500;
   }
 }
 
