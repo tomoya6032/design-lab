@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_11_07_215443) do
+ActiveRecord::Schema[8.0].define(version: 2025_11_11_001934) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -87,6 +87,21 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_07_215443) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "contacts", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "email", null: false
+    t.string "subject", null: false
+    t.text "message", null: false
+    t.string "ip_address"
+    t.text "user_agent"
+    t.integer "status", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["created_at"], name: "index_contacts_on_created_at"
+    t.index ["email"], name: "index_contacts_on_email"
+    t.index ["status"], name: "index_contacts_on_status"
+  end
+
   create_table "jobs", force: :cascade do |t|
     t.string "title", null: false
     t.string "job_type", null: false
@@ -111,7 +126,23 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_07_215443) do
     t.bigint "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "title"
+    t.text "description"
+    t.string "file_type"
+    t.integer "file_size"
     t.index ["user_id"], name: "index_media_on_user_id"
+  end
+
+  create_table "media_usages", force: :cascade do |t|
+    t.bigint "medium_id", null: false
+    t.string "mediable_type", null: false
+    t.bigint "mediable_id", null: false
+    t.string "usage_type"
+    t.string "context"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["mediable_type", "mediable_id"], name: "index_media_usages_on_mediable"
+    t.index ["medium_id"], name: "index_media_usages_on_medium_id"
   end
 
   create_table "pages", force: :cascade do |t|
@@ -215,5 +246,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_07_215443) do
   add_foreign_key "article_tags", "tags"
   add_foreign_key "articles", "users"
   add_foreign_key "media", "users"
+  add_foreign_key "media_usages", "media"
   add_foreign_key "pages", "users"
 end

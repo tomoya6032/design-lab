@@ -29,6 +29,22 @@ class Admin::ArticlesController < ApplicationController
       if @article.slug.blank?
         @article.update_column(:slug, "article-#{@article.id}")
       end
+      
+      # メディアライブラリから選択された画像を処理
+      if params[:article][:selected_media_id].present?
+        medium = Medium.find_by(id: params[:article][:selected_media_id])
+        if medium&.file&.attached?
+          @article.featured_image.attach(medium.file.blob)
+          
+          # メディア使用状況を記録
+          MediaUsage.find_or_create_by(
+            medium: medium,
+            mediable: @article,
+            usage_type: :featured_image
+          )
+        end
+      end
+      
       redirect_to admin_article_path(@article), notice: '記事が作成されました。'
     else
       Rails.logger.debug "Article errors: #{@article.errors.full_messages}"
@@ -43,6 +59,21 @@ class Admin::ArticlesController < ApplicationController
   end
 
   def update
+    # メディアライブラリから選択された画像を処理
+    if params[:article][:selected_media_id].present?
+      medium = Medium.find_by(id: params[:article][:selected_media_id])
+      if medium&.file&.attached?
+        @article.featured_image.attach(medium.file.blob)
+        
+        # メディア使用状況を記録
+        MediaUsage.find_or_create_by(
+          medium: medium,
+          mediable: @article,
+          usage_type: :featured_image
+        )
+      end
+    end
+    
     if @article.update(article_params)
       redirect_to admin_article_path(@article), notice: '記事が更新されました。'
     else

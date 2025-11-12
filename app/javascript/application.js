@@ -4,6 +4,42 @@ console.log("Design Lab CMS - Application loaded");
 
 // 一括操作機能
 document.addEventListener('DOMContentLoaded', function() {
+  
+  // Cropper.jsをCDN経由で動的に読み込み（DOMContentLoaded後に定義）
+  window.loadCropperJS = function() {
+    console.log('loadCropperJS関数が呼び出されました');
+    return new Promise((resolve, reject) => {
+      if (typeof window.Cropper !== 'undefined') {
+        console.log('Cropper.jsは既に読み込まれています');
+        resolve(window.Cropper);
+        return;
+      }
+
+      console.log('Cropper.jsをCDN経由で読み込み開始...');
+      
+      // CSS読み込み
+      const cssLink = document.createElement('link');
+      cssLink.rel = 'stylesheet';
+      cssLink.href = 'https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css';
+      document.head.appendChild(cssLink);
+      
+      // JavaScript読み込み
+      const script = document.createElement('script');
+      script.src = 'https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js';
+      script.onload = function() {
+        console.log('=== Cropper.js CDN読み込み完了 ===');
+        console.log('window.Cropper:', typeof window.Cropper);
+        resolve(window.Cropper);
+      };
+      script.onerror = function() {
+        console.error('Cropper.jsの読み込みに失敗');
+        reject(new Error('Cropper.jsの読み込みに失敗'));
+      };
+      document.head.appendChild(script);
+    });
+  };
+  
+  console.log('loadCropperJS関数を定義しました:', typeof window.loadCropperJS);
   // 全選択チェックボックス
   const selectAllCheckbox = document.getElementById('select-all');
   const itemCheckboxes = document.querySelectorAll('.item-checkbox');

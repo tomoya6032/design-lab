@@ -1,51 +1,63 @@
-- content_for :page_title, '新規メディア追加'
+- content_for :page_title, 'メディア追加'
+
+- content_for :head do
+  = javascript_include_tag 'admin/media_upload', 'data-turbo-track': 'reload'
+
+.media-upload-containerontent_for :page_title, '新規メディア追加'
 
 .media-upload-container
   = form_with model: [:admin, @medium], local: true, html: { class: 'media-upload-form', multipart: true } do |form|
-    .form-section
+    
+    .upload-section
+      %h3 ファイルアップロード
+      
+      .file-upload-area{id: 'file-upload-area'}
+        .upload-icon
+          📁
+        .upload-text
+          %strong ファイルをドラッグ&ドロップ
+          %br
+          または
+          %br
+          %span.upload-button-text クリックして選択
+        = form.file_field :file, multiple: false, accept: 'image/*,video/*,audio/*,.pdf,.doc,.docx,.xls,.xlsx', class: 'file-input', id: 'file-input'
+      
+      .file-preview{id: 'file-preview', style: 'display: none;'}
+        .preview-content{id: 'preview-content'}
+        .file-info{id: 'file-info'}
+    
+    .metadata-section{id: 'metadata-section', style: 'display: none;'}
       %h3 メディア情報
       
       .form-group
         = form.label :title, 'タイトル'
-        = form.text_field :title, class: 'form-control', placeholder: 'メディアのタイトルを入力'
-      
+        = form.text_field :title, class: 'form-control', placeholder: 'メディアのタイトル'
+        %small.form-text ファイル名から自動設定されます
+
       .form-group
         = form.label :description, '説明'
-        = form.text_area :description, rows: 3, class: 'form-control', placeholder: 'メディアの説明を入力（任意）'
-      
-      .form-group
-        = form.label :file_url, 'ファイルURL'
-        = form.url_field :file_url, class: 'form-control', placeholder: 'https://example.com/image.jpg'
-        %small.form-text ファイルの直接URLを入力してください
-      
-      .form-group
-        = form.label :file_type, 'ファイルタイプ'
-        = form.select :file_type, 
-          options_for_select([
-            ['画像 (JPEG)', 'image/jpeg'],
-            ['画像 (PNG)', 'image/png'],
-            ['画像 (GIF)', 'image/gif'],
-            ['画像 (WebP)', 'image/webp'],
-            ['動画 (MP4)', 'video/mp4'],
-            ['動画 (WebM)', 'video/webm'],
-            ['PDF文書', 'application/pdf'],
-            ['Word文書', 'application/msword'],
-            ['その他', 'application/octet-stream']
-          ], @medium.file_type), 
-          { prompt: 'ファイルタイプを選択' }, 
-          { class: 'form-control' }
-      
-      .form-group
-        = form.label :file_size, 'ファイルサイズ（バイト）'
-        = form.number_field :file_size, class: 'form-control', placeholder: '例: 1024000'
-      
-      .form-group
-        = form.label :alt_text, 'alt属性（画像の場合）'
-        = form.text_field :alt_text, class: 'form-control', placeholder: '画像の代替テキスト'
-        %small.form-text 画像の内容を説明するテキスト（アクセシビリティ向上）
+        = form.text_area :description, rows: 3, class: 'form-control', placeholder: 'メディアの説明（任意）'
 
-    .form-actions
-      = form.submit 'メディアを追加', class: 'btn btn-primary'
+      .form-group{id: 'alt-text-group', style: 'display: none;'}
+        = form.label :alt_text, 'alt属性（画像用）'
+        = form.text_field :alt_text, class: 'form-control', placeholder: '画像の代替テキスト'
+        %small.form-text アクセシビリティ向上のため、画像の内容を説明してください
+
+      .metadata-info
+        %strong ファイル情報
+        .info-grid
+          .info-item
+            %span.label ファイル名:
+            %span#display-filename
+          .info-item
+            %span.label ファイルタイプ:
+            %span#display-filetype
+          .info-item
+            %span.label ファイルサイズ:
+            %span#display-filesize
+
+    .form-actions{id: 'form-actions', style: 'display: none;'}
+      = form.submit 'メディアを追加', class: 'btn btn-primary', id: 'submit-btn'
       = link_to 'キャンセル', admin_media_path, class: 'btn btn-secondary'
 
 .media-upload-styles

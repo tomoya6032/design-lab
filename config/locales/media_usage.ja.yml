@@ -1,0 +1,20 @@
+ja:
+  activerecord:
+    models:
+      media_usage: "メディア使用状況"
+    attributes:
+      media_usage:
+        usage_type: "使用タイプ"
+        context: "コンテキスト"
+        mediable: "使用元"
+  enums:
+    media_usage:
+      usage_type:
+        featured_image: "アイキャッチ画像"
+        hero_image: "ヒーロー画像"
+        detail_image: "詳細画像"
+        background_image: "背景画像"
+        gallery_image: "ギャラリー画像"
+        content_image: "コンテンツ画像"
+        thumbnail: "サムネイル"
+        attachment: "添付ファイル"

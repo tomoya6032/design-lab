@@ -39,7 +39,7 @@
 .admin-content-actions
   = link_to '新規ページ作成', new_admin_page_path, class: 'btn btn-primary'
 
-= form_with url: bulk_action_admin_pages_path, method: :patch, local: true, id: 'bulk-action-form-pages' do |form|
+= form_with url: bulk_action_admin_pages_path, method: :patch, local: true, id: 'bulk-action-form' do |form|
   .admin-table-container
     %table.admin-table
       %thead
@@ -102,16 +102,14 @@
 
   .admin-table-footer
     .bulk-actions
-      %select#bulk-action-select.bulk-action-select{name: 'bulk_action'}
+      %select{name: 'bulk_action', required: true}
         %option{value: ''} 一括操作を選択
         %option{value: 'published'} 公開
         %option{value: 'draft'} 下書きに戻す
-                %option{value: 'limited'} 限定公開化
+        %option{value: 'limited'} 限定公開化
         %option{value: 'delete'} 削除
-      %button#bulk-action-button.btn.btn-secondary.bulk-action-btn{type: 'button', disabled: true} 実行
-      %span#selected-count-pages.selected-info{style: 'display: none; margin-left: 15px;'}
-        %strong{id: 'count-number-pages'} 0
-        件選択中
+      = form.submit '実行', class: 'btn btn-secondary bulk-action-btn', 
+                   onclick: "return confirm('選択したページに対して一括操作を実行しますか？');"
 
     .pagination-info
       = "#{@pages.count}件のページ"

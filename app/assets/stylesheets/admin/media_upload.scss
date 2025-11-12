@@ -1,0 +1,250 @@
+/* Media Upload Styles */
+.media-upload-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.file-upload-section {
+  background: #f8f9fa;
+  border: 2px dashed #dee2e6;
+  border-radius: 8px;
+  padding: 40px 20px;
+  text-align: center;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  margin-bottom: 30px;
+}
+
+.file-upload-section:hover,
+.file-upload-section.drag-over {
+  border-color: #007bff;
+  background: #e3f2fd;
+}
+
+.upload-icon {
+  font-size: 48px;
+  color: #6c757d;
+  margin-bottom: 15px;
+}
+
+.upload-text {
+  color: #495057;
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.upload-hint {
+  color: #6c757d;
+  font-size: 14px;
+}
+
+#file-input {
+  display: none;
+}
+
+/* File Preview Section */
+.file-preview-section {
+  display: none;
+  background: white;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 30px;
+}
+
+.preview-header {
+  border-bottom: 1px solid #dee2e6;
+  padding-bottom: 15px;
+  margin-bottom: 20px;
+}
+
+.preview-header h3 {
+  margin: 0;
+  color: #495057;
+}
+
+.preview-content {
+  text-align: center;
+  margin-bottom: 20px;
+  max-width: 680px;
+  max-height: 480px;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.preview-image {
+  max-width: 680px;
+  max-height: 480px;
+  width: auto;
+  height: auto;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  object-fit: contain;
+}
+
+.preview-video {
+  max-width: 400px;
+  max-height: 300px;
+  border-radius: 4px;
+}
+
+.preview-audio {
+  width: 100%;
+  max-width: 400px;
+}
+
+.file-icon {
+  font-size: 64px;
+  color: #6c757d;
+  padding: 20px;
+}
+
+.file-info {
+  background: #f8f9fa;
+  border-radius: 4px;
+  padding: 15px;
+}
+
+.file-info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 15px;
+  text-align: left;
+}
+
+.file-info-item label {
+  display: block;
+  font-weight: 600;
+  color: #495057;
+  margin-bottom: 5px;
+  font-size: 14px;
+}
+
+.file-info-item span {
+  color: #6c757d;
+  font-size: 14px;
+}
+
+/* Metadata Section */
+.metadata-section {
+  display: none;
+  background: white;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 30px;
+}
+
+.metadata-section h3 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  color: #495057;
+  border-bottom: 1px solid #dee2e6;
+  padding-bottom: 10px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  font-weight: 600;
+  color: #495057;
+  margin-bottom: 8px;
+}
+
+.form-group input[type="text"],
+.form-group textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  font-size: 14px;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.form-group input[type="text"]:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+#alt-text-group {
+  display: none;
+}
+
+/* Form Actions */
+.form-actions {
+  display: none;
+  text-align: center;
+  padding-top: 20px;
+  border-top: 1px solid #dee2e6;
+}
+
+.btn {
+  display: inline-block;
+  padding: 10px 20px;
+  margin: 0 10px;
+  border-radius: 4px;
+  text-decoration: none;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  transition: all 0.15s ease-in-out;
+}
+
+.btn-primary {
+  background-color: #007bff;
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+}
+
+.btn-secondary {
+  background-color: #6c757d;
+  color: white;
+}
+
+.btn-secondary:hover {
+  background-color: #545b62;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .media-upload-container {
+    padding: 10px;
+  }
+  
+  .file-info-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  
+  .preview-content {
+    max-width: 100%;
+    max-height: 300px;
+  }
+  
+  .preview-image {
+    max-width: 100%;
+    max-height: 300px;
+  }
+  
+  .preview-video {
+    max-width: 100%;
+    max-height: 300px;
+  }
+}

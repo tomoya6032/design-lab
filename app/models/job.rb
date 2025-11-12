@@ -1,7 +1,13 @@
 class Job < ApplicationRecord
+  include MediaIntegration
+  
   # Active Storage attachments
   has_many_attached :hero_images
   has_many_attached :detail_images
+  
+  # メディア使用状況の関連付け
+  has_many :media_usages, as: :mediable, dependent: :destroy
+  has_many :media, through: :media_usages, source: :medium
   
   # Validations
   validates :title, presence: true, length: { maximum: 100 }

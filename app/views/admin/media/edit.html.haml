@@ -1,0 +1,137 @@
+- content_for :page_title, "#{@medium.title} の編集"
+
+- content_for :head do
+  = javascript_include_tag 'admin/media_edit', 'data-turbo-track': 'reload'
+
+.media-edit-container
+  .media-edit-header
+    .breadcrumb
+      = link_to 'メディア管理', admin_media_path, class: 'breadcrumb-link'
+      %span.breadcrumb-separator /
+      = link_to @medium.title.presence || '無題', admin_medium_path(@medium), class: 'breadcrumb-link'
+      %span.breadcrumb-separator /
+      %span.current 編集
+
+  .media-edit-content
+    .edit-left-panel
+      .current-image-section
+        %h3 現在の画像
+        .current-image-preview
+          - if @medium.image?
+            %img#current-image{src: @medium.file_url, alt: @medium.alt_text || @medium.title}
+          - else
+            .no-image-placeholder
+              📄
+              %p このファイルタイプは編集できません
+
+      - if @medium.image?
+        .image-tools-section
+          %h3 画像編集ツール
+          .tool-buttons
+            .tool-group
+              %h4 リサイズ
+              .resize-buttons
+                %button.tool-btn{onclick: 'resizeImage(0.5)'} 50%に縮小
+                %button.tool-btn{onclick: 'resizeImage(0.75)'} 75%に縮小
+                %button.tool-btn{onclick: 'resizeImage(1.25)'} 125%に拡大
+                %button.tool-btn{onclick: 'resizeImage(1.5)'} 150%に拡大
+            
+            .tool-group
+              %h4 形状変更
+              .shape-buttons
+                %button.tool-btn{onclick: 'enableManualCrop()'} 手動トリミング
+                %button.tool-btn{onclick: 'cropToSquare()'} 正方形にクロップ
+                %button.tool-btn{onclick: 'cropToCircle()'} 円形にクロップ
+            
+            .tool-group
+              %h4 品質調整
+              .quality-buttons
+                %button.tool-btn{onclick: 'compressImage(0.7)'} 高品質圧縮
+                %button.tool-btn{onclick: 'compressImage(0.5)'} 標準圧縮
+                %button.tool-btn{onclick: 'compressImage(0.3)'} 高圧縮（軽量）
+
+        .preview-section
+          %h3 編集プレビュー
+          .edit-preview
+            %canvas#edit-canvas{style: 'display: none;'}
+            %img#preview-image{style: 'max-width: 100%; display: none;'}
+            .crop-container#crop-container{style: 'display: none;'}
+              %img#crop-image
+          
+          .crop-actions#crop-actions{style: 'display: none;'}
+            %button.btn.btn-success{onclick: 'applyCrop()'} トリミング実行
+            %button.btn.btn-secondary{onclick: 'cancelCrop()'} キャンセル
+          
+          .preview-actions
+            %button.btn.btn-primary{id: 'apply-btn', onclick: 'applyChanges()', disabled: true} 変更を適用
+            %button.btn.btn-secondary{onclick: 'resetChanges()'} リセット
+
+    .edit-right-panel
+      .metadata-form-section
+        .section-header
+          %h3
+            📝 メタデータ編集
+          %p.section-description ファイルの情報を編集できます。SEOにも重要な項目です。
+        
+        = form_with model: [:admin, @medium], local: true, html: { class: 'metadata-form' } do |form|
+          .form-group
+            .form-label-wrapper
+              = form.label :title, class: 'form-label' do
+                🏷️ タイトル
+                %span.required *
+            = form.text_field :title, class: 'form-control', placeholder: 'ファイルのタイトルを入力してください'
+            .form-help
+              ファイルを識別するための名前です。検索時にも使用されます。
+          
+          .form-group
+            .form-label-wrapper
+              = form.label :description, class: 'form-label' do
+                📄 説明
+            = form.text_area :description, class: 'form-control', rows: 4, placeholder: 'このファイルについて詳しく説明してください...'
+            .form-help
+              ファイルの内容や用途について説明します。詳細な情報があると管理しやすくなります。
+          
+          .form-group
+            .form-label-wrapper
+              = form.label :alt_text, class: 'form-label' do
+                🖼️ Alt属性
+                - if @medium.image?
+                  %span.recommended (推奨)
+            = form.text_field :alt_text, class: 'form-control', placeholder: '画像の内容を簡潔に説明してください'
+            .form-help
+              スクリーンリーダーや画像が表示されない場合に使用されます。アクセシビリティの向上につながります。
+          
+          .form-actions
+            = form.submit '💾 変更を保存', class: 'btn btn-primary btn-save'
+            = link_to '❌ キャンセル', admin_medium_path(@medium), class: 'btn btn-secondary'
+
+      .file-info-section
+        .section-header
+          %h3
+            📊 ファイル情報
+          %p.section-description このファイルの詳細情報です。
+        
+        .info-cards
+          .info-card-item
+            .info-icon 📁
+            .info-content
+              %label ファイルタイプ
+              %span.info-value= @medium.file_type
+          
+          .info-card-item
+            .info-icon 📏
+            .info-content
+              %label ファイルサイズ
+              %span.info-value= number_to_human_size(@medium.file_size || 0)
+          
+          .info-card-item
+            .info-icon 📅
+            .info-content
+              %label アップロード日
+              %span.info-value= @medium.created_at.strftime('%Y年%m月%d日')
+          
+          .info-card-item
+            .info-icon 🔄
+            .info-content
+              %label 最終更新
+              %span.info-value= @medium.updated_at.strftime('%Y年%m月%d日')

@@ -1,0 +1,103 @@
+.media-selector-modal
+  .media-selector-header
+    %h3 メディアを選択
+    %button.close-modal{type: 'button', onclick: 'closeMediaSelector()'} ×
+  
+  .media-selector-filters
+    .filter-buttons
+      %button.filter-btn.active{data: {type: 'all'}} すべて
+      %button.filter-btn{data: {type: 'image'}} 画像
+      %button.filter-btn{data: {type: 'video'}} 動画
+      %button.filter-btn{data: {type: 'document'}} ドキュメント
+    
+    .search-box
+      %input.media-search{type: 'text', placeholder: '検索...'}
+  
+  .media-selector-grid
+    - @media.each do |medium|
+      .media-selector-item{data: {id: medium.id, type: medium.file_type, title: medium.title}}
+        .media-thumbnail-wrapper{onclick: "selectMedia(#{medium.id}, '#{medium.title}', '#{medium.file_url}')"}
+          - if medium.image?
+            %img.media-thumbnail{src: medium.thumbnail_url, alt: medium.alt_text}
+          - elsif medium.video?
+            .media-video-thumb
+              🎬
+              %span Video
+          - elsif medium.document?
+            .media-document-thumb
+              📄
+              %span Document
+          - else
+            .media-file-thumb
+              📎
+              %span File
+        
+        .media-info
+          .media-title= medium.title
+          .media-meta
+            %span.file-type= medium.file_type
+            %span.file-size= number_to_human_size(medium.file_size || 0)
+            - if medium.used?
+              %span.usage-indicator.used 使用中
+            - else
+              %span.usage-indicator.unused 未使用
+  
+  - if @media.empty?
+    .empty-state
+      %p メディアがありません
+      = link_to '新しいメディアをアップロード', new_admin_medium_path, class: 'btn btn-primary'
+
+:javascript
+  function selectMedia(id, title, url) {
+    // 呼び出し元のフォームに値を設定
+    if (window.mediaSelectCallback) {
+      window.mediaSelectCallback(id, title, url);
+    }
+    closeMediaSelector();
+  }
+  
+  function closeMediaSelector() {
+    document.getElementById('media-selector-overlay').remove();
+  }
+  
+  // フィルター機能
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      this.classList.add('active');
+      
+      const filterType = this.dataset.type;
+      filterMedia(filterType);
+    });
+  });
+  
+  function filterMedia(type) {
+    const items = document.querySelectorAll('.media-selector-item');
+    items.forEach(item => {
+      if (type === 'all') {
+        item.style.display = 'block';
+      } else {
+        const itemType = item.dataset.type;
+        if (itemType.startsWith(type)) {
+          item.style.display = 'block';
+        } else {
+          item.style.display = 'none';
+        }
+      }
+    });
+  }
+  
+  // 検索機能
+  document.querySelector('.media-search').addEventListener('input', function() {
+    const searchTerm = this.value.toLowerCase();
+    const items = document.querySelectorAll('.media-selector-item');
+    
+    items.forEach(item => {
+      const title = item.dataset.title.toLowerCase();
+      if (title.includes(searchTerm)) {
+        item.style.display = 'block';
+      } else {
+        item.style.display = 'none';
+      }
+    });
+  });

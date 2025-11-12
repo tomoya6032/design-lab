@@ -1,6 +1,12 @@
 class Page < ApplicationRecord
+  include MediaIntegration
+  
   belongs_to :user
   has_one_attached :featured_image
+  
+  # メディア使用状況の関連付け
+  has_many :media_usages, as: :mediable, dependent: :destroy
+  has_many :media, through: :media_usages, source: :medium
   
   # ステータスのenum定義（Rails 8対応）
   enum :status, { draft: 0, published: 1, scheduled: 2, archived: 3, limited: 4 }

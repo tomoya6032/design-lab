@@ -1,4 +1,6 @@
 class Article < ApplicationRecord
+  include MediaIntegration
+  
   belongs_to :user
   has_one_attached :featured_image
   
@@ -7,6 +9,10 @@ class Article < ApplicationRecord
   has_many :categories, through: :article_categories
   has_many :article_tags, dependent: :destroy
   has_many :tags, through: :article_tags
+  
+  # メディア使用状況の関連付け
+  has_many :media_usages, as: :mediable, dependent: :destroy
+  has_many :media, through: :media_usages, source: :medium
   
   # ステータスのenum定義（Rails 8対応）
   enum :status, { draft: 0, published: 1, scheduled: 2, archived: 3, limited: 4 }
@@ -18,9 +24,10 @@ class Article < ApplicationRecord
   
   # コールバック
   before_validation :ensure_slug_present, :make_slug_unique
+  before_save :set_published_at
   
   # スコープ
-  scope :published, -> { where(status: :published, published_at: ..Time.current) }
+  scope :published, -> { where(status: :published).where('published_at IS NULL OR published_at <= ?', Time.current) }
   scope :recent, -> { order(created_at: :desc) }
   # N+1クエリを防ぐためのeager loading用スコープ
   scope :with_featured_image, -> { includes(:featured_image_attachment) }
@@ -66,6 +73,13 @@ class Article < ApplicationRecord
     while Article.where(slug: slug).where.not(id: id).exists?
       self.slug = "#{original_slug}-#{counter}"
       counter += 1
+    end
+  end
+  
+  def set_published_at
+    # publishedに変更された時、published_atが未設定の場合は現在時刻を設定
+    if status_changed? && published? && published_at.nil?
+      self.published_at = Time.current
     end
   end
 end

@@ -13,6 +13,7 @@
     = csp_meta_tag
     = stylesheet_link_tag 'application', 'data-turbo-track': 'reload'
     = javascript_include_tag 'application', 'data-turbo-track': 'reload'
+    = yield(:head) if content_for?(:head)
     = javascript_include_tag 'admin/rich_editor', 'data-turbo-track': 'reload'
     = javascript_include_tag 'admin/image_upload', 'data-turbo-track': 'reload'
   %body.admin-body

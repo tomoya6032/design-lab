@@ -1,6 +1,12 @@
 class Portfolio < ApplicationRecord
+  include MediaIntegration
+  
   has_many_attached :pc_images
   has_many_attached :sp_images
+  
+  # メディア使用状況の関連付け  
+  has_many :media_usages, as: :mediable, dependent: :destroy
+  has_many :media, through: :media_usages, source: :medium
   
   validates :title, presence: true
   validates :production_period, presence: true

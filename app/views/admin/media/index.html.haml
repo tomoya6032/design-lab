@@ -1,13 +1,22 @@
 - content_for :page_title, 'メディア管理'
 
+- content_for :head do
+  = javascript_include_tag 'admin/media_delete', 'data-turbo-track': 'reload'
+
 .admin-content-actions
   .media-stats
     .stat-item
       %span.stat-number= @total_media
       %span.stat-label 総メディア数
     .stat-item
+      %span.stat-number= @used_media
+      %span.stat-label 使用中
+    .stat-item
+      %span.stat-number= @unused_media
+      %span.stat-label 未使用
+    .stat-item
       %span.stat-number= @recent_media
-      %span.stat-label 新規メディア（7日間）
+      %span.stat-label 新規（7日間）
   
   .media-actions
     = link_to '新規メディア追加', new_admin_medium_path, class: 'btn btn-primary'
@@ -18,19 +27,23 @@
       - @media.each do |medium|
         .media-item{data: {id: medium.id}}
           .media-thumbnail
-            - if medium.file_type&.start_with?('image/')
-              %img.media-image{src: medium.file_url, alt: medium.alt_text || medium.title}
-            - elsif medium.file_type&.start_with?('video/')
+            - if medium.image?
+              %img.media-image{src: medium.thumbnail_url, alt: medium.alt_text || medium.title}
+            - elsif medium.video?
               .media-video-icon
-                %i.icon.icon-video
+                🎬
                 %span Video
-            - elsif medium.file_type&.include?('pdf')
-              .media-pdf-icon
-                %i.icon.icon-pdf
-                %span PDF
+            - elsif medium.audio?
+              .media-audio-icon
+                🎵
+                %span Audio
+            - elsif medium.document?
+              .media-document-icon
+                📄
+                %span Document
             - else
               .media-file-icon
-                %i.icon.icon-file
+                📎
                 %span File
           
           .media-info
@@ -41,11 +54,13 @@
               - if medium.file_size.present?
                 %span.file-size= number_to_human_size(medium.file_size)
               %span.upload-date= medium.created_at.strftime('%Y/%m/%d')
+              %span.usage-status{class: medium.used? ? 'used' : 'unused'}
+                = medium.used? ? "使用中(#{medium.usage_count})" : '未使用'
           
           .media-actions
             = link_to '編集', edit_admin_medium_path(medium), class: 'btn btn-sm btn-secondary'
-            = link_to '削除', admin_medium_path(medium), method: :delete, 
-                      data: { confirm: '本当に削除しますか？' }, class: 'btn btn-sm btn-danger'
+            = link_to '削除', admin_medium_path(medium), class: 'btn btn-sm btn-danger delete-media-btn', 
+                      data: { media_id: medium.id, media_title: medium.title }
 
   - else
     .no-media-message

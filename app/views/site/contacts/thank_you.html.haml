@@ -1,0 +1,101 @@
+- content_for :title, 'お問い合わせありがとうございます'
+
+.thank-you-page
+  .thank-you-container
+    
+    / メインカード
+    .main-card
+      
+      / 背景装飾
+      .bg-decoration.top-right
+      .bg-decoration.bottom-left
+      
+      / 成功アイコン
+      .success-icon-container
+        .success-icon
+          .check-icon ✓
+        
+        %h1.main-title 
+          お問い合わせありがとうございます！
+        
+        %p.main-description 
+          この度はお問い合わせいただき、誠にありがとうございます。
+          %br
+          %strong 担当者より2営業日以内にご連絡
+          させていただきます。
+
+    / お問い合わせ内容サマリー
+    .contact-summary
+      %h3.section-title
+        %span.title-icon 📋
+        お問い合わせ内容
+      
+      %table.contact-table
+        %tbody
+          %tr.basic-info
+            %td.label
+              %span.field-icon 👤
+              お名前
+            %td.value= @contact.name
+          
+          %tr.basic-info
+            %td.label
+              %span.field-icon ✉️
+              メールアドレス
+            %td.value.email= @contact.email
+          
+          %tr.basic-info
+            %td.label
+              %span.field-icon 📝
+              件名
+            %td.value= @contact.subject
+          
+          %tr.inquiry-number
+            %td.label
+              %span.field-icon 🔢
+              問い合わせ番号
+            %td.value
+              %span.inquiry-number-badge= "INQ-#{@contact.id.to_s.rjust(6, '0')}"
+          
+          %tr.inquiry-content
+            %td.label
+              %span.field-icon 💬
+              お問い合わせ内容
+            %td.value
+              .message-container= simple_format(@contact.message)
+
+    / 今後の流れ
+    .next-steps
+      %h3.section-title
+        %span.title-icon 🚀
+        今後の流れ
+      
+      .steps-grid
+        .step-item
+          .step-number.step-1 1
+          .step-text 確認メールを自動送信いたしました
+        
+        .step-item
+          .step-number.step-2 2
+          .step-text 担当者がお問い合わせ内容を確認いたします
+        
+        .step-item
+          .step-number.step-3 3
+          .step-text 
+            %strong 2営業日以内
+            にご連絡させていただきます
+        
+        .step-item
+          .step-number.urgent ⚡
+          .step-text 緊急の場合は直接お電話でご連絡ください
+
+    / アクションボタン
+    .action-buttons
+      = link_to root_path, class: 'btn btn-primary' do
+        %span.btn-icon 🏠
+        ホームに戻る
+      
+      = link_to new_site_contact_path, class: 'btn btn-secondary' do
+        %span.btn-icon ➕
+        新しいお問い合わせ
+

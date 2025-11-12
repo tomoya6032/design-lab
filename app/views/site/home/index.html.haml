@@ -213,4 +213,47 @@
       %h2.section-title 求人情報
       %p 現在募集中の求人はございません。最新情報をお待ちください。
 
+%section.contact-cta-section
+  .container
+    .contact-cta-wrapper
+      .contact-cta-content
+        %h2.contact-cta-title お気軽にお問い合わせください
+        %p.contact-cta-description
+          ご質問やご相談、お見積もりなど、何でもお気軽にお問い合わせください。<br>
+          専門スタッフが迅速にご対応いたします。
+        
+        .contact-features
+          .contact-feature
+            %i.icon-clock
+            .feature-content
+              %strong 迅速な対応
+              %p 2営業日以内にご連絡
+          
+          .contact-feature
+            %i.icon-mail
+            .feature-content
+              %strong 24時間受付
+              %p いつでもお問い合わせ可能
+          
+          .contact-feature
+            %i.icon-phone
+            .feature-content
+              %strong 無料相談
+              %p お見積もり・ご相談無料
+        
+        .contact-cta-actions
+          = link_to contact_path, class: 'btn btn-contact-primary' do
+            %i.icon-mail
+            %span お問い合わせフォーム
+          
+          .contact-info
+            %p.phone-number
+              %i.icon-phone
+              03-XXXX-XXXX
+            %small 平日 9:00〜18:00
+      
+      .contact-cta-visual
+        .contact-illustration
+          %i.icon-chat
+
 

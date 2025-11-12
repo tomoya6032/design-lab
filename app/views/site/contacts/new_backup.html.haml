@@ -1,0 +1,97 @@
+- content_for :title, 'お問い合わせ'
+
+%section.hero-section{ style: @site_setting.hero_background_image.present? ? "background-image: url(#{url_for(@site_setting.hero_background_image)}); background-size: cover; background-position: center 40%; background-repeat: no-repeat;" : '' }
+  .hero-overlay
+  .container
+    .hero-content
+      %h1.hero-title お問い合わせ
+      %p.hero-description お気軽にお問い合わせください
+
+.contact-form-page
+  .form-container
+    .form-card
+      %h2.form-title お問い合わせフォーム
+      %p.form-description 
+        ご質問やご相談がございましたら、下記フォームよりお気軽にお問い合わせください。
+        %br
+        担当者より2営業日以内にご連絡させていただきます。
+
+      = form_with model: [:site, @contact], local: true do |form|
+        
+        - if @contact.errors.any?
+          .error-messages
+            %h4 ⚠️ 入力エラーがあります
+            %ul
+              - @contact.errors.full_messages.each do |message|
+                %li= message
+
+        .form-field
+          %label 
+            お名前 
+            %span.required *
+          = form.text_field :name, class: 'form-input', placeholder: '山田 太郎', required: true
+
+        .form-field
+          %label 
+            メールアドレス
+            %span.required *
+          = form.email_field :email, class: 'form-input', placeholder: 'example@example.com', required: true
+
+        .form-field
+          %label 
+            お問い合わせ件名
+            %span.required *
+          = form.text_field :subject, class: 'form-input', placeholder: 'サービスについて', required: true
+
+        .form-field
+          %label 
+            お問い合わせ内容
+            %span.required *
+          = form.text_area :message, class: 'form-input textarea', placeholder: 'お問い合わせ内容をご記入ください...', required: true
+
+        / ハニーポット（ボット対策）
+        %input{type: 'text', name: 'website', style: 'display: none;', tabindex: '-1', autocomplete: 'off'}
+
+        - if Rails.env.production?
+          .recaptcha-section
+            = recaptcha_tags
+        - else
+          .recaptcha-section.development-mode
+            .dev-notice
+              %span.notice-icon ℹ️
+              %span 開発環境ではreCAPTCHAは無効です
+
+        .form-actions
+          = form.submit 'お問い合わせを送信', class: 'btn btn-submit', style: 'background: linear-gradient(135deg, #3498db, #2980b9) !important; color: white !important; padding: 18px 40px !important; border: none !important; border-radius: 50px !important; font-size: 1.1rem !important; font-weight: 600 !important; cursor: pointer !important; display: inline-block !important; margin-right: 20px !important;'
+          = link_to 'キャンセル', root_path, class: 'btn btn-cancel', style: 'background: transparent !important; color: #6c757d !important; padding: 18px 40px !important; border: 2px solid #6c757d !important; border-radius: 50px !important; text-decoration: none !important; display: inline-block !important; font-size: 1.1rem !important; font-weight: 600 !important;'
+
+  .contact-info-section
+    .info-card
+      %h3.info-title 
+        %span.title-icon 📞
+        その他のお問い合わせ方法
+      
+      .contact-methods
+        .contact-method
+          .method-icon 📞
+          .method-title お電話でのお問い合わせ
+          .method-details 03-XXXX-XXXX
+          .method-note 受付時間：平日 9:00〜18:00
+
+        .contact-method
+          .method-icon ✉️
+          .method-title メールでのお問い合わせ
+          .method-details info@example.com
+          .method-note 返信目安：2営業日以内
+
+        .contact-method
+          .method-icon 📍
+          .method-title 所在地
+          .method-details.address
+            〒XXX-XXXX
+            %br
+            東京都XX区XX 1-2-3
+            %br
+            XXXビル 4F
+          .method-note 最寄り駅：○○駅 徒歩5分
+

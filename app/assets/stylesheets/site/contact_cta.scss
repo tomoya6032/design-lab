@@ -1,0 +1,217 @@
+/* Contact CTA Section Styles */
+.contact-cta-section {
+  padding: 4rem 0;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  position: relative;
+  overflow: hidden;
+}
+
+.contact-cta-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)" /></svg>');
+  opacity: 0.3;
+}
+
+.contact-cta-wrapper {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 3rem;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+}
+
+.contact-cta-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.contact-cta-description {
+  font-size: 1.2rem;
+  line-height: 1.7;
+  margin-bottom: 2.5rem;
+  opacity: 0.95;
+}
+
+.contact-features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2.5rem;
+}
+
+.contact-feature {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.contact-feature i {
+  font-size: 1.5rem;
+  color: #ffd700;
+  margin-top: 0.25rem;
+  flex-shrink: 0;
+}
+
+.feature-content strong {
+  display: block;
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+  color: white;
+}
+
+.feature-content p {
+  font-size: 0.9rem;
+  opacity: 0.85;
+  margin: 0;
+}
+
+.contact-cta-actions {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.btn-contact-primary {
+  background: white;
+  color: #667eea;
+  padding: 1rem 2rem;
+  border-radius: 50px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+  border: none;
+}
+
+.btn-contact-primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  color: #5a6fd8;
+}
+
+.btn-contact-primary i {
+  font-size: 1.2rem;
+}
+
+.contact-info {
+  text-align: left;
+}
+
+.phone-number {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.phone-number i {
+  font-size: 1.1rem;
+  color: #ffd700;
+}
+
+.contact-info small {
+  opacity: 0.8;
+  font-size: 0.9rem;
+}
+
+.contact-cta-visual {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.contact-illustration {
+  width: 120px;
+  height: 120px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.contact-illustration i {
+  font-size: 3rem;
+  color: white;
+  opacity: 0.9;
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 768px) {
+  .contact-cta-wrapper {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    text-align: center;
+  }
+  
+  .contact-cta-title {
+    font-size: 2rem;
+  }
+  
+  .contact-cta-description {
+    font-size: 1.1rem;
+  }
+  
+  .contact-features {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .contact-feature {
+    justify-content: center;
+    text-align: left;
+  }
+  
+  .contact-cta-actions {
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+  }
+  
+  .contact-info {
+    text-align: center;
+  }
+  
+  .contact-illustration {
+    width: 100px;
+    height: 100px;
+  }
+  
+  .contact-illustration i {
+    font-size: 2.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .contact-cta-section {
+    padding: 3rem 0;
+  }
+  
+  .contact-cta-title {
+    font-size: 1.8rem;
+  }
+  
+  .btn-contact-primary {
+    padding: 0.875rem 1.5rem;
+    font-size: 1rem;
+  }
+}

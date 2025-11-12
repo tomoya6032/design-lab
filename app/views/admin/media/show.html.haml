@@ -1,110 +1,132 @@
-- content_for :page_title, @medium.title.presence || '無題のメディア'
+- content_for :page_title, @medium.title.presence || 'メディア詳細'
 
 .media-detail-container
   .media-detail-header
+    .breadcrumb
+      = link_to 'メディア管理', admin_media_path, class: 'breadcrumb-link'
+      %span.breadcrumb-separator /
+      %span.current= @medium.title.presence || '無題'
+    
     .media-actions
-      = link_to '編集', edit_admin_medium_path(@medium), class: 'btn btn-secondary'
+      = link_to '編集', edit_admin_medium_path(@medium), class: 'btn btn-primary'
       = link_to '削除', admin_medium_path(@medium), method: :delete, 
                 data: { confirm: '本当に削除しますか？' }, class: 'btn btn-danger'
-      = link_to '一覧に戻る', admin_media_path, class: 'btn btn-outline-secondary'
 
   .media-detail-content
-    .media-preview
-      - if @medium.file_type&.start_with?('image/')
-        %img.preview-image{src: @medium.file_url, alt: @medium.alt_text || @medium.title}
-      - elsif @medium.file_type&.start_with?('video/')
-        %video.preview-video{controls: true}
-          %source{src: @medium.file_url, type: @medium.file_type}
-          お使いのブラウザは動画の再生に対応していません。
-      - else
-        .preview-placeholder
-          %i.icon.icon-file
-          %h4= @medium.title.presence || '無題'
-          %p
-            = link_to 'ファイルを開く', @medium.file_url, target: '_blank', class: 'btn btn-primary'
+    .media-preview-section
+      .media-preview
+        - if @medium.image?
+          %img.detail-image{src: @medium.file_url, alt: @medium.alt_text || @medium.title}
+        - elsif @medium.video?
+          %video.detail-video{controls: true, src: @medium.file_url}
+            お使いのブラウザは動画の再生に対応していません。
+        - elsif @medium.audio?
+          .audio-player
+            %audio{controls: true, src: @medium.file_url}
+              お使いのブラウザは音声の再生に対応していません。
+            .audio-info
+              🎵
+              %span.audio-label Audio File
+        - elsif @medium.document?
+          .document-preview
+            📄
+            %span.document-label Document
+            .document-actions
+              = link_to 'ダウンロード', @medium.file_url, class: 'btn btn-sm btn-secondary', target: '_blank'
+        - else
+          .file-preview
+            📎
+            %span.file-label File
+            .file-actions
+              = link_to 'ダウンロード', @medium.file_url, class: 'btn btn-sm btn-secondary', target: '_blank'
 
-    .media-info-panel
-      %h3 メディア情報
-      
-      .info-group
-        %label タイトル
-        %p= @medium.title.presence || '未設定'
-      
-      .info-group
-        %label 説明
-        %p= @medium.description.presence || '未設定'
-      
-      .info-group
-        %label ファイルURL
-        %p
-          = link_to @medium.file_url, @medium.file_url, target: '_blank', class: 'file-url-link'
-      
-      .info-group
-        %label ファイルタイプ
-        %p
-          %span.file-type-badge= @medium.file_type || 'unknown'
-      
-      - if @medium.file_size.present?
-        .info-group
-          %label ファイルサイズ
-          %p= number_to_human_size(@medium.file_size)
-      
-      - if @medium.alt_text.present?
-        .info-group
-          %label alt属性
-          %p= @medium.alt_text
-      
-      .info-group
-        %label アップロード日
-        %p= @medium.created_at.strftime('%Y年%m月%d日 %H:%M')
-      
-      .info-group
-        %label 最終更新
-        %p= @medium.updated_at.strftime('%Y年%m月%d日 %H:%M')
+    .media-info-section
+      .info-card
+        %h3 メディア情報
+        .info-grid
+          .info-item
+            %label ファイル名
+            %span= @medium.title
+          
+          .info-item
+            %label 説明
+            %span= @medium.description.presence || '説明なし'
+          
+          - if @medium.alt_text.present?
+            .info-item
+              %label Alt属性
+              %span= @medium.alt_text
+          
+          .info-item
+            %label ファイルタイプ
+            %span= @medium.file_type
+          
+          .info-item
+            %label ファイルサイズ
+            %span= number_to_human_size(@medium.file_size || 0)
+          
+          .info-item
+            %label アップロード日時
+            %span= @medium.created_at.strftime('%Y年%m月%d日 %H:%M')
+          
+          .info-item
+            %label アップロード者
+            %span= @medium.user.email
+          
+          .info-item
+            %label 使用状況
+            %span{class: @medium.used? ? 'status-used' : 'status-unused'}
+              = @medium.used? ? "使用中(#{@medium.usage_count}箇所)" : '未使用'
 
-.media-detail-styles
-  :css
-    .media-detail-container {
-      max-width: 1000px;
-      margin: 0 auto;
-    }
+      - if @medium.used?
+        .usage-details-card
+          %h3 使用箇所の詳細
+          .usage-list
+            - @medium.media_usages.includes(:mediable).each do |usage|
+              .usage-detail-item
+                .usage-type
+                  %span.usage-type-badge{class: "usage-#{usage.usage_type}"}
+                    = usage.usage_type_name
+                .usage-content
+                  %strong= usage.mediable_type
+                  - if usage.mediable.respond_to?(:title)
+                    %span.usage-title= usage.mediable.title
+                  - if usage.context.present?
+                    %span.usage-context= "(#{usage.context})"
+                  - if defined?(admin_path_for)
+                    = link_to '編集', admin_path_for(usage.mediable), class: 'usage-edit-link'
 
-    .media-detail-header {
-      margin-bottom: 30px;
-      text-align: right;
-    }
+      - if @medium.image?
+        .usage-card
+          %h3 使用方法
+          .usage-examples
+            .usage-item
+              %label URL
+              .url-field
+                %input.copy-input{type: 'text', value: @medium.file_url, readonly: true}
+                %button.copy-btn{type: 'button', onclick: 'copyToClipboard(this)'} コピー
+            
+            .usage-item
+              %label HTMLタグ
+              .url-field
+                %input.copy-input{type: 'text', value: "<img src=\"#{@medium.file_url}\" alt=\"#{@medium.alt_text || @medium.title}\" />", readonly: true}
+                %button.copy-btn{type: 'button', onclick: 'copyToClipboard(this)'} コピー
 
-    .media-actions {
-      display: flex;
-      gap: 10px;
-      justify-content: flex-end;
-    }
-
-    .media-detail-content {
-      display: grid;
-      grid-template-columns: 2fr 1fr;
-      gap: 30px;
-      background: white;
-      border-radius: 8px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-      overflow: hidden;
-    }
-
-    .media-preview {
-      padding: 30px;
-      background: #f8f9fa;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 400px;
-    }
-
-    .preview-image {
-      max-width: 100%;
-      max-height: 100%;
-      border-radius: 4px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    }
+:javascript
+  function copyToClipboard(button) {
+    const input = button.previousElementSibling;
+    input.select();
+    document.execCommand('copy');
+    
+    const originalText = button.textContent;
+    button.textContent = 'コピー済み！';
+    button.style.backgroundColor = '#28a745';
+    
+    setTimeout(() => {
+      button.textContent = originalText;
+      button.style.backgroundColor = '';
+    }, 2000);
+  }
 
     .preview-video {
       max-width: 100%;

@@ -150,7 +150,9 @@
       
       .form-group
         = form.label :featured_image, '画像ファイルをアップロード', class: 'image-upload-label'
-        = form.file_field :featured_image, class: 'image-upload-input', accept: 'image/*'
+        .image-upload-options
+          = form.file_field :featured_image, class: 'image-upload-input', accept: 'image/*'
+          %button.btn.btn-secondary.media-select-btn{type: 'button', onclick: 'selectFeaturedImageFromMedia()'} メディアから選択
         %small.form-text JPG、PNG、GIF形式に対応（推奨サイズ: 1200x630px）
         
         .image-preview-container
@@ -210,4 +212,54 @@
     .form-actions
       = form.submit '記事を更新', class: 'btn btn-primary btn-lg'
       = link_to 'キャンセル', admin_articles_path, class: 'btn btn-secondary'
+
+- content_for :head do
+  = javascript_include_tag 'admin/media_selector', 'data-turbo-track': 'reload'
+
+:javascript
+  // アイキャッチ画像の選択機能
+  function selectFeaturedImageFromMedia() {
+    window.mediaSelector.open((media) => {
+      // 隠しフィールドでメディアIDを送信
+      let hiddenInput = document.getElementById('article_selected_media_id');
+      if (!hiddenInput) {
+        hiddenInput = document.createElement('input');
+        hiddenInput.type = 'hidden';
+        hiddenInput.name = 'article[selected_media_id]';
+        hiddenInput.id = 'article_selected_media_id';
+        document.querySelector('form').appendChild(hiddenInput);
+      }
+      hiddenInput.value = media.id;
+      
+      // ファイル入力をクリア
+      const fileInput = document.getElementById('article_featured_image');
+      if (fileInput) {
+        fileInput.value = '';
+      }
+      
+      // プレビューを更新
+      updateImagePreview(media.url, media.title);
+      
+      console.log('選択されたメディア:', media);
+    }, { type: 'image', title: 'アイキャッチ画像を選択' });
+  }
+  
+  function updateImagePreview(url, title) {
+    const container = document.querySelector('.image-preview-container');
+    const currentImage = container.querySelector('.current-image');
+    const previewPlaceholder = container.querySelector('.preview-placeholder');
+    
+    // 既存のプレビューを非表示
+    if (currentImage) currentImage.style.display = 'none';
+    
+    // 新しいプレビューを表示
+    const img = previewPlaceholder.querySelector('img');
+    const info = previewPlaceholder.querySelector('p');
+    
+    img.src = url;
+    img.alt = title;
+    info.textContent = '選択した画像: ' + title;
+    
+    previewPlaceholder.style.display = 'block';
+  }
   :css

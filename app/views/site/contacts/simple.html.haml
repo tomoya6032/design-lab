@@ -1,0 +1,26 @@
+- content_for :title, 'お問い合わせ（デバッグ版）'
+
+%h1 シンプルお問い合わせフォーム
+
+.simple-debug-form
+  = form_with model: [:site, @contact], local: true do |form|
+    %div{style: 'margin: 10px 0;'}
+      %label お名前：
+      = form.text_field :name, style: 'display: block; width: 300px; padding: 5px;'
+    
+    %div{style: 'margin: 10px 0;'}
+      %label メール：
+      = form.email_field :email, style: 'display: block; width: 300px; padding: 5px;'
+    
+    %div{style: 'margin: 10px 0;'}
+      %label 件名：
+      = form.text_field :subject, style: 'display: block; width: 300px; padding: 5px;'
+    
+    %div{style: 'margin: 10px 0;'}
+      %label メッセージ：
+      = form.text_area :message, style: 'display: block; width: 300px; height: 100px; padding: 5px;'
+    
+    %div{style: 'margin: 20px 0; border: 3px solid red; padding: 20px;'}
+      %p ボタンエリア（赤枠内）：
+      = form.submit '送信ボタン', style: 'background: green; color: white; padding: 15px 30px; font-size: 18px; border: none; cursor: pointer;'
+      %p ボタンの後のテキスト

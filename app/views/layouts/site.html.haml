@@ -40,6 +40,8 @@
             = link_to 'ホーム', root_path, class: 'main-nav-link'
           %li.main-nav-item
             = link_to '求人情報', site_jobs_path, class: 'main-nav-link'
+          %li.main-nav-item
+            = link_to 'お問い合わせ', contact_path, class: 'main-nav-link'
           - if @navigation_pages.present?
             - @navigation_pages.limit(2).each do |page|
               %li.main-nav-item
@@ -54,4 +56,5 @@
           %p &copy; 2025 #{@site_setting&.site_name || 'Design Lab CMS'}. All rights reserved.
           .footer-links
             = link_to '私たちについて', site_pages_path, class: 'footer-link'
+            = link_to 'お問い合わせ', contact_path, class: 'footer-link'
             = link_to '管理画面', admin_root_path, class: 'footer-link'

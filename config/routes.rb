@@ -21,7 +21,11 @@ Rails.application.routes.draw do
         patch 'bulk_action'
       end
     end
-    resources :media
+    resources :media do
+      collection do
+        get :select
+      end
+    end
     resources :portfolios do
       delete 'images/:id', to: 'portfolios#destroy_image', as: 'destroy_image'
     end
@@ -41,8 +45,21 @@ Rails.application.routes.draw do
     resources :articles, only: [:index, :show]
     resources :pages, only: [:index, :show]
     resources :jobs, only: [:index, :show]
+    resources :contacts, only: [:new, :create, :show] do
+      member do
+        get :thank_you
+      end
+    end
     root 'home#index'  # /site のルートパス
   end
+  
+  # 問い合わせフォーム用の短縮ルート
+  get 'contact', to: 'site/contacts#new', as: :contact
+  post 'contact', to: 'site/contacts#create'
+  get 'contact/:id/thank_you', to: 'site/contacts#thank_you', as: :thank_you_contact
+  get 'contact/test', to: 'site/contacts#test', as: :test_contact
+  get 'contact/debug', to: 'site/contacts#debug', as: :debug_contact
+  get 'contact/simple', to: 'site/contacts#simple', as: :simple_contact
   
   # 固定ページ用の短縮ルート
   get 'page/:id', to: 'site/pages#show', as: :page

@@ -1,0 +1,12 @@
+%h1 シンプルテスト
+%p このページが表示されれば、HAMLの基本構文は動作しています。
+
+= form_with model: [:site, @contact], local: true do |form|
+  %p フォームが開始されました
+  
+  = form.text_field :name, placeholder: 'テスト用名前欄'
+  
+  %p ボタンエリア：
+  = form.submit 'テスト送信ボタン', style: 'background: red; color: white; padding: 10px; font-size: 20px;'
+  
+  %p フォームが終了します

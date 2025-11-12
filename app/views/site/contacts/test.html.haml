@@ -1,0 +1,22 @@
+%h1 テスト用コンタクトフォーム
+
+= form_with model: [:site, @contact], local: true, html: { class: 'simple-form' } do |form|
+  %div
+    = form.label :name, 'お名前'
+    = form.text_field :name, placeholder: '山田 太郎'
+  
+  %div
+    = form.label :email, 'メールアドレス'
+    = form.email_field :email, placeholder: 'example@example.com'
+  
+  %div
+    = form.label :subject, '件名'
+    = form.text_field :subject, placeholder: 'お問い合わせ件名'
+  
+  %div
+    = form.label :message, 'メッセージ'
+    = form.text_area :message, placeholder: 'お問い合わせ内容'
+  
+  %div
+    = form.submit '送信', style: 'background: blue; color: white; padding: 10px 20px; border: none; cursor: pointer;'
+    = link_to 'キャンセル', root_path, style: 'margin-left: 10px; padding: 10px 20px; background: gray; color: white; text-decoration: none;'

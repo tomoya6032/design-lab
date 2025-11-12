@@ -1,6 +1,12 @@
 class Setting < ApplicationRecord
+  include MediaIntegration
+  
   # シングルトンパターンでサイト設定を管理
   has_one_attached :hero_background_image
+  
+  # メディア使用状況の関連付け
+  has_many :media_usages, as: :mediable, dependent: :destroy
+  has_many :media, through: :media_usages, source: :medium
   
   validates :site_name, presence: true  
   validates :theme, inclusion: { in: %w[orange red earth-green pearl-black modern classic minimal] }
