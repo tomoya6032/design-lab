@@ -1,0 +1,39 @@
+- content_for :title, '制作実績'
+
+%section.portfolios-page-header
+  .container
+    .page-header-content
+      %h1.page-title 制作実績
+      %p.page-description これまでに手がけた制作事例をご紹介します
+
+%section.portfolios-section
+  .container
+    - if @portfolios.any?
+      .row
+        - @portfolios.each do |portfolio|
+          .col-md-4.col-sm-6.mb-4
+            .card.portfolio-card.h-100
+              .card-img-wrapper
+                - if portfolio.featured_image.present?
+                  = image_tag portfolio.featured_image, alt: portfolio.title, class: 'card-img-top portfolio-img'
+                - else
+                  .portfolio-placeholder
+                    %span.placeholder-icon 🎨
+              .card-body.d-flex.flex-column
+                .portfolio-meta.mb-2
+                  - if portfolio.production_period.present?
+                    %span.production-period-badge 制作期間：#{portfolio.production_period}
+                %h5.card-title.portfolio-title
+                  = link_to portfolio.title, site_portfolio_path(portfolio), class: 'text-decoration-none text-dark portfolio-title-link'
+                %p.card-text.portfolio-excerpt.flex-grow-1= truncate(strip_tags(portfolio.description), length: 100)
+                .portfolio-actions.mt-auto
+                  = link_to '詳細を見る', site_portfolio_path(portfolio), class: 'btn btn-outline-primary btn-sm w-100'
+    - else
+      .no-portfolios.text-center.py-5
+        %div.mb-3{style: 'font-size: 4rem;'} 🎨
+        %h3.mb-3 制作実績はまだありません
+        %p.text-muted 制作実績が公開されるまでお待ちください。
+
+    - if @portfolios.respond_to?(:current_page)
+      .pagination-wrapper.mt-4
+        = paginate @portfolios

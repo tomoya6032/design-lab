@@ -7,7 +7,19 @@ class ApplicationController < ActionController::Base
   before_action :load_navigation_pages, unless: -> { request.path.start_with?('/admin') || request.path.start_with?('/api/') }
   before_action :load_sidebar_data, if: -> { request.path.start_with?('/site') }
   
+  # パンくずリスト用
+  helper_method :breadcrumbs
+  
   private
+  
+  def breadcrumbs
+    @breadcrumbs ||= []
+  end
+  
+  def add_breadcrumb(title, path = nil)
+    @breadcrumbs ||= []
+    @breadcrumbs << { title: title, path: path }
+  end
   
   def configure_permitted_parameters
     devise_parameter_sanitizer.permit(:sign_up, keys: [:email, :first_name, :last_name])

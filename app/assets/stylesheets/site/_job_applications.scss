@@ -1,0 +1,484 @@
+// 求人応募フォームのスタイル
+
+.job-application-hero {
+  background-color: #f8f9fa;
+  padding: 3rem 0 2rem;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid #e9ecef;
+
+  .hero-content {
+    text-align: center;
+
+    .page-title {
+      font-size: 2rem;
+      font-weight: 600;
+      color: #343a40;
+      margin-bottom: 0.5rem;
+    }
+
+    .form-title {
+      font-size: 1.5rem;
+      font-weight: 500;
+      color: #007bff;
+      margin-bottom: 1rem;
+    }
+
+    .form-description {
+      font-size: 1.1rem;
+      color: #6c757d;
+      margin-bottom: 0;
+    }
+  }
+}
+
+// フォームセクション
+.job-application-form-section {
+  padding: 2rem 0 4rem;
+
+  .form-wrapper {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 3rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .form-container {
+    background: white;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+  }
+
+  .form-section {
+    margin-bottom: 2.5rem;
+
+    .section-title {
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: #343a40;
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid #007bff;
+    }
+  }
+
+  .form-group {
+    margin-bottom: 1.5rem;
+
+    .form-label {
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: #343a40;
+
+      &.required::after {
+        content: ' *';
+        color: #dc3545;
+      }
+    }
+
+    .form-control {
+      border: 2px solid #e9ecef;
+      border-radius: 0.375rem;
+      padding: 0.75rem;
+      font-size: 1rem;
+      transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+
+      &:focus {
+        border-color: #007bff;
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+      }
+    }
+
+    .form-text {
+      margin-top: 0.25rem;
+      font-size: 0.875rem;
+      color: #6c757d;
+    }
+  }
+
+  .form-actions {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid #e9ecef;
+
+    .action-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: space-between;
+
+      .btn {
+        padding: 0.75rem 2rem;
+        font-size: 1.1rem;
+        border-radius: 0.375rem;
+        transition: all 0.3s ease;
+
+        &:hover {
+          transform: translateY(-2px);
+        }
+      }
+    }
+  }
+
+  // サイドバー
+  .job-summary-sidebar {
+    .job-info-card,
+    .contact-info-card {
+      background: white;
+      border-radius: 0.5rem;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+
+      .card-title {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: #343a40;
+        margin-bottom: 1rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid #e9ecef;
+      }
+    }
+
+    .job-info {
+      .job-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #343a40;
+        margin-bottom: 0.5rem;
+      }
+
+      .job-type {
+        color: #007bff;
+        font-weight: 500;
+        margin-bottom: 1rem;
+      }
+
+      .job-details {
+        .detail-item {
+          display: flex;
+          justify-content: space-between;
+          margin-bottom: 0.5rem;
+          font-size: 0.9rem;
+
+          strong {
+            color: #495057;
+          }
+
+          span {
+            color: #6c757d;
+          }
+        }
+      }
+    }
+  }
+}
+
+// 確認画面
+.job-application-confirm-section {
+  padding: 2rem 0 4rem;
+
+  .confirm-wrapper {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 3rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .confirm-container {
+    background: white;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+  }
+
+  .confirm-section {
+    margin-bottom: 2.5rem;
+
+    .section-title {
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: #343a40;
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid #007bff;
+    }
+  }
+
+  .confirm-group {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 1rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid #f1f3f4;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    dt {
+      font-weight: 600;
+      color: #495057;
+    }
+
+    dd {
+      color: #343a40;
+      margin: 0;
+
+      &.pre-formatted {
+        white-space: pre-wrap;
+        line-height: 1.6;
+      }
+    }
+  }
+}
+
+// 完了画面
+.job-application-complete-hero {
+  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+  color: white;
+  padding: 4rem 0;
+  text-align: center;
+
+  .success-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+
+    .icon-check-circle::before {
+      content: "✓";
+      display: inline-block;
+      width: 80px;
+      height: 80px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      line-height: 80px;
+      font-size: 2rem;
+    }
+  }
+
+  .page-title {
+    font-size: 2.5rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+  }
+
+  .success-message {
+    font-size: 1.2rem;
+    opacity: 0.9;
+  }
+}
+
+.job-application-complete-section {
+  padding: 3rem 0;
+
+  .complete-wrapper {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 3rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .complete-container {
+    .section-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #343a40;
+      margin-bottom: 1.5rem;
+    }
+
+    .subsection-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #495057;
+      margin-bottom: 1rem;
+    }
+  }
+
+  .application-summary,
+  .next-steps,
+  .contact-notice {
+    background: white;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .summary-section {
+    margin-bottom: 2rem;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  .summary-item {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 1rem;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid #f1f3f4;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    dt {
+      font-weight: 600;
+      color: #495057;
+    }
+
+    dd {
+      color: #343a40;
+      margin: 0;
+    }
+  }
+
+  .steps-timeline {
+    .step-item {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      .step-number {
+        flex-shrink: 0;
+        width: 2rem;
+        height: 2rem;
+        background: #007bff;
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        font-size: 0.9rem;
+      }
+
+      .step-content {
+        h4 {
+          font-size: 1.1rem;
+          font-weight: 600;
+          color: #343a40;
+          margin-bottom: 0.5rem;
+        }
+
+        p {
+          color: #6c757d;
+          margin: 0;
+          line-height: 1.5;
+        }
+      }
+    }
+  }
+
+  .notice-list {
+    margin: 0;
+    padding-left: 1.5rem;
+
+    li {
+      margin-bottom: 0.5rem;
+      color: #495057;
+      line-height: 1.5;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  .contact-sidebar {
+    .contact-card {
+      background: white;
+      border-radius: 0.5rem;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      padding: 1.5rem;
+
+      .card-title {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: #343a40;
+        margin-bottom: 1rem;
+      }
+    }
+
+    .contact-methods {
+      .contact-method {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+
+        .method-info {
+          strong {
+            display: block;
+            color: #343a40;
+            margin-bottom: 0.5rem;
+          }
+
+          .contact-link {
+            color: #007bff;
+            text-decoration: none;
+
+            &:hover {
+              text-decoration: underline;
+            }
+          }
+
+          .phone-number {
+            font-weight: 600;
+            color: #343a40;
+            margin-bottom: 0.25rem;
+          }
+        }
+      }
+    }
+  }
+}
+
+// レスポンシブ対応
+@media (max-width: 768px) {
+  .job-application-form-section,
+  .job-application-confirm-section,
+  .job-application-complete-section {
+    .form-wrapper,
+    .confirm-wrapper,
+    .complete-wrapper {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+  }
+
+  .job-application-hero {
+    padding: 2rem 0 1.5rem;
+
+    .page-title {
+      font-size: 1.5rem;
+    }
+
+    .form-title {
+      font-size: 1.3rem;
+    }
+  }
+
+  .form-actions .action-buttons {
+    flex-direction: column;
+
+    .btn {
+      width: 100%;
+    }
+  }
+
+  .confirm-group {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+}

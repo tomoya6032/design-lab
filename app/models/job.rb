@@ -22,6 +22,22 @@ class Job < ApplicationRecord
   scope :ordered, -> { order(:display_order, :created_at) }
   scope :by_job_type, ->(job_type) { where(job_type: job_type) }
   
+  # 検索用スコープ
+  scope :search_by_text, ->(query) {
+    return all if query.blank?
+    
+    search_term = "%#{query}%"
+    where(
+      "title ILIKE :term OR " \
+      "job_type ILIKE :term OR " \
+      "description ILIKE :term OR " \
+      "expectations ILIKE :term OR " \
+      "salary_range ILIKE :term OR " \
+      "senior_message ILIKE :term",
+      term: search_term
+    )
+  }
+  
   # Class methods
   def self.job_types
     distinct.pluck(:job_type).compact.sort

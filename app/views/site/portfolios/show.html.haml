@@ -1,0 +1,41 @@
+- content_for :title, @portfolio.title
+
+%article.portfolio-detail
+  .container
+    .article-layout
+      .main-content
+        .portfolio-header
+          %h1.portfolio-title= @portfolio.title
+          .portfolio-meta
+            - if @portfolio.production_period.present?
+              %span.production-period
+                %i.icon-clock
+                制作期間: #{@portfolio.production_period}
+            %time.created-date= @portfolio.created_at.strftime('%Y年%m月%d日')
+        
+        - if @portfolio.description.present?
+          .portfolio-description
+            %h2.section-title プロジェクト概要
+            .description-content
+              = simple_format(@portfolio.description)
+        
+        - if @portfolio.pc_images.any?
+          .portfolio-images-section
+            %h2.section-title PC版デザイン
+            .portfolio-images-grid.pc-grid
+              - @portfolio.pc_images.each_with_index do |pc_image, index|
+                .portfolio-image-item
+                  = image_tag pc_image, alt: "#{@portfolio.title} PC版 #{index + 1}", class: 'portfolio-image pc-image', loading: 'lazy'
+                  .image-caption PC版デザイン #{index + 1}
+        
+        - if @portfolio.sp_images.any?
+          .portfolio-images-section.sp-section
+            %h2.section-title スマートフォン版デザイン
+            .portfolio-images-grid.sp-grid
+              - @portfolio.sp_images.each_with_index do |sp_image, index|
+                .portfolio-image-item.sp-image-item
+                  = image_tag sp_image, alt: "#{@portfolio.title} SP版 #{index + 1}", class: 'portfolio-image sp-image', loading: 'lazy'
+                  .image-caption スマートフォン版デザイン #{index + 1}
+        
+        .portfolio-actions
+          = link_to '制作実績一覧に戻る', site_portfolios_path, class: 'btn btn-outline-primary btn-lg'

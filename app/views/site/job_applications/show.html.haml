@@ -1,0 +1,100 @@
+- content_for :title, "エントリー完了 - #{@job.title}"
+
+%section.job-application-complete-hero
+  .container
+    .hero-content
+      .success-icon
+        %i.icon-check-circle
+      %h1.page-title エントリーが完了しました
+      %p.success-message ご応募ありがとうございます。追って担当者よりご連絡いたします。
+
+%section.job-application-complete-section
+  .container
+    .complete-wrapper
+      .complete-container
+        .application-summary
+          %h2.section-title ご応募内容
+          
+          .summary-section
+            %h3.subsection-title 応募職種
+            .job-info
+              %h4.job-title= @job_application.job.title
+              %p.job-type= @job_application.job.job_type
+          
+          .summary-section
+            %h3.subsection-title 基本情報
+            
+            .summary-item
+              %dt お名前
+              %dd= @job_application.name
+            
+            .summary-item
+              %dt メールアドレス
+              %dd= @job_application.email
+            
+            .summary-item
+              %dt 電話番号
+              %dd= @job_application.phone
+            
+            .summary-item
+              %dt 実務経験年数
+              %dd #{@job_application.experience_years}年
+
+        .next-steps
+          %h2.section-title 今後の流れ
+          
+          .steps-timeline
+            .step-item
+              .step-number 1
+              .step-content
+                %h4 書類選考
+                %p ご提出いただいた内容を拝見し、書類選考を行います（1週間程度）
+            
+            .step-item
+              .step-number 2
+              .step-content
+                %h4 面接のご案内
+                %p 書類選考通過の方には、面接日程のご相談をさせていただきます
+            
+            .step-item
+              .step-number 3
+              .step-content
+                %h4 採用結果のご連絡
+                %p 面接後、採用結果を1週間以内にご連絡いたします
+
+        .contact-notice
+          %h2.section-title ご注意
+          %ul.notice-list
+            %li 選考結果については、合否に関わらず必ずご連絡いたします
+            %li ご不明な点がございましたら、いつでもお問い合わせください
+            %li 応募内容に変更がある場合は、お早めにご連絡ください
+
+        .form-actions
+          .action-buttons
+            = link_to site_jobs_path, class: 'btn btn-outline-primary btn-lg' do
+              %i.icon-list
+              他の求人を見る
+            = link_to site_root_path, class: 'btn btn-primary btn-lg' do
+              %i.icon-home
+              ホームに戻る
+
+      .contact-sidebar
+        .contact-card
+          %h3.card-title お問い合わせ
+          %p ご不明な点やご質問がございましたら、お気軽にお問い合わせください。
+          
+          .contact-methods
+            .contact-method
+              %i.icon-mail
+              .method-info
+                %strong メールでのお問い合わせ
+                = link_to contact_path, class: 'contact-link' do
+                  お問い合わせフォーム
+                  %i.icon-arrow-right
+            
+            .contact-method
+              %i.icon-phone
+              .method-info
+                %strong お電話でのお問い合わせ
+                %p.phone-number 03-XXXX-XXXX
+                %small 平日 9:00〜18:00

@@ -32,6 +32,11 @@ Rails.application.routes.draw do
     resources :jobs do
       delete 'images/:id', to: 'jobs#destroy_image', as: 'destroy_image'
     end
+    resources :job_applications, only: [:index, :show, :destroy] do
+      member do
+        patch :update_status
+      end
+    end
     resources :users, only: [:index, :show, :edit, :update, :destroy]
     resource :settings, only: [:show, :edit, :update]
     get 'theme-customization', to: 'theme_customization#edit'
@@ -44,12 +49,21 @@ Rails.application.routes.draw do
     get 'home/index'
     resources :articles, only: [:index, :show]
     resources :pages, only: [:index, :show]
-    resources :jobs, only: [:index, :show]
+    resources :portfolios, only: [:index, :show]
+    resources :jobs, only: [:index, :show] do
+      resources :job_applications, only: [:new, :create, :show] do
+        member do
+          get :confirm
+          post :confirm, action: :create_confirmed
+        end
+      end
+    end
     resources :contacts, only: [:new, :create, :show] do
       member do
         get :thank_you
       end
     end
+    get 'search', to: 'search#index', as: :search
     root 'home#index'  # /site のルートパス
   end
   
@@ -63,6 +77,9 @@ Rails.application.routes.draw do
   
   # 固定ページ用の短縮ルート
   get 'page/:id', to: 'site/pages#show', as: :page
+  
+  # 検索用の短縮ルート
+  get 'search', to: 'site/search#index', as: :search
   
   # API
   namespace :api do

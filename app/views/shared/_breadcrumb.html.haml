@@ -1,0 +1,18 @@
+.breadcrumb-navigation
+  .container
+    %nav.breadcrumb{itemscope: true, itemtype: "https://schema.org/BreadcrumbList"}
+      %ol.breadcrumb-list
+        %li.breadcrumb-item{itemprop: "itemListElement", itemscope: true, itemtype: "https://schema.org/ListItem"}
+          = link_to "ホーム", root_path, {itemprop: "item"}
+          %span{itemprop: "name", style: "display: none;"} ホーム
+          %meta{itemprop: "position", content: "1"}
+        - breadcrumbs.each_with_index do |breadcrumb, index|
+          %li.breadcrumb-item{itemprop: "itemListElement", itemscope: true, itemtype: "https://schema.org/ListItem"}
+            %span.breadcrumb-separator >
+            - if index == breadcrumbs.length - 1
+              %span.current{itemprop: "name"}= breadcrumb[:title]
+              %meta{itemprop: "position", content: "#{index + 2}"}
+            - else
+              = link_to breadcrumb[:title], breadcrumb[:path], {itemprop: "item"}
+              %span{itemprop: "name", style: "display: none;"}= breadcrumb[:title]
+              %meta{itemprop: "position", content: "#{index + 2}"}

@@ -1,0 +1,97 @@
+// パンくずリスト用のスタイル
+// パンくずリスト
+.breadcrumb-navigation {
+  background-color: #f8f9fa;
+  padding: 0.75rem 0;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid #e9ecef;
+
+  .breadcrumb {
+    margin: 0;
+    padding: 0;
+    background: none;
+
+    .breadcrumb-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+
+      .breadcrumb-item {
+        display: flex;
+        align-items: center;
+        font-size: 0.875rem;
+        color: #6c757d;
+
+        .breadcrumb-separator {
+          margin: 0 0.5rem;
+          color: #adb5bd;
+          font-weight: normal;
+        }
+
+        a {
+          color: #007bff;
+          text-decoration: none;
+          transition: color 0.2s;
+
+          &:hover {
+            color: #0056b3;
+            text-decoration: underline;
+          }
+        }
+
+        .current {
+          color: #495057;
+          font-weight: 500;
+        }
+      }
+    }
+  }
+}
+
+// レスポンシブ対応
+@media (max-width: 768px) {
+  .breadcrumb-navigation {
+    padding: 0.5rem 0;
+
+    .breadcrumb .breadcrumb-list .breadcrumb-item {
+      font-size: 0.8rem;
+
+      .breadcrumb-separator {
+        margin: 0 0.3rem;
+      }
+    }
+  }
+}
+
+// SEO用の構造化データマークアップは追加のスタイル不要
+
+// SEO用の構造化データマークアップは追加のスタイル不要
+
+// レスポンシブ対応
+@media (max-width: 768px) {
+  .breadcrumb-container {
+    padding: 10px 0;
+    margin-bottom: 15px;
+    
+    .breadcrumb {
+      font-size: 13px;
+      flex-wrap: wrap;
+      
+      .breadcrumb-item:not(:last-child)::after {
+        margin: 0 6px;
+      }
+    }
+  }
+}
+
+// 特定ページでのパンくずリスト調整
+.article-detail .breadcrumb-container {
+  margin-bottom: 25px;
+}
+
+.page-detail .breadcrumb-container {
+  margin-bottom: 20px;
+}

@@ -33,6 +33,20 @@ class Article < ApplicationRecord
   scope :with_featured_image, -> { includes(:featured_image_attachment) }
   scope :with_associations, -> { includes(:user, :featured_image_attachment) }
   
+  # 検索用スコープ
+  scope :search_by_text, ->(query) {
+    return all if query.blank?
+    
+    search_term = "%#{query}%"
+    where(
+      "title ILIKE :term OR " \
+      "content_json::text ILIKE :term OR " \
+      "meta_description ILIKE :term OR " \
+      "(content_json ->> 'blocks')::text ILIKE :term",
+      term: search_term
+    )
+  }
+  
   # ルーティング用のパラメータ（slugが優先、なければid）
   def to_param
     if slug.present? && !slug.blank?

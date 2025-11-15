@@ -1,0 +1,96 @@
+- content_for :title, "求人応募詳細 - #{@job_application.name}"
+
+.admin-content-header
+  %h1.admin-title 求人応募詳細
+  %p.admin-subtitle= "#{@job_application.job.title}への応募"
+
+.admin-actions
+  = link_to '一覧に戻る', admin_job_applications_path, class: 'btn btn-outline-secondary'
+  = link_to "mailto:#{@job_application.email}", class: 'btn btn-primary' do
+    %i.fas.fa-envelope
+    メール送信
+
+.job-application-detail
+  .detail-sections
+    .detail-section
+      %h3.section-title 基本情報
+      .detail-grid
+        .detail-item
+          %dt 応募者名
+          %dd= @job_application.name
+        
+        .detail-item
+          %dt メールアドレス
+          %dd
+            = link_to @job_application.email, "mailto:#{@job_application.email}", class: 'email-link'
+        
+        .detail-item
+          %dt 電話番号
+          %dd= @job_application.phone
+        
+        .detail-item
+          %dt 実務経験年数
+          %dd #{@job_application.experience_years}年
+        
+        - if @job_application.portfolio_url.present?
+          .detail-item
+            %dt ポートフォリオURL
+            %dd
+              = link_to @job_application.portfolio_url, @job_application.portfolio_url, target: '_blank', rel: 'noopener', class: 'portfolio-link'
+
+    .detail-section
+      %h3.section-title 応募内容
+      
+      .detail-item.full-width
+        %dt 志望動機
+        %dd.motivation-text
+          = simple_format(@job_application.motivation)
+      
+      - if @job_application.cover_letter.present?
+        .detail-item.full-width
+          %dt 自己PR・補足事項
+          %dd.cover-letter-text
+            = simple_format(@job_application.cover_letter)
+
+    .detail-section
+      %h3.section-title 応募情報
+      .detail-grid
+        .detail-item
+          %dt 応募求人
+          %dd
+            = link_to @job_application.job.title, admin_job_path(@job_application.job), class: 'job-link'
+            %br
+            %small.text-muted= @job_application.job.job_type
+        
+        .detail-item
+          %dt 現在のステータス
+          %dd
+            %span.badge{class: "badge-#{@job_application.status_color}"}
+              = @job_application.status_display
+        
+        .detail-item
+          %dt 応募日時
+          %dd= @job_application.created_at.strftime('%Y年%m月%d日 %H:%M')
+        
+        .detail-item
+          %dt 最終更新
+          %dd= @job_application.updated_at.strftime('%Y年%m月%d日 %H:%M')
+
+.status-management
+  %h3.section-title ステータス管理
+  .status-actions
+    - JobApplication.statuses.each do |key, value|
+      - if @job_application.status != key
+        = link_to update_status_admin_job_application_path(@job_application, status: key), 
+          method: :patch, class: "btn btn-#{JobApplication.new.tap{|ja| ja.status = key}.status_color}" do
+          = JobApplication.new.tap{|ja| ja.status = key}.status_display
+          に変更
+
+.danger-zone
+  %h3.section-title 危険な操作
+  %p この応募を完全に削除します。この操作は取り消せません。
+  = link_to admin_job_application_path(@job_application), method: :delete, 
+    data: { confirm: '本当にこの応募を削除しますか？この操作は取り消せません。' }, 
+    class: 'btn btn-danger' do
+    %i.fas.fa-trash
+    応募を削除

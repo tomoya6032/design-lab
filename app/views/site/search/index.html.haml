@@ -1,0 +1,183 @@
+- content_for :title, @query.present? ? "「#{@query}」の検索結果" : "サイト内検索"
+
+%section.hero-section{ style: @site_setting.hero_background_image.present? ? "background-image: url(#{url_for(@site_setting.hero_background_image)}); background-size: cover; background-position: center 40%; background-repeat: no-repeat;" : '' }
+  .hero-overlay
+  .container
+    .hero-content
+      %h1.hero-title 
+        = @query.present? ? "「#{@query}」の検索結果" : "サイト内検索"
+      %p.hero-description
+        = @query.present? ? "#{@total_count}件の結果が見つかりました" : "記事、ページ、求人、制作実績から検索できます"
+
+/ パンクズリスト
+.breadcrumb-section
+  .container
+    %nav.breadcrumb
+      %ol
+        %li
+          = link_to "ホーム", root_path
+        %li
+          %span サイト内検索
+        - if @query.present?
+          %li
+            %span= "「#{@query}」の検索結果"
+
+.search-results-page
+  .container
+    / 検索フォーム
+    .search-form-section
+      = form_with url: search_path, method: :get, local: true, class: 'search-form' do |form|
+        .search-input-group
+          = form.text_field :q, value: @query, placeholder: "キーワードを入力してください", class: 'search-input'
+          = form.submit "検索", class: 'search-button'
+
+    - if @query.present?
+      / 検索結果サマリー
+      .search-summary
+        %h2.summary-title 検索結果：#{@total_count}件
+        .result-counts
+          - if @counts[:articles] > 0
+            %span.count-item 
+              %i.icon-article 📰
+              コラム: #{@counts[:articles]}件
+          - if @counts[:pages] > 0
+            %span.count-item
+              %i.icon-page 📄
+              固定ページ: #{@counts[:pages]}件
+          - if @counts[:jobs] > 0
+            %span.count-item
+              %i.icon-job 💼
+              求人: #{@counts[:jobs]}件
+          - if @counts[:portfolios] > 0
+            %span.count-item
+              %i.icon-portfolio 🎨
+              制作実績: #{@counts[:portfolios]}件
+
+      / 検索結果表示
+      .search-results
+        / コラム（記事）
+        - if @results[:articles].any?
+          .result-section
+            %h3.section-title
+              %i.section-icon 📰
+              コラム（#{@counts[:articles]}件）
+            .result-grid
+              - @results[:articles].each do |article|
+                .result-item
+                  .item-content
+                    .item-meta
+                      %span.breadcrumb-path ホーム > コラム > #{article.title}
+                      %time.published-date= article.published_at&.strftime("%Y年%m月%d日")
+                    %h4.item-title
+                      = link_to article.title, site_article_path(article)
+                    %p.item-excerpt= truncate(strip_tags(article.meta_description || ""), length: 120)
+                    .item-tags
+                      - if article.categories.any?
+                        - article.categories.limit(3).each do |category|
+                          %span.tag-item= category.name
+
+        / 固定ページ
+        - if @results[:pages].any?
+          .result-section
+            %h3.section-title
+              %i.section-icon 📄
+              固定ページ（#{@counts[:pages]}件）
+            .result-grid
+              - @results[:pages].each do |page|
+                .result-item
+                  .item-content
+                    .item-meta
+                      %span.breadcrumb-path ホーム > ページ > #{page.title}
+                      %time.updated-date= page.updated_at.strftime("%Y年%m月%d日更新")
+                    %h4.item-title
+                      = link_to page.title, page_path(page)
+                    %p.item-excerpt= truncate(strip_tags(page.meta_description || ""), length: 120)
+
+        / 求人
+        - if @results[:jobs].any?
+          .result-section
+            %h3.section-title
+              %i.section-icon 💼
+              求人情報（#{@counts[:jobs]}件）
+            .result-grid
+              - @results[:jobs].each do |job|
+                .result-item
+                  .item-content
+                    .item-meta
+                      %span.breadcrumb-path ホーム > 求人情報 > #{job.title}
+                      %span.job-type= job.job_type
+                    %h4.item-title
+                      = link_to job.title, site_job_path(job)
+                    %p.item-excerpt= truncate(strip_tags(job.description || ""), length: 120)
+                    .job-details
+                      - if job.salary_range.present?
+                        %span.detail-item
+                          %i.icon �
+                          = job.salary_range
+                      - if job.capacity.present?
+                        %span.detail-item
+                          %i.icon �
+                          = job.capacity
+
+        / 制作実績
+        - if @results[:portfolios].any?
+          .result-section
+            %h3.section-title
+              %i.section-icon 🎨
+              制作実績（#{@counts[:portfolios]}件）
+            .result-grid
+              - @results[:portfolios].each do |portfolio|
+                .result-item
+                  .item-content
+                    .item-meta
+                      %span.breadcrumb-path ホーム > 制作実績 > #{portfolio.title}
+                      %span.production-period= portfolio.production_period
+                    %h4.item-title
+                      = link_to portfolio.title, site_portfolio_path(portfolio)
+                    %p.item-excerpt= truncate(strip_tags(portfolio.description || ""), length: 120)
+
+        / 結果がない場合
+        - if @total_count == 0
+          .no-results
+            .no-results-content
+              %div{style: 'font-size: 4rem; margin-bottom: 20px;'} 🔍
+              %h3 検索結果が見つかりませんでした
+              %p 「#{@query}」に該当する内容が見つかりませんでした。
+              .suggestions
+                %h4 検索のヒント：
+                %ul
+                  %li キーワードのスペルを確認してください
+                  %li より一般的なキーワードで検索してみてください
+                  %li キーワードを減らしてみてください
+                  %li 関連するキーワードで検索してみてください
+
+    - else
+      / 初期状態（検索前）
+      .search-guide
+        %h2 サイト内検索
+        %p 記事、ページ、求人情報、制作実績から情報を検索できます。キーワードを入力して検索してください。
+        
+        .search-categories
+          .category-item
+            .category-icon 📰
+            .category-content
+              %h3 コラム
+              %p 最新の記事やニュース
+          
+          .category-item
+            .category-icon 📄
+            .category-content
+              %h3 固定ページ
+              %p 会社情報やサービス案内
+          
+          .category-item
+            .category-icon 💼
+            .category-content
+              %h3 求人情報
+              %p 採用情報や職種
+          
+          .category-item
+            .category-icon 🎨
+            .category-content
+              %h3 制作実績
+              %p 過去の制作事例

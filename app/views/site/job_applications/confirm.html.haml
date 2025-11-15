@@ -1,0 +1,84 @@
+- content_for :title, "#{@job.title} - エントリー内容確認"
+
+%section.job-application-hero
+  .container
+    .hero-content
+      %h1.page-title #{@job.title}
+      %h2.form-title エントリー内容確認
+      %p.form-description 入力内容をご確認の上、送信してください。
+
+%section.job-application-confirm-section
+  .container
+    .confirm-wrapper
+      .confirm-container
+        = form_with model: [@job, @job_application], url: site_job_job_applications_path(@job), method: :post, local: true, html: { class: 'job-application-confirm-form' } do |form|
+          
+          .confirm-section
+            %h3.section-title 基本情報
+            
+            .confirm-group
+              %dt お名前
+              %dd= @job_application.name
+              = form.hidden_field :name, value: @job_application.name
+            
+            .confirm-group
+              %dt メールアドレス
+              %dd= @job_application.email
+              = form.hidden_field :email, value: @job_application.email
+            
+            .confirm-group
+              %dt 電話番号
+              %dd= @job_application.phone
+              = form.hidden_field :phone, value: @job_application.phone
+
+          .confirm-section
+            %h3.section-title 経験・スキル
+            
+            .confirm-group
+              %dt 実務経験年数
+              %dd #{@job_application.experience_years}年
+              = form.hidden_field :experience_years, value: @job_application.experience_years
+            
+            - if @job_application.portfolio_url.present?
+              .confirm-group
+                %dt ポートフォリオURL
+                %dd= link_to @job_application.portfolio_url, @job_application.portfolio_url, target: '_blank', rel: 'noopener'
+                = form.hidden_field :portfolio_url, value: @job_application.portfolio_url
+
+          .confirm-section
+            %h3.section-title 志望動機・自己PR
+
+            .confirm-group
+              %dt 志望動機
+              %dd.pre-formatted= simple_format(@job_application.motivation)
+              = form.hidden_field :motivation, value: @job_application.motivation
+            
+            - if @job_application.cover_letter.present?
+              .confirm-group
+                %dt 自己PR・補足事項
+                %dd.pre-formatted= simple_format(@job_application.cover_letter)
+                = form.hidden_field :cover_letter, value: @job_application.cover_letter
+
+          .form-actions
+            .action-buttons
+              = link_to new_site_job_job_application_path(@job), class: 'btn btn-outline-secondary btn-lg' do
+                %i.icon-edit
+                修正する
+          = form.submit 'エントリーを送信', class: 'btn btn-primary btn-lg'
+
+      .job-summary-sidebar
+        .job-info-card
+          %h3.card-title 応募職種
+          .job-info
+            %h4.job-title= @job.title
+            %p.job-type= @job.job_type
+            
+            .job-details
+              - if @job.capacity.present?
+                .detail-item
+                  %strong 募集人数:
+                  %span= @job.capacity
+              - if @job.salary_range.present?
+                .detail-item
+                  %strong 想定年収:
+                  %span= @job.salary_range

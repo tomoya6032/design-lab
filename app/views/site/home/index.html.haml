@@ -153,13 +153,17 @@
                 %span.device-label スマートフォン画面（#{portfolio.sp_images.count}枚）
             
             .portfolio-content
-              %h3.portfolio-title= portfolio.title
+              %h3.portfolio-title
+                = link_to portfolio.title, site_portfolio_path(portfolio), class: 'portfolio-title-link'
               .portfolio-meta
                 %span.production-period
                   %i.icon-clock
                   制作期間: #{portfolio.production_period}
               %p.portfolio-description= truncate(portfolio.description, length: 120)
-            -#   %a.portfolio-link{href: "#", onclick: "return false;"} 詳細を見る
+              .portfolio-actions
+                = link_to '詳細を見る', site_portfolio_path(portfolio), class: 'btn btn-outline-primary btn-sm'
+      .section-footer.text-center
+        = link_to '制作実績一覧を見る', site_portfolios_path, class: 'btn btn-outline-primary btn-lg'
 - else
   %section.no-portfolios-section
     .container
@@ -249,7 +253,7 @@
           .contact-info
             %p.phone-number
               %i.icon-phone
-              03-XXXX-XXXX
+              070-8903-0836
             %small 平日 9:00〜18:00
       
       .contact-cta-visual

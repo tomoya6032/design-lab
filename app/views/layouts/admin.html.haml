@@ -16,6 +16,7 @@
     = yield(:head) if content_for?(:head)
     = javascript_include_tag 'admin/rich_editor', 'data-turbo-track': 'reload'
     = javascript_include_tag 'admin/image_upload', 'data-turbo-track': 'reload'
+    %script{src: 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js'}
   %body.admin-body
     %header.admin-header
       .admin-header-content
@@ -63,6 +64,10 @@
             = link_to admin_jobs_path, class: 'admin-menu-link' do
               %i.icon.icon-jobs
               求人管理
+          %li.admin-menu-item
+            = link_to admin_job_applications_path, class: 'admin-menu-link' do
+              %i.icon.icon-applications
+              求人応募管理
           %li.admin-menu-item
             = link_to admin_users_path, class: 'admin-menu-link' do
               %i.icon.icon-users

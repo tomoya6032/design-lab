@@ -150,12 +150,18 @@
   border-bottom: 1px solid #e9ecef;
   padding: 0;
   
+  .nav-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    @include container;
+  }
+  
   .main-nav-list {
     display: flex;
     list-style: none;
     margin: 0;
     padding: 0;
-    @include container;
   }
   
   .main-nav-item {
@@ -176,6 +182,90 @@
       color: $primary-color;
       background-color: rgba($primary-color, 0.05);
       border-bottom-color: $primary-color;
+    }
+  }
+  
+  // ヘッダー検索フォーム
+  .header-search-form {
+    display: flex;
+    align-items: center;
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 25px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    margin-left: 20px;
+    
+    &:hover, &:focus-within {
+      border-color: $primary-color;
+      box-shadow: 0 0 0 3px rgba($primary-color, 0.1);
+      background: white;
+    }
+    
+    .header-search-input {
+      border: none;
+      outline: none;
+      padding: 10px 16px;
+      font-size: 14px;
+      width: 200px;
+      background: transparent;
+      transition: width 0.3s ease;
+      color: #495057;
+      
+      &:focus {
+        width: 250px;
+      }
+      
+      &::placeholder {
+        color: #6c757d;
+      }
+    }
+    
+    .header-search-button {
+      border: none;
+      background: $primary-color;
+      color: white;
+      padding: 10px 16px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 500;
+      
+      &:hover {
+        background: darken($primary-color, 10%);
+        transform: translateX(-2px);
+      }
+    }
+  }
+}
+
+// レスポンシブ対応
+@media (max-width: 768px) {
+  .main-navigation {
+    .nav-wrapper {
+      flex-direction: column;
+      gap: 15px;
+      padding: 15px 20px;
+    }
+    
+    .main-nav-list {
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    
+    .header-search {
+      margin-left: 0;
+      
+      .header-search-input {
+        width: 150px;
+        
+        &:focus {
+          width: 180px;
+        }
+      }
     }
   }
 }
@@ -221,47 +311,60 @@
 
 // Responsive Design
 @media (max-width: 768px) {
+  .site-header {
+    padding: 10px 0;
+  }
+  
   .navbar {
+    flex-direction: column;
+    gap: 15px;
     padding: 15px 20px;
+    align-items: stretch;
   }
   
   .navbar-brand {
     font-size: 1.25rem;
+    text-align: center;
   }
   
-  .navbar-icons {
-    gap: 12px;
+  .navbar-nav {
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
   }
   
-  .icon-link {
-    width: 36px;
-    height: 36px;
-  }
-  
-  .icon-image {
-    width: 18px;
-    height: 18px;
+  .nav-item {
+    width: 100%;
   }
   
   .nav-link {
-    padding: 6px 12px;
-    font-size: 0.9rem;
+    padding: 12px 16px;
+    font-size: 0.95rem;
+    text-align: center;
+    border-radius: 8px;
+    background: rgba($primary-color, 0.05);
+    
+    &:hover {
+      background: rgba($primary-color, 0.1);
+    }
   }
   
-  .main-navigation {
-    .main-nav-list {
-      flex-direction: column;
-      padding: 0 20px;
+  .header-search-form {
+    margin-left: 0;
+    width: 100%;
+    
+    .header-search-input {
+      width: 100%;
+      padding: 12px 16px;
+      
+      &:focus {
+        width: 100%;
+      }
     }
     
-    .main-nav-link {
-      padding: 12px 0;
-      border-bottom: 1px solid #e9ecef;
-      border-right: none;
-      
-      &:last-child {
-        border-bottom: none;
-      }
+    .header-search-button {
+      padding: 12px 20px;
+      white-space: nowrap;
     }
   }
   
@@ -269,6 +372,11 @@
     .footer-content {
       flex-direction: column;
       text-align: center;
+      gap: 15px;
+    }
+    
+    .footer-links {
+      justify-content: center;
     }
   }
 }

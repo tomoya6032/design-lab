@@ -16,25 +16,29 @@
         #{@site_setting.custom_css}
   %body.site-body
     %header.site-header
-      .header-container
-        .site-branding
-          %h1.site-title
-            = link_to root_path do
-              - if @site_setting&.logo_url.present?
-                %img.site-logo{src: @site_setting.logo_url, alt: @site_setting.site_name}
-              - else
-                = @site_setting&.site_name || 'Design Lab'
-          - if @site_setting&.site_description.present?
-            %p.site-description= @site_setting.site_description
+      %nav.navbar
+        = link_to root_path, class: 'navbar-brand' do
+          - if @site_setting&.logo_url.present?
+            %img.site-logo{src: @site_setting.logo_url, alt: @site_setting.site_name, style: 'height: 32px; width: auto;'}
+          - else
+            = @site_setting&.site_name || 'Design Lab'
         
-        %nav.main-navigation
-          %ul.nav-menu
-            %li.nav-item
-              = link_to 'ホーム', root_path, class: 'nav-link'
-            %li.nav-item
-              = link_to 'ブログ', '#', class: 'nav-link'
-            %li.nav-item
-              = link_to 'お問い合わせ', '#', class: 'nav-link'
+        %ul.navbar-nav
+          %li.nav-item
+            = link_to 'ホーム', root_path, class: 'nav-link'
+          %li.nav-item
+            = link_to 'コラム', site_articles_path, class: 'nav-link'
+          %li.nav-item
+            = link_to '制作実績', site_portfolios_path, class: 'nav-link'
+          %li.nav-item
+            = link_to '求人情報', site_jobs_path, class: 'nav-link'
+          %li.nav-item
+            = link_to 'お問い合わせ', contact_path, class: 'nav-link'
+          %li.nav-item
+            = form_with url: search_path, method: :get, class: 'header-search-form', local: true do |f|
+              = f.text_field :q, placeholder: 'サイト内検索...', class: 'header-search-input', value: params[:q]
+              = f.button type: 'submit', class: 'header-search-button' do
+                %span 検索
     
     %main.site-main
       = yield

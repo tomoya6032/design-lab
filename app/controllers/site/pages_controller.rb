@@ -8,6 +8,9 @@ class Site::PagesController < ApplicationController
   end
   
   def show
+    add_breadcrumb('固定ページ', site_pages_path)
+    add_breadcrumb(@page.title)
+    
     unless @page.published?
       redirect_to root_path, alert: 'ページが見つかりません'
       return

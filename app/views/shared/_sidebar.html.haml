@@ -1,5 +1,5 @@
 .sidebar-widget.search-widget
-  %h3.widget-title サイト内検索
+  %h3.widget-title コラム内検索
   = form_with url: site_articles_path, method: :get, local: true, class: 'search-form' do |form|
     .search-input-group
       = form.text_field :search, placeholder: 'キーワードを入力...', value: params[:search], class: 'search-input'

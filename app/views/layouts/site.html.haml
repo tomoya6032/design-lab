@@ -35,19 +35,32 @@
     
     %nav.main-navigation
       .container
-        %ul.main-nav-list
-          %li.main-nav-item
-            = link_to 'ホーム', root_path, class: 'main-nav-link'
-          %li.main-nav-item
-            = link_to '求人情報', site_jobs_path, class: 'main-nav-link'
-          %li.main-nav-item
-            = link_to 'お問い合わせ', contact_path, class: 'main-nav-link'
-          - if @navigation_pages.present?
-            - @navigation_pages.limit(2).each do |page|
-              %li.main-nav-item
-                = link_to page.title, site_page_path(page), class: 'main-nav-link'
+        .nav-wrapper
+          %ul.main-nav-list
+            %li.main-nav-item
+              = link_to 'ホーム', root_path, class: 'main-nav-link'
+            -# %li.main-nav-item
+            -#   = link_to 'コラム', site_articles_path, class: 'main-nav-link'
+            %li.main-nav-item
+              = link_to '制作実績', site_portfolios_path, class: 'main-nav-link'
+            %li.main-nav-item
+              = link_to '求人情報', site_jobs_path, class: 'main-nav-link'
+            %li.main-nav-item
+              = link_to 'お問い合わせ', contact_path, class: 'main-nav-link'
+            - if @navigation_pages.present?
+              - @navigation_pages.limit(2).each do |page|
+                %li.main-nav-item
+                  = link_to page.title, site_page_path(page), class: 'main-nav-link'
+          
+          / 検索フォーム
+          .header-search
+            = form_with url: search_path, method: :get, local: true, class: 'header-search-form' do |form|
+              = form.text_field :q, placeholder: "サイト内検索...", class: 'header-search-input'
+              = form.submit "🔍検索する", class: 'header-search-button'
     
     %main.site-main
+      .container
+        = render 'shared/breadcrumb' if breadcrumbs.any?
       = yield
     
     %footer.site-footer

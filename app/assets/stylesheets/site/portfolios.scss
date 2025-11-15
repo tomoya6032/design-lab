@@ -1,0 +1,368 @@
+// 制作実績ページのスタイル
+
+.portfolios-page-header {
+  background-color: #fafafa;
+  padding: 3rem 0 2rem;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid #e9ecef;
+
+  .page-header-content {
+    text-align: center;
+
+    .page-title {
+      font-size: 2.5rem;
+      font-weight: normal;
+      color: #000000;
+      margin-bottom: 1rem;
+    }
+
+    .page-description {
+      font-size: 1.2rem;
+      font-weight: normal;
+      color: #000000;
+      margin-bottom: 0;
+    }
+  }
+}
+
+.portfolios-section {
+  padding: 2rem 0;
+
+  .portfolio-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid #e9ecef;
+    border-radius: 0.5rem;
+    overflow: hidden;
+
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    .card-img-wrapper {
+      position: relative;
+      overflow: hidden;
+      height: 200px;
+
+      .portfolio-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+      }
+
+      .portfolio-placeholder {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        background-color: #f8f9fa;
+        color: #6c757d;
+
+        .placeholder-icon {
+          font-size: 3rem;
+        }
+      }
+    }
+
+    &:hover .portfolio-img {
+      transform: scale(1.05);
+    }
+
+    .card-body {
+      padding: 1.5rem;
+
+      .portfolio-meta {
+        font-size: 0.875rem;
+        color: #6c757d;
+
+        .production-period-badge {
+          display: inline-block;
+          background-color: #f8f9fa;
+          border: 1px solid #e9ecef;
+          color: #495057;
+          padding: 0.4rem 0.8rem;
+          border-radius: 0.5rem;
+          font-size: 0.8rem;
+          font-weight: 500;
+          white-space: nowrap;
+          transition: all 0.2s ease;
+
+          &:hover {
+            background-color: #e9ecef;
+            border-color: #dee2e6;
+          }
+        }
+      }
+
+      .portfolio-title {
+        margin-bottom: 0.75rem;
+
+        .portfolio-title-link {
+          color: #2c3e50;
+          text-decoration: none;
+          font-weight: 600;
+          transition: color 0.3s ease;
+
+          &:hover {
+            color: #007bff;
+            text-decoration: none;
+          }
+        }
+      }
+
+      .portfolio-actions {
+        .btn {
+          transition: all 0.3s ease;
+          
+          &:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+          }
+        }
+      }
+
+      .portfolio-excerpt {
+        color: #6c757d;
+        line-height: 1.6;
+        margin-bottom: 1rem;
+      }
+    }
+  }
+}
+
+.no-portfolios {
+  padding: 4rem 0;
+
+  h3 {
+    color: #495057;
+    font-weight: 600;
+  }
+}
+
+// レスポンシブ対応
+@media (max-width: 768px) {
+  .portfolios-page-header {
+    padding: 2rem 0 1.5rem;
+
+    .page-title {
+      font-size: 2rem;
+    }
+
+    .page-description {
+      font-size: 1rem;
+    }
+  }
+
+  .portfolios-section {
+    .portfolio-card {
+      .card-img-wrapper {
+        height: 180px;
+      }
+    }
+  }
+}
+
+@media (max-width: 576px) {
+  .portfolios-page-header {
+    .page-title {
+      font-size: 1.75rem;
+    }
+  }
+
+  .portfolios-section {
+    .portfolio-card {
+      .card-img-wrapper {
+        height: 160px;
+      }
+
+      .card-body {
+        padding: 1rem;
+      }
+    }
+  }
+}
+
+// 制作実績詳細ページ
+.portfolio-detail {
+  .article-layout {
+    max-width: 1200px;
+    margin: 0 auto;
+    margin-bottom: 3rem;
+
+    .main-content {
+      .portfolio-header {
+        margin-bottom: 2rem;
+        padding-bottom: 1.5rem;
+        border-bottom: 2px solid #e9ecef;
+
+        .portfolio-title {
+          font-size: 2.5rem;
+          font-weight: 700;
+          color: #2c3e50;
+          margin-bottom: 1rem;
+          line-height: 1.3;
+        }
+
+        .portfolio-meta {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 1.5rem;
+          color: #6c757d;
+          font-size: 0.95rem;
+
+          .production-period {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+
+            i {
+              color: #007bff;
+            }
+          }
+
+          .created-date {
+            display: flex;
+            align-items: center;
+          }
+        }
+      }
+
+      .portfolio-description {
+        margin-bottom: 3rem;
+
+        .section-title {
+          font-size: 1.75rem;
+          font-weight: 600;
+          color: #2c3e50;
+          margin-bottom: 1.5rem;
+          padding-bottom: 0.5rem;
+          border-bottom: 2px solid #007bff;
+          display: inline-block;
+        }
+
+        .description-content {
+          font-size: 1.1rem;
+          line-height: 1.8;
+          color: #495057;
+        }
+      }
+
+      .portfolio-images-section {
+        margin-bottom: 3rem;
+
+        &:last-child {
+          margin-bottom: 2rem;
+        }
+
+        .section-title {
+          font-size: 1.75rem;
+          font-weight: 600;
+          color: #2c3e50;
+          margin-bottom: 1.5rem;
+          padding-bottom: 0.5rem;
+          border-bottom: 2px solid #007bff;
+          display: inline-block;
+        }
+
+        .portfolio-images-grid {
+          display: grid;
+          gap: 2rem;
+
+          &.pc-grid {
+            grid-template-columns: 1fr;
+          }
+
+          &.sp-grid {
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            max-width: 800px;
+          }
+
+          .portfolio-image-item {
+            background: #fff;
+            border-radius: 0.5rem;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+            &:hover {
+              transform: translateY(-5px);
+              box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+            }
+
+            .portfolio-image {
+              width: 100%;
+              height: auto;
+              display: block;
+            }
+
+            .image-caption {
+              padding: 1rem;
+              text-align: center;
+              font-size: 0.9rem;
+              color: #6c757d;
+              background-color: #f8f9fa;
+            }
+
+            &.sp-image-item {
+              .portfolio-image {
+                max-height: 600px;
+                object-fit: contain;
+              }
+            }
+          }
+        }
+      }
+
+      .portfolio-actions {
+        text-align: center;
+        padding: 2rem 0;
+        border-top: 1px solid #e9ecef;
+      }
+    }
+  }
+}
+
+// レスポンシブ対応 - 詳細ページ
+
+@media (max-width: 768px) {
+  .portfolio-detail {
+    .article-layout .main-content {
+      .portfolio-header {
+        .portfolio-title {
+          font-size: 2rem;
+        }
+
+        .portfolio-meta {
+          flex-direction: column;
+          gap: 0.75rem;
+        }
+      }
+
+      .portfolio-description .section-title,
+      .portfolio-images-section .section-title {
+        font-size: 1.5rem;
+      }
+
+      .portfolio-images-section .portfolio-images-grid {
+        &.sp-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 576px) {
+  .portfolio-detail {
+    .article-layout .main-content {
+      .portfolio-header .portfolio-title {
+        font-size: 1.75rem;
+      }
+
+      .portfolio-images-section .portfolio-images-grid {
+        gap: 1.5rem;
+      }
+    }
+  }
+}

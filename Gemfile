@@ -1,6 +1,11 @@
-source "https://rubygems.org"
+source "https://rubygems.org# Add HTTP asset caching/compression and X-Sendfile acceleration to Puma [https://github.com/basecamp/thruster/]
+gem "thruster", require: false
 
-# Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
+# Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
+gem "image_processing", "~> 1.2"
+
+# AWS SDK for S3 storage
+gem "aws-sdk-s3", require: falseBundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "~> 8.0.2"
 # Use postgresql as the database for Active Record
 gem "pg", "~> 1.1"

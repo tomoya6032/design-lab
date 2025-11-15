@@ -15,15 +15,22 @@
 @import 'site/layout';
 @import 'site/home';
 @import 'site/articles';
+@import 'site/portfolios';
 @import 'site/jobs';
+@import 'site/job_applications';
 @import 'site/contact_cta';
 @import 'site/contacts';
+@import 'site/search';
+
+// コンポーネント
+@import 'components/breadcrumb';
 
 // 管理画面スタイル  
 @import 'admin/layout';
 @import 'admin/dashboard';
 @import 'admin/forms';
 @import 'admin/jobs';
+@import 'admin/job_applications';
 @import 'admin/media_edit';
 @import 'admin/media_upload';
 
@@ -290,88 +297,6 @@ body {
 /* フロントエンド用スタイル */
 .site-body {
   background-color: #ffffff;
-}
-
-.site-header {
-  background-color: #ffffff;
-  border-bottom: 1px solid #e1e5e9;
-  padding: 15px 0;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 20px;
-}
-
-.navbar-brand {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: #007bff;
-  text-decoration: none;
-  margin: 0;
-}
-
-.navbar-brand:hover {
-  color: #0056b3;
-  text-decoration: none;
-}
-
-.navbar-nav {
-  display: flex;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  gap: 25px;
-  align-items: center;
-}
-
-.nav-item {
-  margin: 0;
-}
-
-.nav-link {
-  color: #495057;
-  text-decoration: none;
-  font-weight: 500;
-  font-size: 0.95rem;
-  padding: 8px 16px;
-  border-radius: 6px;
-  transition: all 0.3s ease;
-}
-
-.nav-link:hover {
-  color: #007bff;
-  background-color: #f8f9fa;
-  text-decoration: none;
-}
-
-/* レスポンシブ対応 - ヘッダー */
-@media (max-width: 768px) {
-  .navbar {
-    flex-direction: column;
-    gap: 15px;
-    padding: 15px 20px;
-  }
-  
-  .navbar-nav {
-    gap: 15px;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-  
-  .navbar-brand {
-    font-size: 1.25rem;
-  }
-  
-  .nav-link {
-    padding: 6px 12px;
-    font-size: 0.9rem;
-  }
 }
 
 /* ヒーローセクション */

@@ -1,0 +1,93 @@
+- content_for :title, "#{@job.title} - エントリーフォーム"
+
+%section.job-application-hero
+  .container
+    .hero-content
+      %h1.page-title #{@job.title}
+      %h2.form-title エントリーフォーム
+      %p.form-description 下記フォームに必要事項をご記入の上、送信してください。
+
+%section.job-application-form-section
+  .container
+    .form-wrapper
+      .form-container
+        = form_with model: [@job, @job_application], url: site_job_job_applications_path(@job), method: :post, local: true, html: { class: 'job-application-form' } do |form|
+          - if @job_application.errors.any?
+            .alert.alert-danger
+              %h4 入力に不備があります
+              %ul
+                - @job_application.errors.full_messages.each do |message|
+                  %li= message
+
+          .form-section
+            %h3.section-title 基本情報
+            
+            .form-group
+              = form.label :name, 'お名前', class: 'form-label required'
+              = form.text_field :name, class: 'form-control', placeholder: '山田 太郎'
+            
+            .form-group
+              = form.label :email, 'メールアドレス', class: 'form-label required'
+              = form.email_field :email, class: 'form-control', placeholder: 'example@email.com'
+            
+            .form-group
+              = form.label :phone, '電話番号', class: 'form-label required'
+              = form.text_field :phone, class: 'form-control', placeholder: '090-1234-5678'
+
+          .form-section
+            %h3.section-title 経験・スキル
+            
+            .form-group
+              = form.label :experience_years, '実務経験年数', class: 'form-label required'
+              = form.number_field :experience_years, class: 'form-control', min: 0, placeholder: '3'
+              %small.form-text.text-muted 関連する実務経験年数をご記入ください（未経験の場合は0）
+            
+            .form-group
+              = form.label :portfolio_url, 'ポートフォリオURL', class: 'form-label'
+              = form.url_field :portfolio_url, class: 'form-control', placeholder: 'https://your-portfolio.com'
+              %small.form-text.text-muted 作品集やGitHubプロフィールなどがあればご入力ください
+
+          .form-section
+            %h3.section-title 志望動機・自己PR
+
+            .form-group
+              = form.label :motivation, '志望動機', class: 'form-label required'
+              = form.text_area :motivation, class: 'form-control', rows: 6, placeholder: 'この職種・当社を志望する理由をお聞かせください'
+              %small.form-text.text-muted 最大2000文字
+            
+            .form-group
+              = form.label :cover_letter, '自己PR・補足事項', class: 'form-label'
+              = form.text_area :cover_letter, class: 'form-control', rows: 4, placeholder: 'あなたの強みや特技、補足したいことがあればご記入ください'
+              %small.form-text.text-muted 最大2000文字
+
+          .form-actions
+            .action-buttons
+              = link_to site_job_path(@job), class: 'btn btn-outline-secondary btn-lg' do
+                %i.icon-arrow-left
+                求人詳細に戻る
+          = form.submit '確認画面へ', name: 'preview', class: 'btn btn-outline-primary btn-lg'
+          = form.submit 'そのまま送信', class: 'btn btn-primary btn-lg'
+
+      .job-summary-sidebar
+        .job-info-card
+          %h3.card-title 応募職種
+          .job-info
+            %h4.job-title= @job.title
+            %p.job-type= @job.job_type
+            
+            .job-details
+              - if @job.capacity.present?
+                .detail-item
+                  %strong 募集人数:
+                  %span= @job.capacity
+              - if @job.salary_range.present?
+                .detail-item
+                  %strong 想定年収:
+                  %span= @job.salary_range
+        
+        .contact-info-card
+          %h3.card-title お問い合わせ
+          %p ご不明な点がございましたら、お気軽にお問い合わせください。
+          = link_to contact_path, class: 'btn btn-outline-primary w-100' do
+            %i.icon-mail
+            お問い合わせフォーム

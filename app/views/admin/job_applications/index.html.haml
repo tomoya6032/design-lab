@@ -1,0 +1,92 @@
+- content_for :title, '求人応募管理'
+
+.admin-content-header
+  %h1.admin-title 求人応募管理
+  %p.admin-subtitle 応募者の情報を確認し、選考状況を管理できます
+
+.admin-actions
+  .filter-section
+    = form_with url: admin_job_applications_path, method: :get, local: true, class: 'filter-form' do |f|
+      .filter-group
+        = f.label :status, 'ステータス', class: 'filter-label'
+        = f.select :status, options_for_select([['すべて', ''], ['応募済み', 'submitted'], ['選考中', 'reviewing'], ['面接予定', 'interview'], ['採用決定', 'accepted'], ['不採用', 'rejected']], params[:status]), {}, { class: 'form-control filter-select' }
+      
+      .filter-group
+        = f.label :job_id, '求人', class: 'filter-label'
+        = f.select :job_id, options_from_collection_for_select(@jobs, :id, :title, params[:job_id]), { prompt: 'すべての求人' }, { class: 'form-control filter-select' }
+      
+      .filter-actions
+        = f.submit 'フィルター', class: 'btn btn-primary'
+        = link_to '条件をクリア', admin_job_applications_path, class: 'btn btn-outline-secondary'
+
+.status-summary
+  %h3 応募状況サマリー
+  .status-cards
+    - JobApplication.statuses.each do |key, value|
+      .status-card{class: "status-#{key}"}
+        .status-count= @status_counts[key] || 0
+        .status-label= JobApplication.new.tap{|ja| ja.status = key}.status_display
+
+.admin-table-container
+  - if @job_applications.any?
+    %table.admin-table
+      %thead
+        %tr
+          %th ID
+          %th 求人
+          %th 応募者名
+          %th メールアドレス
+          %th 経験年数
+          %th ステータス
+          %th 応募日時
+          %th 操作
+      %tbody
+        - @job_applications.each do |application|
+          %tr
+            %td= application.id
+            %td
+              = link_to application.job.title, admin_job_path(application.job), class: 'job-link'
+              %br
+              %small.text-muted= application.job.job_type
+            %td
+              %strong= application.name
+              %br
+              %small.text-muted= application.phone
+            %td
+              = link_to application.email, "mailto:#{application.email}", class: 'email-link'
+            %td
+              #{application.experience_years}年
+            %td
+              %span.badge{class: "badge-#{application.status_color}"}
+                = application.status_display
+            %td
+              = application.created_at.strftime('%Y/%m/%d %H:%M')
+            %td.table-actions
+              = link_to '詳細', admin_job_application_path(application), class: 'btn btn-sm btn-outline-primary'
+              .dropdown
+                %button.btn.btn-sm.btn-secondary.dropdown-toggle{type: 'button', 'data-bs-toggle': 'dropdown', 'aria-expanded': 'false'}
+                  %span.badge{class: "badge-#{application.status_color}"}
+                    = application.status_display
+                  %span.dropdown-arrow ▼
+                .dropdown-menu
+                  - JobApplication.statuses.each do |key, value|
+                    - status_obj = JobApplication.new.tap{|ja| ja.status = key}
+                    - next if key == application.status
+                    = form_with url: update_status_admin_job_application_path(application), method: :patch, local: true, class: 'status-form' do |f|
+                      = f.hidden_field :status, value: key
+                      = f.button type: :submit, class: 'dropdown-item', data: { confirm: "ステータスを「#{status_obj.status_display}」に変更しますか？" } do
+                        %span.badge{class: "badge-#{status_obj.status_color}"}
+                          = status_obj.status_display
+              = link_to admin_job_application_path(application), method: :delete, 
+                data: { confirm: '本当に削除しますか？' }, class: 'btn btn-sm btn-outline-danger' do
+                🗑️ 削除
+
+  - else
+    .empty-state
+      .empty-icon 📝
+      %h3 応募がありません
+      %p まだ求人への応募がありません。
+
+- if @job_applications.respond_to?(:current_page)
+  .admin-pagination
+    = paginate @job_applications

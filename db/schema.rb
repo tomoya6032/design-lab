@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_11_11_001934) do
+ActiveRecord::Schema[8.0].define(version: 2025_11_15_011113) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -100,6 +100,22 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_11_001934) do
     t.index ["created_at"], name: "index_contacts_on_created_at"
     t.index ["email"], name: "index_contacts_on_email"
     t.index ["status"], name: "index_contacts_on_status"
+  end
+
+  create_table "job_applications", force: :cascade do |t|
+    t.bigint "job_id", null: false
+    t.string "name"
+    t.string "email"
+    t.string "phone"
+    t.text "resume"
+    t.text "cover_letter"
+    t.string "portfolio_url"
+    t.integer "experience_years"
+    t.text "motivation"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "status"
+    t.index ["job_id"], name: "index_job_applications_on_job_id"
   end
 
   create_table "jobs", force: :cascade do |t|
@@ -245,6 +261,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_11_001934) do
   add_foreign_key "article_tags", "articles"
   add_foreign_key "article_tags", "tags"
   add_foreign_key "articles", "users"
+  add_foreign_key "job_applications", "jobs"
   add_foreign_key "media", "users"
   add_foreign_key "media_usages", "media"
   add_foreign_key "pages", "users"

@@ -4,20 +4,19 @@ class Site::ArticlesController < ApplicationController
   before_action :set_article, only: [:show]
   
   def index
+    add_breadcrumb('コラム', site_articles_path)
+    
     @articles = Article.published.recent
     
     # 検索機能
-    if params[:search].present?
-      search_term = "%#{params[:search]}%"
-      @articles = @articles.where("title ILIKE ? OR content_json ILIKE ? OR meta_description ILIKE ?", 
-                                 search_term, search_term, search_term)
-    end
+    @articles = @articles.search_by_text(params[:search]) if params[:search].present?
     
     # カテゴリによるフィルタリング
     if params[:category].present?
       category = Category.find_by(name: params[:category])
       @articles = @articles.joins(:categories).where(categories: { id: category.id }) if category
       @current_category = params[:category]
+      add_breadcrumb(@current_category) if @current_category
     end
     
     # タグによるフィルタリング
@@ -25,6 +24,7 @@ class Site::ArticlesController < ApplicationController
       tag = Tag.find_by(name: params[:tag])
       @articles = @articles.joins(:tags).where(tags: { id: tag.id }) if tag
       @current_tag = params[:tag]
+      add_breadcrumb(@current_tag) if @current_tag
     end
     
     # 必要な関連データと一緒に取得（eager loading）
@@ -32,6 +32,9 @@ class Site::ArticlesController < ApplicationController
   end
   
   def show
+    add_breadcrumb('コラム', site_articles_path)
+    add_breadcrumb(@article.title)
+    
     # 公開済みの記事または限定公開記事を表示
     # 下書きの記事は表示しない
     if @article.status == 'draft'

@@ -37,7 +37,8 @@
                     .job-badge= job.job_type
                   
                   .job-card-content
-                    %h3.job-title= job.title
+                    %h3.job-title
+                      = link_to job.title, site_job_path(job), class: 'job-title-link'
                     %p.job-description= job.truncated_description(100)
                     
                     .job-meta

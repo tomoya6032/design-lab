@@ -4,11 +4,14 @@ class Site::JobsController < ApplicationController
   before_action :set_job, only: [:show]
 
   def index
+    add_breadcrumb('求人情報', site_jobs_path)
     @jobs = Job.published.ordered
     @job_types = Job.published.job_types
   end
 
   def show
+    add_breadcrumb('求人情報', site_jobs_path)
+    add_breadcrumb(@job.title)
   end
 
   private
