@@ -1,11 +1,8 @@
-source "https://rubygems.org# Add HTTP asset caching/compression and X-Sendfile acceleration to Puma [https://github.com/basecamp/thruster/]
-gem "thruster", require: false
+source "https://rubygems.org"
 
-# Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
-gem "image_processing", "~> 1.2"
+ruby "3.4.1"
 
-# AWS SDK for S3 storage
-gem "aws-sdk-s3", require: falseBundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
+# Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "~> 8.0.2"
 # Use postgresql as the database for Active Record
 gem "pg", "~> 1.1"
@@ -35,7 +32,7 @@ gem "kamal", require: false
 gem "thruster", require: false
 
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
-# gem "image_processing", "~> 1.2"
+gem "image_processing", "~> 1.2"
 
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin Ajax possible
 gem "rack-cors"
@@ -47,7 +44,6 @@ gem "devise-jwt"
 # View関連
 gem "haml-rails"
 gem "sassc-rails"
-gem "image_processing", "~> 1.2"
 gem "sprockets-rails"
 gem "importmap-rails"
 
@@ -56,6 +52,15 @@ gem "rails-i18n"
 
 # フォーム・セキュリティ関連
 gem "recaptcha", "~> 5.0"
+
+# AWS SDK for S3 storage
+gem "aws-sdk-s3", require: false
+
+# Bullet gem for N+1 query detection
+gem "bullet"
+
+# ページング
+gem "kaminari"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
@@ -71,22 +76,24 @@ group :development, :test do
   gem "rspec-rails", "~> 6.0"
   gem "factory_bot_rails"      # テストデータの生成
   gem "shoulda-matchers"       # RSpecの便利なマッチャー
+  
+  # Environment variable management
+  gem "dotenv-rails"
 end
 
 group :development do
+  # Use console on exceptions pages [https://github.com/rails/web-console]
+  gem "web-console"
+  
   # デバッグ・開発ツール
   gem "faker"
-  # ページング
-  gem "kaminari"
   
   # 🚀 開発効率化ツール
   gem "better_errors"          # 美しいエラー画面
   gem "binding_of_caller"      # better_errorsでコンソール機能を有効化
   gem "pry-rails"              # 強力なデバッガー（rails consoleの置き換え）
   gem "pry-byebug"             # pryでブレークポイント機能
-  # gem "annotate"             # モデルファイルにスキーマ情報を自動追加（Rails 8未対応のため一時的に無効）
   gem "rails-erd"              # データベース設計図(ERD)を自動生成
-  gem "bullet"                 # N+1クエリ問題を検出
   gem "listen"                 # ファイル変更の監視（高速化）
   gem "spring"                 # アプリケーション起動の高速化
   gem "spring-watcher-listen"  # springでlistenを使用

@@ -18,6 +18,11 @@ require "action_cable/engine"
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
+# Load environment variables from .env file in development and test environments
+if Rails.env.development? || Rails.env.test?
+  require 'dotenv/load'
+end
+
 module DesignLab
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
@@ -39,6 +44,15 @@ module DesignLab
     # 国際化設定
     config.i18n.default_locale = :ja
     config.time_zone = 'Tokyo'
+
+    # AWS環境変数の設定（開発・テスト環境）
+    if Rails.env.development? || Rails.env.test?
+      # AWS credentials from environment variables
+      ENV['AWS_ACCESS_KEY_ID'] ||= Rails.application.credentials.dig(:aws, :access_key_id)
+      ENV['AWS_SECRET_ACCESS_KEY'] ||= Rails.application.credentials.dig(:aws, :secret_access_key)
+      ENV['AWS_REGION'] ||= Rails.application.credentials.dig(:aws, :region) || 'ap-northeast-1'
+      ENV['AWS_BUCKET'] ||= Rails.application.credentials.dig(:aws, :bucket)
+    end
 
     # Only loads a smaller set of middleware suitable for API only apps.
     # Middleware like session, flash, cookies can be added back manually.

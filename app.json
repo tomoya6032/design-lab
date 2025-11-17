@@ -1,0 +1,66 @@
+{
+  "name": "Design Lab CMS",
+  "description": "Rails 8 CMS application with job application management",
+  "keywords": ["rails", "cms", "job-application", "postgresql"],
+  "website": "https://github.com/tomoya6032/design-lab",
+  "repository": "https://github.com/tomoya6032/design-lab",
+  "logo": "",
+  "success_url": "/",
+  "scripts": {
+    "postdeploy": "bundle exec rails db:seed"
+  },
+  "env": {
+    "RAILS_ENV": {
+      "value": "production"
+    },
+    "RAILS_MASTER_KEY": {
+      "description": "Rails master key for credentials",
+      "required": true
+    },
+    "AWS_ACCESS_KEY_ID": {
+      "description": "AWS Access Key ID for S3 storage",
+      "required": true
+    },
+    "AWS_SECRET_ACCESS_KEY": {
+      "description": "AWS Secret Access Key for S3 storage",
+      "required": true
+    },
+    "AWS_REGION": {
+      "value": "ap-northeast-1",
+      "description": "AWS region for S3 bucket"
+    },
+    "AWS_BUCKET": {
+      "description": "S3 bucket name for file storage",
+      "required": true
+    },
+    "RAILS_MAX_THREADS": {
+      "value": "5",
+      "description": "Maximum number of threads for Puma"
+    },
+    "WEB_CONCURRENCY": {
+      "value": "2",
+      "description": "Number of Puma worker processes"
+    }
+  },
+  "formation": {
+    "web": {
+      "quantity": 1,
+      "size": "basic"
+    }
+  },
+  "addons": [
+    {
+      "plan": "heroku-postgresql:essential-0",
+      "as": "DATABASE"
+    }
+  ],
+  "buildpacks": [
+    {
+      "url": "heroku/nodejs"
+    },
+    {
+      "url": "heroku/ruby"
+    }
+  ],
+  "stack": "heroku-22"
+}

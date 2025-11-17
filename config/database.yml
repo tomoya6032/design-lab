@@ -81,18 +81,17 @@ test:
 production:
   primary: &primary_production
     <<: *default
-    database: design_lab_production
-    username: design_lab
-    password: <%= ENV["DESIGN_LAB_DATABASE_PASSWORD"] %>
+    url: <%= ENV["DATABASE_URL"] %>
+    # Heroku automatically provides DATABASE_URL
   cache:
     <<: *primary_production
-    database: design_lab_production_cache
+    database: <%= ENV["DATABASE_URL"] %>_cache
     migrations_paths: db/cache_migrate
   queue:
     <<: *primary_production
-    database: design_lab_production_queue
+    database: <%= ENV["DATABASE_URL"] %>_queue
     migrations_paths: db/queue_migrate
   cable:
     <<: *primary_production
-    database: design_lab_production_cable
+    database: <%= ENV["DATABASE_URL"] %>_cable
     migrations_paths: db/cable_migrate

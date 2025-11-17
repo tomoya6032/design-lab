@@ -1,0 +1,79 @@
+#!/bin/bash
+
+# Heroku deployment script
+# このスクリプトはHerokuデプロイメントを簡単にするためのヘルパーです
+
+set -e
+
+echo "🚀 Heroku デプロイメントを開始します..."
+
+# アプリ名の確認
+if [ -z "$HEROKU_APP_NAME" ]; then
+    echo "❌ HEROKU_APP_NAME環境変数が設定されていません"
+    echo "例: export HEROKU_APP_NAME=your-app-name"
+    exit 1
+fi
+
+echo "📱 アプリ名: $HEROKU_APP_NAME"
+
+# Herokuにログインしているか確認
+if ! heroku auth:whoami > /dev/null 2>&1; then
+    echo "❌ Herokuにログインしていません"
+    echo "heroku login を実行してください"
+    exit 1
+fi
+
+# Gitの変更をコミット
+echo "📝 変更をコミットしています..."
+git add .
+if git diff --staged --quiet; then
+    echo "ℹ️ コミットする変更がありません"
+else
+    echo "コミットメッセージを入力してください:"
+    read commit_message
+    git commit -m "$commit_message"
+fi
+
+# 必要な環境変数の確認
+echo "🔍 環境変数を確認しています..."
+
+required_vars=("RAILS_MASTER_KEY" "AWS_ACCESS_KEY_ID" "AWS_SECRET_ACCESS_KEY" "AWS_BUCKET")
+missing_vars=()
+
+for var in "${required_vars[@]}"; do
+    if ! heroku config:get $var --app $HEROKU_APP_NAME > /dev/null 2>&1; then
+        missing_vars+=($var)
+    fi
+done
+
+if [ ${#missing_vars[@]} -gt 0 ]; then
+    echo "❌ 以下の環境変数が設定されていません:"
+    printf '%s\n' "${missing_vars[@]}"
+    echo ""
+    echo "以下のコマンドで設定してください:"
+    echo "heroku config:set RAILS_MASTER_KEY=\$(cat config/master.key) --app $HEROKU_APP_NAME"
+    echo "heroku config:set AWS_ACCESS_KEY_ID=your_key --app $HEROKU_APP_NAME"
+    echo "heroku config:set AWS_SECRET_ACCESS_KEY=your_secret --app $HEROKU_APP_NAME"
+    echo "heroku config:set AWS_BUCKET=your_bucket --app $HEROKU_APP_NAME"
+    exit 1
+fi
+
+# デプロイ実行
+echo "🚀 デプロイを実行しています..."
+git push heroku $(git branch --show-current):main
+
+# マイグレーション実行
+echo "🗄️ データベースマイグレーションを実行しています..."
+heroku run rails db:migrate --app $HEROKU_APP_NAME
+
+# デプロイ完了
+echo "✅ デプロイが完了しました!"
+echo "🌐 アプリURL: https://$HEROKU_APP_NAME.herokuapp.com"
+
+# ログを表示するか確認
+echo ""
+echo "ログを確認しますか? (y/n)"
+read show_logs
+if [ "$show_logs" = "y" ] || [ "$show_logs" = "Y" ]; then
+    heroku logs --tail --app $HEROKU_APP_NAME
+fi

@@ -1,0 +1,26 @@
+# Heroku用の設定ファイル
+# このファイルにはHerokuアプリの設定に関する情報が含まれています
+
+# Ruby version
+ruby-3.4.1
+
+# Heroku Buildpacks (自動検出されますが、明示的に指定も可能)
+# - heroku/ruby
+# - heroku/nodejs (package.jsonがある場合)
+
+# データベース: Heroku PostgreSQL
+# - Heroku Postgres addon will provide DATABASE_URL
+
+# 環境変数の設定が必要:
+# RAILS_ENV=production
+# RAILS_MASTER_KEY=<your-master-key>
+# AWS_ACCESS_KEY_ID=<your-aws-access-key>
+# AWS_SECRET_ACCESS_KEY=<your-aws-secret-key>
+# AWS_REGION=ap-northeast-1
+# AWS_BUCKET=<your-bucket-name>
+
+# オプショナルな設定:
+# RAILS_MAX_THREADS=5
+# WEB_CONCURRENCY=2
+# RAILS_SERVE_STATIC_FILES=true
+# RAILS_LOG_TO_STDOUT=true
