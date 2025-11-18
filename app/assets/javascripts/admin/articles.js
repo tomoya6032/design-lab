@@ -105,7 +105,31 @@ document.addEventListener('DOMContentLoaded', function() {
     return Array.from(articleCheckboxes).filter(checkbox => checkbox.checked).length;
   }
 
+  // 削除ボタンの確認ダイアログ
+  function setupDeleteConfirmation() {
+    const deleteButtons = document.querySelectorAll('.delete-article-btn');
+    deleteButtons.forEach(button => {
+      button.addEventListener('click', function(e) {
+        e.preventDefault();
+        
+        const form = this.closest('form');
+        const articleTitle = this.getAttribute('data-article-title') || '選択した記事';
+        
+        // カスタム確認ダイアログを表示
+        const confirmDelete = confirm(
+          `「${articleTitle}」を削除してよろしいですか？\n\nこの操作は元に戻せません。`
+        );
+        
+        if (confirmDelete) {
+          // 削除を実行
+          form.submit();
+        }
+      });
+    });
+  }
+
   // 初期状態の設定
   updateBulkActions();
   updateSelectAllState();
+  setupDeleteConfirmation();
 });

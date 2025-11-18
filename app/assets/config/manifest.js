@@ -4,3 +4,6 @@
 //= link application.js
 //= link admin/rich_editor.js
 //= link admin/image_upload.js
+//= link admin/articles.js
+//= link admin/pages.js
+//= link admin/media.js

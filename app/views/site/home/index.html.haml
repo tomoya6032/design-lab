@@ -1,17 +1,21 @@
 - content_for :title, 'ホーム'
 
+
+
+
 - if @site_setting&.hero_background_image&.attached?
-  .hero-section.with-background{style: "background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(#{url_for(@site_setting.hero_background_image)}); background-size: cover; background-position: center; background-repeat: no-repeat;"}
+  - hero_style = "background-image: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.2)), url(#{url_for(@site_setting.hero_background_image)}); background-size: cover; background-position: center; background-repeat: no-repeat;"
+  .hero-section.with-background{style: hero_style}
     .hero-container
       .hero-content
-        %h1.hero-title Design Labへようこそ
-        %p.hero-description 高速で美しい、モダンなウェブサイトを簡単に作成・管理できるCMSです
+        %h1.hero-title= simple_format(@site_setting&.hero_title || 'Design Labへようこそ')
+        %p.hero-description= simple_format(@site_setting&.hero_description || '高速で美しい、モダンなウェブサイトを簡単に作成・管理できるCMSです')
 - else
   .hero-section
     .hero-container
       .hero-content
-        %h1.hero-title Design Labへようこそ
-        %p.hero-description 高速で美しい、モダンなウェブサイトを簡単に作成・管理できるCMSです
+        %h1.hero-title= simple_format(@site_setting&.hero_title || 'Design Labへようこそ')
+        %p.hero-description= simple_format(@site_setting&.hero_description || '高速で美しい、モダンなウェブサイトを簡単に作成・管理できるCMSです')
 
 %section.problems-section
   .container

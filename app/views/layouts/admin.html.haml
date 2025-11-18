@@ -16,6 +16,9 @@
     = yield(:head) if content_for?(:head)
     = javascript_include_tag 'admin/rich_editor', 'data-turbo-track': 'reload'
     = javascript_include_tag 'admin/image_upload', 'data-turbo-track': 'reload'
+    = javascript_include_tag 'admin/articles', 'data-turbo-track': 'reload'
+    = javascript_include_tag 'admin/pages', 'data-turbo-track': 'reload'
+    = javascript_include_tag 'admin/media', 'data-turbo-track': 'reload'
     %script{src: 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js'}
   %body.admin-body
     %header.admin-header

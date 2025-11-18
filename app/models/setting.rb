@@ -18,7 +18,9 @@ class Setting < ApplicationRecord
       site_description: 'モダンで高速なCMSサイト',
       theme: 'modern',
       social_links: {},
-      seo_settings: {}
+      seo_settings: {},
+      hero_title: 'Design Labへようこそ',
+      hero_description: '高速で美しい、モダンなウェブサイトを簡単に作成・管理できるCMSです'
     )
   end
   

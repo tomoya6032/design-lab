@@ -36,7 +36,8 @@ class Admin::SettingsController < ApplicationController
       :site_name, :site_description, :contact_email, :maintenance_mode,
       :theme, :meta_title, :meta_description, :meta_keywords,
       :google_analytics_id, :twitter_url, :facebook_url, 
-      :instagram_url, :youtube_url, :hero_background_image
+      :instagram_url, :youtube_url, :hero_background_image,
+      :hero_title, :hero_description
     )
   end
 end
