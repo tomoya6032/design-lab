@@ -23,11 +23,21 @@ if Rails.env.development? || Rails.env.test?
     Rails.logger.warn ".env file not found. Please copy .env.example to .env and configure your AWS settings"
   end
 elsif Rails.env.production?
-  # 本番環境でのcredentials確認
+  # 本番環境では環境変数またはcredentialsから読み込み
   aws_config = Rails.application.credentials.aws
-  if aws_config.blank?
-    Rails.logger.error "AWS credentials not configured for production environment"
-  else
+  
+  # 環境変数の確認
+  required_env_vars = %w[AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_REGION AWS_S3_BUCKET]
+  env_vars_present = required_env_vars.all? { |var| ENV[var].present? }
+  
+  if env_vars_present
+    Rails.logger.info "AWS configuration loaded from environment variables"
+    Rails.logger.info "AWS Region: #{ENV['AWS_REGION']}"
+    Rails.logger.info "AWS Bucket: #{ENV['AWS_S3_BUCKET']}"
+  elsif aws_config.present?
     Rails.logger.info "AWS configuration loaded from Rails credentials"
+  else
+    Rails.logger.error "AWS credentials not configured for production environment"
+    Rails.logger.error "Either set environment variables (AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_REGION, AWS_S3_BUCKET) or configure Rails credentials"
   end
 end
