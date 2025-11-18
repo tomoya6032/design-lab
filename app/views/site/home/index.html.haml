@@ -3,19 +3,40 @@
 
 
 
-- if @site_setting&.hero_background_image&.attached?
-  - hero_style = "background-image: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.2)), url(#{url_for(@site_setting.hero_background_image)}); background-size: cover; background-position: center; background-repeat: no-repeat;"
+- hero_image = @site_setting&.hero_background_image
+- default_title = 'Design Labへようこそ'
+- default_desc = '高速で美しい、モダンなウェブサイトを簡単に作成・管理できるCMSです'
+- hero_title = @site_setting&.hero_title.presence || default_title
+- hero_desc = @site_setting&.hero_description.presence || default_desc
+- edited_title = @site_setting&.hero_title.present? && @site_setting.hero_title != default_title
+- edited_desc = @site_setting&.hero_description.present? && @site_setting.hero_description != default_desc
+
+- if hero_image&.attached? && (edited_title || edited_desc)
+  - hero_style = "background-image: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.2)), url(#{url_for(hero_image)}); background-size: cover; background-position: center; background-repeat: no-repeat;"
   .hero-section.with-background{style: hero_style}
     .hero-container
       .hero-content
-        %h1.hero-title= simple_format(@site_setting&.hero_title || 'Design Labへようこそ')
-        %p.hero-description= simple_format(@site_setting&.hero_description || '高速で美しい、モダンなウェブサイトを簡単に作成・管理できるCMSです')
+        %h1.hero-title= simple_format(@site_setting.hero_title)
+        %p.hero-description= simple_format(@site_setting.hero_description)
+- elsif hero_image&.attached?
+  - hero_style = "background-image: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.2)), url(#{url_for(hero_image)}); background-size: cover; background-position: center; background-repeat: no-repeat;"
+  .hero-section.with-background{style: hero_style}
+    .hero-container
+      .hero-content
+        %h1.hero-title= default_title
+        %p.hero-description= default_desc
+- elsif edited_title || edited_desc
+  .hero-section
+    .hero-container
+      .hero-content
+        %h1.hero-title= simple_format(@site_setting.hero_title)
+        %p.hero-description= simple_format(@site_setting.hero_description)
 - else
   .hero-section
     .hero-container
       .hero-content
-        %h1.hero-title= simple_format(@site_setting&.hero_title || 'Design Labへようこそ')
-        %p.hero-description= simple_format(@site_setting&.hero_description || '高速で美しい、モダンなウェブサイトを簡単に作成・管理できるCMSです')
+        %h1.hero-title= default_title
+        %p.hero-description= default_desc
 
 %section.problems-section
   .container
