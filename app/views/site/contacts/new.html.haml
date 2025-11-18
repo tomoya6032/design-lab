@@ -51,14 +51,15 @@
         / ハニーポット（ボット対策）
         %input{type: 'text', name: 'website', style: 'display: none;', tabindex: '-1', autocomplete: 'off'}
 
-        - if Rails.env.production?
-          .recaptcha-section
-            = recaptcha_tags
-        - else
-          .recaptcha-section.development-mode
-            .dev-notice
-              %span.notice-icon ℹ️
-              %span 開発環境ではreCAPTCHAは無効です
+        -# 一時的にreCAPTCHAを無効化（設定が完了次第有効化）
+        -# - if Rails.env.production?
+        -#   .recaptcha-section
+        -#     = recaptcha_tags
+        -# - else
+        .recaptcha-section.development-mode
+          .dev-notice
+            %span.notice-icon ℹ️
+            %span reCAPTCHAは現在無効化されています
 
         .form-actions
           = form.submit 'お問い合わせを送信', style: 'background: linear-gradient(135deg, #3498db, #2980b9); color: white; padding: 18px 40px; border: none; border-radius: 50px; font-size: 1.1rem; font-weight: 600; cursor: pointer; display: inline-block; margin-right: 20px; text-transform: uppercase; letter-spacing: 1px;'

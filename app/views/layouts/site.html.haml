@@ -9,6 +9,29 @@
         \- 
       = @site_setting&.site_name || 'Design Lab CMS'
     
+    / SEO・OGP メタタグ
+    %meta{name: 'description', content: content_for?(:description) ? yield(:description) : (@site_setting&.site_description || 'Design Lab CMS - プロフェッショナルなWebデザインとCMSソリューション')}
+    
+    / OGP設定
+    %meta{property: 'og:type', content: 'website'}
+    %meta{property: 'og:title', content: content_for?(:title) ? "#{yield(:title)} - #{@site_setting&.site_name || 'Design Lab CMS'}" : (@site_setting&.site_name || 'Design Lab CMS')}
+    %meta{property: 'og:description', content: content_for?(:description) ? yield(:description) : (@site_setting&.site_description || 'プロフェッショナルなWebデザインとCMSソリューションを提供')}
+    %meta{property: 'og:url', content: request.original_url}
+    %meta{property: 'og:site_name', content: @site_setting&.site_name || 'Design Lab CMS'}
+    - if @site_setting&.hero_background_image&.attached?
+      %meta{property: 'og:image', content: url_for(@site_setting.hero_background_image)}
+    - else
+      %meta{property: 'og:image', content: asset_url('growth-image.png')}
+    
+    / Twitter Card設定
+    %meta{name: 'twitter:card', content: 'summary_large_image'}
+    %meta{name: 'twitter:title', content: content_for?(:title) ? "#{yield(:title)} - #{@site_setting&.site_name || 'Design Lab CMS'}" : (@site_setting&.site_name || 'Design Lab CMS')}
+    %meta{name: 'twitter:description', content: content_for?(:description) ? yield(:description) : (@site_setting&.site_description || 'プロフェッショナルなWebデザインとCMSソリューションを提供')}
+    - if @site_setting&.hero_background_image&.attached?
+      %meta{name: 'twitter:image', content: url_for(@site_setting.hero_background_image)}
+    - else
+      %meta{name: 'twitter:image', content: asset_url('growth-image.png')}
+    
     = csrf_meta_tags
     = csp_meta_tag
     
@@ -24,14 +47,12 @@
             = @site_setting&.site_name || 'Design Lab'
           
           .navbar-icons
-            = link_to 'https://twitter.com', class: 'icon-link twitter', target: '_blank', rel: 'noopener' do
-              %img{src: 'https://cdn-icons-png.flaticon.com/24/25/25694.png', alt: 'Twitter', class: 'icon-image'}
-            = link_to 'https://facebook.com', class: 'icon-link facebook', target: '_blank', rel: 'noopener' do
-              %img{src: 'https://cdn-icons-png.flaticon.com/24/124/124010.png', alt: 'Facebook', class: 'icon-image'}
-            = link_to 'https://linkedin.com', class: 'icon-link linkedin', target: '_blank', rel: 'noopener' do
-              %img{src: 'https://cdn-icons-png.flaticon.com/24/145/145807.png', alt: 'LinkedIn', class: 'icon-image'}
-            = link_to 'https://github.com', class: 'icon-link github', target: '_blank', rel: 'noopener' do
-              %img{src: 'https://cdn-icons-png.flaticon.com/24/25/25231.png', alt: 'GitHub', class: 'icon-image'}
+            = link_to "https://line.me/R/msg/text/?#{CGI.escape(request.original_url)}", class: 'icon-link line', target: '_blank', rel: 'noopener' do
+              = image_tag 'LINE_APP_iOS.png', alt: 'LINE', class: 'icon-image', size: '24x24'
+            = link_to "https://www.facebook.com/sharer/sharer.php?u=#{CGI.escape(request.original_url)}", class: 'icon-link facebook', target: '_blank', rel: 'noopener' do
+              = image_tag 'facebook-icon.png', alt: 'Facebook', class: 'icon-image', size: '24x24'
+            = link_to "https://x.com/intent/tweet?url=#{CGI.escape(request.original_url)}&text=#{CGI.escape(@site_setting&.site_name || 'Design Lab CMS')}", class: 'icon-link x-twitter', target: '_blank', rel: 'noopener' do
+              = image_tag 'x-twitter-icon.png', alt: 'X (Twitter)', class: 'icon-image', size: '24x24'
     
     %nav.main-navigation
       .container
@@ -70,4 +91,4 @@
           .footer-links
             = link_to '私たちについて', site_pages_path, class: 'footer-link'
             = link_to 'お問い合わせ', contact_path, class: 'footer-link'
-            = link_to '管理画面', admin_root_path, class: 'footer-link'
+            -# = link_to '管理画面', admin_root_path, class: 'footer-link'

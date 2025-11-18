@@ -35,13 +35,13 @@ class Site::ContactsController < ApplicationController
       return
     end
     
-    # reCAPTCHA検証（本番環境のみ）
-    if Rails.env.production?
-      unless verify_recaptcha(model: @contact)
-        render :new, status: :unprocessable_entity
-        return
-      end
-    end
+    # reCAPTCHA検証（一時的に無効化）
+    # if Rails.env.production?
+    #   unless verify_recaptcha(model: @contact)
+    #     render :new, status: :unprocessable_entity
+    #     return
+    #   end
+    # end
     
     if @contact.save
       # メール送信（開発環境では送信をスキップ）
