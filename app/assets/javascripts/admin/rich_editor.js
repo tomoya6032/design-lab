@@ -10,9 +10,15 @@ function initializeRichEditor() {
   const hiddenField = document.querySelector('#content_json_hidden');
   
   console.log('Elements found:', { toolbar, editor, hiddenField });
-  
+
+  // If any required element is missing, log which one and the current path
   if (!toolbar || !editor || !hiddenField) {
-    console.error('Required elements not found for rich editor');
+    const missing = {
+      toolbar: !!toolbar,
+      editor: !!editor,
+      hiddenField: !!hiddenField
+    };
+    console.error('Required elements not found for rich editor - missing flags:', missing, 'path=', window.location.pathname);
     return false;
   }
   

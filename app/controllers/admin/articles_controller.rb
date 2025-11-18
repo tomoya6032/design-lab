@@ -3,10 +3,24 @@ require 'open-uri'
 class Admin::ArticlesController < ApplicationController
   layout 'admin'
   before_action :authenticate_user!
+  before_action :log_csrf_on_index, only: [:index]
   before_action :set_article, only: [:show, :edit, :update, :destroy]
 
   def index
     @articles = Article.order(created_at: :desc)
+  end
+  def log_csrf_on_index
+    begin
+      server_token = form_authenticity_token
+      server_head = server_token.to_s[0,8]
+      session_raw = session[:_csrf_token].to_s
+      session_head = session_raw[0,8]
+  session_cookie = request.cookies[Rails.application.config.session_options[:key]]
+  session_cookie_head = session_cookie.to_s[0,8]
+  Rails.logger.info "CSRF-index-debug: server_token_len=#{server_token.to_s.length} server_head=#{server_head} session_raw_len=#{session_raw.length} session_head=#{session_head} session_key=#{Rails.application.config.session_options[:key]} session_cookie_present=#{session_cookie.present?} session_cookie_head=#{session_cookie_head}"
+    rescue => e
+      Rails.logger.error "CSRF-index-debug: error logging tokens: #{e.message}"
+    end
   end
 
   def show
@@ -82,13 +96,31 @@ class Admin::ArticlesController < ApplicationController
       render :edit, status: :unprocessable_entity
     end
   end
-
-  def destroy
-    @article.destroy
-    redirect_to admin_articles_path, notice: '記事を削除しました。'
-  end
+  
   
   def bulk_action
+    # --- CSRF debug logging (temporary) ---
+    begin
+      submitted_token = params[:authenticity_token]
+      header_token = request.headers['X-CSRF-Token']
+      Rails.logger.info "CSRF debug: header_token_present=#{header_token.present?} header_head=#{header_token.to_s[0,8]}"
+      session_cookie = request.cookies[Rails.application.config.session_options[:key]]
+      token_present = submitted_token.present?
+      token_len = submitted_token.to_s.length
+      valid_token = begin
+        # valid_authenticity_token? is a controller helper; call via send to access
+        send(:valid_authenticity_token?, session, submitted_token)
+      rescue => e
+        Rails.logger.error "CSRF debug: error checking token validity: #{e.message}"
+        false
+      end
+  session_cookie_head = session_cookie.to_s[0,8]
+  Rails.logger.info "CSRF debug: path=#{request.path} token_present=#{token_present} token_len=#{token_len} valid=#{valid_token} session_cookie_present=#{session_cookie.present?} session_cookie_head=#{session_cookie_head}"
+    rescue => e
+      Rails.logger.error "CSRF debug: unexpected error: #{e.message}"
+    end
+    # --- end debug ---
+
     article_ids = params[:article_ids]
     bulk_action = params[:bulk_action]
     
@@ -223,6 +255,8 @@ class Admin::ArticlesController < ApplicationController
       render json: { success: false, error: "OGP情報を取得できませんでした" }
     end
   end
+
+  # csrf_test (development-only) removed
 
   private
 

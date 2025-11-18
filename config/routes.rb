@@ -6,19 +6,23 @@ Rails.application.routes.draw do
     get 'dashboard', to: 'dashboard#index'
     resources :categories
     resources :tags
-    resources :articles do
-      collection do
-        post 'fetch_ogp'
-        post 'upload_images'
-        patch 'bulk_action'
+      resources :articles do
+        collection do
+          post 'fetch_ogp'
+          post 'upload_images'
+          patch 'bulk_action'
+          post 'bulk_action'
+          delete 'bulk_action'
+        end
       end
-    end
     resources :pages do
       collection do
         post 'fetch_ogp'
         post 'upload_images'
         patch 'update_navigation'
-        patch 'bulk_action'
+  patch 'bulk_action'
+  post 'bulk_action'
+  delete 'bulk_action'
       end
     end
     resources :media do

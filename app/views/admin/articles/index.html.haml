@@ -1,88 +1,88 @@
 - content_for :page_title, '記事管理'
 
-.admin-content-actions
-  = link_to '新規記事作成', new_admin_article_path, class: 'btn btn-primary'
 
-= form_with url: bulk_action_admin_articles_path, method: :patch, local: true, id: 'bulk-action-form' do |form|
-  .admin-table-container
-    %table.admin-table
-      %thead
-        %tr
-          %th.checkbox-column
-            %input{type: 'checkbox', id: 'select-all'}
-          %th.title-column タイトル
-          %th.status-column ステータス
-          %th.category-column カテゴリ
-          %th.author-column 作成者
-          %th.date-column 作成日
-          %th.date-column 更新日
-          %th.actions-column 操作
+.admin-articles-index
+  .d-flex.justify-content-between.align-items-center.mb-3
+    -# %h1.mb-0 記事管理
+    = link_to '新規記事作成', new_admin_article_path, class: 'btn btn-primary'
 
-      %tbody
-        - if @articles.any?
-          - @articles.each do |article|
-            %tr.article-row{data: {id: article.id}}
-              %td.checkbox-column
-                %input.item-checkbox{type: 'checkbox', name: 'article_ids[]', value: article.id}
-              %td.title-column
-                .article-title-wrap
-                  = link_to admin_article_path(article), class: 'article-title-link' do
-                    %strong= article.title
-                  - if article.meta_description.present?
-                    %p.article-excerpt= truncate(article.meta_description, length: 80)
-              %td.status-column
-                %span.status-badge{class: "status-#{article.status}"}
-                  - case article.status
-                  - when 'published'
-                    公開
-                  - when 'limited'
-                    限定公開
+  = form_with url: bulk_action_admin_articles_path, method: :patch, local: true, id: 'bulk-action-form', authenticity_token: true do |form|
+    = hidden_field_tag 'authenticity_token', form_authenticity_token
+    = hidden_field_tag '_method', 'patch'
+    .admin-table-container
+      %table.admin-table
+        %thead
+          %tr
+            %th.checkbox-column
+              %input{type: 'checkbox', id: 'select-all'}
+            %th.title-column タイトル
+            %th.status-column ステータス
+            %th.category-column カテゴリ
+            %th.author-column 作成者
+            %th.date-column 作成日
+            %th.date-column 更新日
+            %th.actions-column 操作
+        %tbody
+          - if @articles.any?
+            - @articles.each do |article|
+              %tr.article-row{data: {id: article.id}}
+                %td.checkbox-column
+                  %input.item-checkbox{type: 'checkbox', name: 'article_ids[]', value: article.id}
+                %td.title-column
+                  .article-title-wrap
+                    = link_to admin_article_path(article), class: 'article-title-link' do
+                      %strong= article.title
+                    - if article.meta_description.present?
+                      %p.article-excerpt= truncate(article.meta_description, length: 80)
+                %td.status-column
+                  %span.status-badge{class: "status-#{article.status}"}
+                    - case article.status
+                    - when 'published'
+                      公開
+                    - when 'limited'
+                      限定公開
+                    - else
+                      下書き
+                %td.category-column
+                  - if article.custom_fields && article.custom_fields['category'].present?
+                    %span.category-tag= article.custom_fields['category']
                   - else
-                    下書き
-              %td.category-column
-                - if article.custom_fields && article.custom_fields['category'].present?
-                  %span.category-tag= article.custom_fields['category']
-                - else
-                  %span.no-category 未分類
-              %td.author-column 管理者
-              %td.date-column
-                .date-info
-                  %time= article.created_at.strftime('%Y/%m/%d')
-                  %span.time= article.created_at.strftime('%H:%M')
-              %td.date-column
-                .date-info
-                  %time= article.updated_at.strftime('%Y/%m/%d')
-                  %span.time= article.updated_at.strftime('%H:%M')
-              %td.actions-column
-                .action-buttons
-                  = link_to '編集', edit_admin_article_path(article), class: 'btn btn-sm btn-secondary'
-                  = link_to '表示', admin_article_path(article), class: 'btn btn-sm btn-info'
-                  = button_to '削除', admin_article_path(article),
-                    method: :delete,
-                    data: { turbo_method: :delete, article_title: article.title },
-                    class: 'btn btn-sm btn-danger delete-article-btn',
-                    form: { style: 'display: inline;' }
-        - else
-          %tr.no-items
-            %td{colspan: 8}
-              .no-items-message
-                %i.icon.icon-article
-                %p まだ記事がありません
-                = link_to '最初の記事を作成', new_admin_article_path, class: 'btn btn-primary'
+                    %span.no-category 未分類
+                %td.author-column 管理者
+                %td.date-column
+                  .date-info
+                    %time= article.created_at.strftime('%Y/%m/%d')
+                    %span.time= article.created_at.strftime('%H:%M')
+                %td.date-column
+                  .date-info
+                    %time= article.updated_at.strftime('%Y/%m/%d')
+                    %span.time= article.updated_at.strftime('%H:%M')
+                %td.actions-column
+                  .action-buttons
+                    = link_to '編集', edit_admin_article_path(article), class: 'btn btn-sm btn-secondary'
+                    = link_to '表示', admin_article_path(article), class: 'btn btn-sm btn-info'
+                    = button_to '削除', admin_article_path(article), method: :delete, data: { article_title: article.title, confirm: "記事『#{article.title}』を削除しますか？この操作は取り消せません。" }, class: 'btn btn-sm btn-danger delete-article-btn'
+          - else
+            %tr.no-items
+              %td{colspan: 8}
+                .no-items-message
+                  %i.icon.icon-article
+                  %p まだ記事がありません
+                  = link_to '最初の記事を作成', new_admin_article_path, class: 'btn btn-primary'
 
-  .admin-table-footer
-    .bulk-actions
-      %select{name: 'bulk_action', required: true}
-        %option{value: ''} 一括操作を選択
-        %option{value: 'published'} 公開
-        %option{value: 'draft'} 下書きに戻す
-        %option{value: 'limited'} 限定公開化
-        %option{value: 'delete'} 削除
-      = form.submit '実行', class: 'btn btn-secondary bulk-action-btn', 
-                   onclick: "return confirm('選択した記事に対して一括操作を実行しますか？');"
+      .admin-table-footer
+        .bulk-actions
+          %select{name: 'bulk_action', required: true, id: 'bulk-action-select'}
+            %option{value: ''} 一括操作を選択
+            %option{value: 'published'} 公開
+            %option{value: 'draft'} 下書きに戻す
+            %option{value: 'limited'} 限定公開化
+            %option{value: 'delete'} 削除
+          = form.submit '実行', class: 'btn btn-secondary bulk-action-btn', id: 'bulk-action-button', onclick: "return confirm('選択した記事に対して一括操作を実行しますか？');"
 
     .pagination-info
       = "#{@articles.count}件の記事"
+
 
 .article-list-styles
   :css
@@ -176,7 +176,8 @@
     .status-limited {
       background: #ff9800;
       color: white;
-    }    .category-tag {
+    }
+    .category-tag {
       background: #e9ecef;
       padding: 2px 6px;
       border-radius: 3px;
@@ -238,6 +239,9 @@
     }
 
     .pagination-info {
-      color: #666;
-      font-size: 14px;
-    }
+        color: #666;
+        font-size: 14px;
+      }
+  -# development-only CSRF debug panel removed
+
+  

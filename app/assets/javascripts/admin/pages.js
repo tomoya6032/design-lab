@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', function() {
     bulkActionBtn.addEventListener('click', function(e) {
       e.preventDefault();
       const checkedCount = getCheckedCount();
-      const selectedAction = bulkActionSelect.value;
+      const selectedAction = bulkActionSelect ? bulkActionSelect.value : null;
       
       if (checkedCount === 0) {
         alert('操作するページを選択してください。');
@@ -58,7 +58,11 @@ document.addEventListener('DOMContentLoaded', function() {
       }
       
       if (confirm(confirmMessage)) {
-        bulkActionForm.submit();
+        if (bulkActionForm) {
+          bulkActionForm.submit();
+        } else {
+          console.warn('bulkActionForm not found for pages; aborting submit');
+        }
       }
     });
   }
@@ -68,15 +72,14 @@ document.addEventListener('DOMContentLoaded', function() {
     const checkedCount = getCheckedCount();
     
     if (checkedCount > 0) {
-      bulkActionSelect.disabled = false;
-      bulkActionBtn.disabled = false;
-      selectedCount.style.display = 'inline-block';
-      countNumber.textContent = checkedCount;
+      if (bulkActionSelect) bulkActionSelect.disabled = false;
+      if (bulkActionBtn) bulkActionBtn.disabled = false;
+      if (selectedCount) selectedCount.style.display = 'inline-block';
+      if (countNumber) countNumber.textContent = checkedCount;
     } else {
-      bulkActionSelect.disabled = true;
-      bulkActionSelect.value = '';
-      bulkActionBtn.disabled = true;
-      selectedCount.style.display = 'none';
+      if (bulkActionSelect) { bulkActionSelect.disabled = true; try { bulkActionSelect.value = ''; } catch(e) {} }
+      if (bulkActionBtn) bulkActionBtn.disabled = true;
+      if (selectedCount) selectedCount.style.display = 'none';
     }
   }
 

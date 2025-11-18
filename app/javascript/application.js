@@ -160,8 +160,54 @@ document.addEventListener('DOMContentLoaded', function() {
           }
         });
         
-        // フォームを送信
-        existingForm.submit();
+        // Debug: log token and method just before submitting existing form
+        try {
+          const tokenInput = existingForm.querySelector('input[name="authenticity_token"]');
+          const tokenVal = tokenInput ? tokenInput.value : (document.querySelector('meta[name="csrf-token"]') || {}).content;
+          const methodInput = existingForm.querySelector('input[name="_method"]');
+          console.log('CSRF-DEBUG: submitting existingForm, token_len=', tokenVal ? tokenVal.length : null, 'token_head=', tokenVal ? tokenVal.slice(0,8) : null, '_method=', methodInput ? methodInput.value : (existingForm.getAttribute('method') || 'GET'));
+        } catch (e) {
+          console.warn('CSRF-DEBUG: error reading token for existingForm', e);
+        }
+        // フォーム送信を fetch に置き換え（一時的な回避策）
+        try {
+          const csrf = (document.querySelector('meta[name="csrf-token"]') || {}).getAttribute('content');
+          const formData = new FormData(existingForm);
+          // Normalize to POST + _method=PATCH for bulk actions to avoid accidental DELETE method
+          if (existingForm.id === 'bulk-action-form') {
+            formData.set('_method', 'PATCH');
+          }
+          // Debug: log what _method will be sent
+          try {
+            const sentMethod = formData.get('_method') || (existingForm.getAttribute('method') || 'POST');
+            console.log('CSRF-DEBUG: bulk_action sending with _method=', sentMethod);
+          } catch (e) {
+            // ignore
+          }
+          // Force using POST so method override is carried in formData
+          const fetchMethod = 'POST';
+          fetch(existingForm.action, {
+            method: fetchMethod,
+            headers: {
+              'X-CSRF-Token': csrf,
+              'Accept': 'text/html'
+            },
+            body: formData,
+            credentials: 'same-origin'
+          }).then(resp => {
+            if (resp.redirected) {
+              window.location = resp.url;
+            } else {
+              window.location.reload();
+            }
+          }).catch(err => {
+            console.error('Bulk action fetch error:', err);
+            existingForm.submit(); // fallback to traditional submit
+          });
+        } catch (e) {
+          console.error('Bulk action fetch failed, falling back to form submit', e);
+          existingForm.submit();
+        }
       } else {
         // フォールバック: 新しいフォームを作成
         const form = document.createElement('form');
@@ -200,7 +246,28 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         
         document.body.appendChild(form);
-        form.submit();
+        // Debug: log token and method for dynamically created form
+        try {
+          const createdToken = form.querySelector('input[name="authenticity_token"]').value;
+          const createdMethod = form.querySelector('input[name="_method"]').value;
+          console.log('CSRF-DEBUG: submitting dynamic form, token_len=', createdToken ? createdToken.length : null, 'token_head=', createdToken ? createdToken.slice(0,8) : null, '_method=', createdMethod);
+        } catch (e) {
+          console.warn('CSRF-DEBUG: error reading token for dynamic form', e);
+        }
+        // dynamic form: use fetch instead of direct submit
+        try {
+          const csrf = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+          const formData = new FormData(form);
+          fetch(form.action, {
+            method: 'POST',
+            headers: { 'X-CSRF-Token': csrf, 'Accept': 'text/html' },
+            body: formData,
+            credentials: 'same-origin'
+          }).then(resp => { if (resp.redirected) window.location = resp.url; else window.location.reload(); }).catch(err => { console.error('Bulk action fetch error:', err); form.submit(); });
+        } catch (e) {
+          console.error('Bulk action dynamic fetch failed, falling back to submit', e);
+          form.submit();
+        }
       }
     });
   }
@@ -208,3 +275,124 @@ document.addEventListener('DOMContentLoaded', function() {
   // 初期状態を設定
   updateBulkActionButtonState();
 });
+
+  // Global safety: ensure forms have authenticity_token before submission
+  document.addEventListener('submit', function(event) {
+    try {
+      const form = event.target;
+      if (!(form instanceof HTMLFormElement)) return;
+
+      // Only act for non-GET submits
+      const method = (form.getAttribute('method') || 'get').toUpperCase();
+      if (method === 'GET') return;
+
+      // If authenticity_token missing, add it from meta
+      if (!form.querySelector('input[name="authenticity_token"]')) {
+        const meta = document.querySelector('meta[name="csrf-token"]');
+        if (meta) {
+          const input = document.createElement('input');
+          input.type = 'hidden';
+          input.name = 'authenticity_token';
+          input.value = meta.getAttribute('content');
+          form.appendChild(input);
+        }
+      }
+
+      // Debug: log on submit what token is being sent (length and head) and _method if present
+      try {
+        const outTokenEl = form.querySelector('input[name="authenticity_token"]');
+        const outToken = outTokenEl ? outTokenEl.value : null;
+        const outMethodEl = form.querySelector('input[name="_method"]');
+        const outMethod = outMethodEl ? outMethodEl.value : (form.getAttribute('method') || 'GET');
+        console.log('CSRF-DEBUG: form submit detected, token_len=', outToken ? outToken.length : null, 'token_head=', outToken ? outToken.slice(0,8) : null, '_method=', outMethod);
+      } catch (e) {
+        console.warn('CSRF-DEBUG: error logging form submit token', e);
+      }
+
+      // If form intends to use PATCH/DELETE but lacks _method hidden, add it as fallback
+      const action = (form.getAttribute('data-method') || '').toLowerCase();
+      if (!form.querySelector('input[name="_method"]')) {
+        // inspect any data-method on links/buttons or a data attribute on form
+        const methodOverride = form.getAttribute('data-method') || form.getAttribute('data-remote-method');
+        if (methodOverride) {
+          const mi = document.createElement('input');
+          mi.type = 'hidden';
+          mi.name = '_method';
+          mi.value = methodOverride;
+          form.appendChild(mi);
+        }
+      }
+      // If this is a bulk_action endpoint but _method was set to delete (e.g., by mistake), normalize to PATCH
+      try {
+        const bulkActionInput = form.querySelector('input[name="bulk_action"]');
+        const methodInput = form.querySelector('input[name="_method"]');
+        if (bulkActionInput && methodInput && methodInput.value.toLowerCase() === 'delete') {
+          methodInput.value = 'patch';
+        }
+      } catch (e) {
+        // ignore
+      }
+    } catch (e) {
+      // don't block submission on error
+      console.error('CSRF safety hook error:', e);
+    }
+  }, true);
+
+  // Intercept single-article delete buttons (button_to generates a form)
+  document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.delete-article-btn').forEach(btn => {
+      // button_to renders a form around the button; find the closest form
+      const form = btn.closest('form');
+      if (!form) return;
+
+      btn.addEventListener('click', function(event) {
+        // allow default confirmation behavior provided by Rails UJS if present
+        // but intercept actual network submission to attach X-CSRF-Token header
+        try {
+          // If the button has data-confirm attribute, respect it
+          const confirmMsg = btn.getAttribute('data-confirm');
+          if (confirmMsg && !window.confirm(confirmMsg)) {
+            event.preventDefault();
+            return;
+          }
+
+          event.preventDefault();
+
+          // Prepare FormData and fetch
+          const action = form.getAttribute('action') || window.location.pathname;
+          let method = 'POST';
+          const methodInput = form.querySelector('input[name="_method"]');
+          if (methodInput && methodInput.value) method = methodInput.value.toUpperCase();
+          // default button_to with method: :delete will include _method=delete
+
+          const formData = new FormData(form);
+          // ensure authenticity_token exists in formData
+          if (!formData.get('authenticity_token')) {
+            const meta = document.querySelector('meta[name="csrf-token"]');
+            if (meta) formData.set('authenticity_token', meta.getAttribute('content'));
+          }
+
+          const csrf = (document.querySelector('meta[name="csrf-token"]') || {}).getAttribute('content');
+
+          fetch(action, {
+            method: method === 'GET' ? 'POST' : method,
+            headers: { 'X-CSRF-Token': csrf, 'Accept': 'text/html' },
+            body: formData,
+            credentials: 'same-origin'
+          }).then(resp => {
+            if (resp.redirected) {
+              window.location = resp.url;
+            } else {
+              // reload to reflect deletion
+              window.location.reload();
+            }
+          }).catch(err => {
+            console.error('Single delete fetch error, falling back to form submit', err);
+            form.submit();
+          });
+        } catch (e) {
+          console.error('Error in single delete handler, allowing default submit', e);
+        }
+      });
+    });
+  });

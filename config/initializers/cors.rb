@@ -14,7 +14,7 @@ Rails.application.config.middleware.insert_before 0, Rack::Cors do
       headers: :any,
       methods: [:get, :post, :put, :patch, :delete, :options, :head],
       # JWT認証に必要なヘッダーを公開
-      expose: ['access-token', 'expiry', 'token-type', 'uid', 'client', 'authorization'],
+      expose: ['access-token', 'expiry', 'token-type', 'uid', 'client', 'authorization', 'X-CSRF-Token'],
       # 認証情報（Cookieなど）のやり取りを許可
       credentials: true
   end

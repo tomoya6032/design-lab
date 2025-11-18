@@ -19,7 +19,44 @@ document.addEventListener('DOMContentLoaded', function() {
         
         if (confirmDelete) {
           // 削除を実行
-          form.submit();
+            if (form) {
+              // if a form exists (e.g., button_to), submit it
+              form.submit();
+              return;
+            }
+
+            // if no form exists, build one (so link_to without method still works)
+            try {
+              const action = this.getAttribute('href') || window.location.pathname + '/' + this.getAttribute('data-media-id');
+              const builtForm = document.createElement('form');
+              builtForm.method = 'POST';
+              builtForm.action = action;
+
+              // CSRF token
+              const meta = document.querySelector('meta[name="csrf-token"]');
+              if (meta) {
+                const tokenInput = document.createElement('input');
+                tokenInput.type = 'hidden';
+                tokenInput.name = 'authenticity_token';
+                tokenInput.value = meta.getAttribute('content');
+                builtForm.appendChild(tokenInput);
+              }
+
+              // Emulate _method DELETE
+              const methodInput = document.createElement('input');
+              methodInput.type = 'hidden';
+              methodInput.name = '_method';
+              methodInput.value = 'delete';
+              builtForm.appendChild(methodInput);
+
+              document.body.appendChild(builtForm);
+              builtForm.submit();
+            } catch (err) {
+              // fallback: if anything goes wrong, navigate to href (will typically show the page)
+              console.error('Failed to submit delete form programmatically:', err);
+              const href = this.getAttribute('href');
+              if (href) window.location.href = href;
+            }
         }
       });
     });
