@@ -26,17 +26,17 @@
           = form.text_area :site_description, rows: 3, class: 'form-control'
           %small.form-text サイトの簡潔な説明文
 
-        %h4.section-subtitle フロントページ ヒーローセクション
+      %h4.section-subtitle フロントページ ヒーローセクション
 
-        .form-group
-          = form.label :hero_title, 'ヒーロータイトル（複数行可）'
-          = form.text_area :hero_title, rows: 2, class: 'form-control', placeholder: "例: CMS搭載の\nホームページ制作なら\nぐんまデザインラボ"
-          %small.form-text トップページのメインタイトルです。改行も反映されます。
+      .form-group
+        = form.label :hero_title, 'ヒーロータイトル（複数行可）'
+        = form.text_area :hero_title, rows: 2, class: 'form-control', placeholder: "例: CMS搭載の\nホームページ制作なら\nぐんまデザインラボ"
+        %small.form-text トップページのメインタイトルです。改行も反映されます。
 
-        .form-group
-          = form.label :hero_description, 'ヒーロー説明文（複数行可）'
-          = form.text_area :hero_description, rows: 4, class: 'form-control', placeholder: "例: 高速で美しい、\nモダンなウェブサイトを\n簡単に作成・管理できるCMSです"
-          %small.form-text トップページのメイン説明文です。改行も反映されます。
+      .form-group
+        = form.label :hero_description, 'ヒーロー説明文（複数行可）'
+        = form.text_area :hero_description, rows: 4, class: 'form-control', placeholder: "例: 高速で美しい、\nモダンなウェブサイトを\n簡単に作成・管理できるCMSです"
+        %small.form-text トップページのメイン説明文です。改行も反映されます。
 
         .form-group
           = form.label :contact_email, '連絡先メールアドレス'
