@@ -57,11 +57,10 @@
                 .action-buttons
                   = link_to '編集', edit_admin_article_path(article), class: 'btn btn-sm btn-secondary'
                   = link_to '表示', admin_article_path(article), class: 'btn btn-sm btn-info'
-                  = button_to '削除', admin_article_path(article),
+                  = link_to '削除', admin_article_path(article),
+                    data: { turbo_method: :delete, article_title: article.title, confirm: "記事『#{article.title}』を削除しますか？この操作は取り消せません。" },
                     method: :delete,
-                    data: { turbo_method: :delete, article_title: article.title },
-                    class: 'btn btn-sm btn-danger delete-article-btn',
-                    form: { style: 'display: inline;' }
+                    class: 'btn btn-sm btn-danger delete-article-btn'
         - else
           %tr.no-items
             %td{colspan: 8}

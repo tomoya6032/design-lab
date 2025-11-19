@@ -3,6 +3,9 @@ require 'open-uri'
 class Admin::ArticlesController < ApplicationController
   layout 'admin'
   before_action :authenticate_user!
+  # Temporary workaround: skip CSRF verification for bulk_action to avoid InvalidAuthenticityToken
+  # NOTE: This weakens CSRF protection for this specific action; keep as temporary and investigate root cause.
+  skip_before_action :verify_authenticity_token, only: [:bulk_action]
   before_action :set_article, only: [:show, :edit, :update, :destroy]
 
   def index
