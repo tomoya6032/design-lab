@@ -3,13 +3,11 @@ require 'open-uri'
 class Admin::ArticlesController < ApplicationController
   layout 'admin'
   before_action :authenticate_user!
-<<<<<<< HEAD
-  before_action :log_csrf_on_index, only: [:index]
-=======
+
   # Temporary workaround: skip CSRF verification for bulk_action to avoid InvalidAuthenticityToken
   # NOTE: This weakens CSRF protection for this specific action; keep as temporary and investigate root cause.
   skip_before_action :verify_authenticity_token, only: [:bulk_action]
->>>>>>> 50591ffefdbdbf8d7a21baddea993c175fe737ee
+
   before_action :set_article, only: [:show, :edit, :update, :destroy]
 
   def index
