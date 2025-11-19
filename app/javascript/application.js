@@ -160,6 +160,7 @@ document.addEventListener('DOMContentLoaded', function() {
           }
         });
         
+<<<<<<< HEAD
         // Debug: log token and method just before submitting existing form
         try {
           const tokenInput = existingForm.querySelector('input[name="authenticity_token"]');
@@ -192,6 +193,18 @@ document.addEventListener('DOMContentLoaded', function() {
               'X-CSRF-Token': csrf,
               'Accept': 'text/html'
             },
+=======
+        // フォーム送信を fetch に置き換え（一時回避策: ヘッダで CSRF トークンを送る）
+        try {
+          const csrf = (document.querySelector('meta[name="csrf-token"]') || {}).getAttribute('content');
+          const formData = new FormData(existingForm);
+          // Ensure method override is PATCH for bulk actions
+          formData.set('_method', 'PATCH');
+          console.log('CSRF-DEBUG: sending bulk_action via fetch, _method=', formData.get('_method'));
+          fetch(existingForm.action, {
+            method: 'POST',
+            headers: { 'X-CSRF-Token': csrf, 'Accept': 'text/html' },
+>>>>>>> 50591ffefdbdbf8d7a21baddea993c175fe737ee
             body: formData,
             credentials: 'same-origin'
           }).then(resp => {
@@ -201,11 +214,19 @@ document.addEventListener('DOMContentLoaded', function() {
               window.location.reload();
             }
           }).catch(err => {
+<<<<<<< HEAD
             console.error('Bulk action fetch error:', err);
             existingForm.submit(); // fallback to traditional submit
           });
         } catch (e) {
           console.error('Bulk action fetch failed, falling back to form submit', e);
+=======
+            console.error('Bulk action fetch error, falling back to form.submit()', err);
+            existingForm.submit();
+          });
+        } catch (e) {
+          console.error('Bulk action fetch failed, falling back to submit', e);
+>>>>>>> 50591ffefdbdbf8d7a21baddea993c175fe737ee
           existingForm.submit();
         }
       } else {
@@ -276,6 +297,7 @@ document.addEventListener('DOMContentLoaded', function() {
   updateBulkActionButtonState();
 });
 
+<<<<<<< HEAD
   // Global safety: ensure forms have authenticity_token before submission
   document.addEventListener('submit', function(event) {
     try {
@@ -396,3 +418,42 @@ document.addEventListener('DOMContentLoaded', function() {
       });
     });
   });
+=======
+// Capture-phase submit handler: intercept bulk-action form submits and send via fetch with X-CSRF-Token
+document.addEventListener('submit', function(e) {
+  try {
+    const form = e.target;
+    if (!(form instanceof HTMLFormElement)) return;
+    if (form.id !== 'bulk-action-form') return;
+
+    // prevent any native submit (and any other handlers) and send via fetch
+    e.preventDefault();
+    e.stopImmediatePropagation();
+
+    const csrf = (document.querySelector('meta[name="csrf-token"]') || {}).getAttribute('content');
+    const formData = new FormData(form);
+    formData.set('_method', 'PATCH');
+
+    console.log('CSRF-DEBUG: intercepted bulk-action submit, sending via fetch, _method=', formData.get('_method'));
+
+    fetch(form.action, {
+      method: 'POST',
+      headers: { 'X-CSRF-Token': csrf, 'Accept': 'text/html' },
+      body: formData,
+      credentials: 'same-origin'
+    }).then(resp => {
+      if (resp.redirected) {
+        window.location = resp.url;
+      } else {
+        window.location.reload();
+      }
+    }).catch(err => {
+      console.error('CSRF-DEBUG: bulk-action fetch failed, falling back to form.submit()', err);
+      // last-resort: allow native submit
+      form.submit();
+    });
+  } catch (e) {
+    console.error('CSRF-DEBUG: error in bulk-action submit interceptor', e);
+  }
+}, true);
+>>>>>>> 50591ffefdbdbf8d7a21baddea993c175fe737ee
