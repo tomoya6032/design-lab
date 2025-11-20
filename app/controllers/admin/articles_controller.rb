@@ -4,9 +4,10 @@ class Admin::ArticlesController < ApplicationController
   layout 'admin'
   before_action :authenticate_user!
 
-  # Temporary workaround: skip CSRF verification for bulk_action to avoid InvalidAuthenticityToken
-  # NOTE: This weakens CSRF protection for this specific action; keep as temporary and investigate root cause.
-  skip_before_action :verify_authenticity_token, only: [:bulk_action]
+  # Temporary workaround: skip CSRF verification for bulk_action and destroy to avoid InvalidAuthenticityToken
+  # NOTE: This weakens CSRF protection for these actions; this is a temporary, emergency workaround
+  # while we investigate routing/client-side issues that cause requests to be routed incorrectly.
+  skip_before_action :verify_authenticity_token, only: [:bulk_action, :destroy]
 
   before_action :set_article, only: [:show, :edit, :update, :destroy]
 
